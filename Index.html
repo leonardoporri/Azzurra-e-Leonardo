@@ -1,0 +1,3599 @@
+<!DOCTYPE html>
+<html lang="it" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Azzurra &amp; Leonardo — 10 Aprile 2027</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            salvia: {
+              50: '#f4f7f4',
+              100: '#e3ece3',
+              200: '#c5d8c5',
+              300: '#9dbf9e',
+              500: '#5e8760',
+              600: '#4c6f4e',
+              700: '#3d583e',
+              800: '#2b3f2c',
+            },
+            cipria: {
+              50: '#fdf9f8',
+              100: '#f8ede8',
+              200: '#edd5cc',
+              300: '#dfb5a6',
+              400: '#ce9380',
+              500: '#ba735f',
+            },
+            avorio: '#fcfaf5',
+            crema: '#f4ece1',
+            legno: '#4a3b2c',
+            oro: '#c8a85f',
+            dorato: '#dfb76c'
+          },
+          fontFamily: {
+            serif: ['"Cormorant Garamond"', 'serif'],
+            script: ['"Alex Brush"', 'cursive'],
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #faf6ef;
+      color: #443e38;
+      overflow-x: hidden;
+      transition: background-color 0.6s ease, color 0.6s ease;
+    }
+
+    /* Texture botanica a foglie e pois pastello */
+    .bg-forest-texture {
+      background-color: #faf6ef;
+      background-image: 
+        radial-gradient(#5e87601f 1.5px, transparent 1.5px),
+        radial-gradient(#ce93801f 1.5px, #faf6ef 1.5px);
+      background-size: 36px 36px;
+      background-position: 0 0, 18px 18px;
+      transition: background-color 0.6s ease;
+    }
+
+    /* Modalità Notte nel Bosco */
+    body.night-mode {
+      background-color: #07140b !important;
+      color: #e2ede5 !important;
+    }
+
+    body.night-mode.bg-forest-texture,
+    html.night-mode .bg-forest-texture {
+      background-color: #07140b !important;
+      background-image: 
+        radial-gradient(rgba(146, 217, 152, 0.18) 1.5px, transparent 1.5px),
+        radial-gradient(rgba(223, 183, 108, 0.14) 1.5px, #07140b 1.5px) !important;
+    }
+
+    body.night-mode nav {
+      background-color: rgba(12, 27, 18, 0.94) !important;
+      border-color: rgba(94, 135, 96, 0.45) !important;
+      box-shadow: 0 10px 32px rgba(0, 0, 0, 0.55) !important;
+    }
+    body.night-mode nav a,
+    body.night-mode nav span:not(.text-cipria-400) {
+      color: #e6f2e8 !important;
+    }
+    body.night-mode #mobile-menu {
+      background-color: rgba(10, 24, 15, 0.97) !important;
+      border-color: rgba(94, 135, 96, 0.4) !important;
+    }
+    body.night-mode #mobile-menu a {
+      color: #dbe9de !important;
+    }
+
+    /* Card e riquadri in modalità notturna */
+    body.night-mode [class*="bg-white"],
+    body.night-mode [class*="bg-avorio"],
+    body.night-mode .bg-white,
+    body.night-mode .bg-avorio {
+      background-color: rgba(14, 30, 20, 0.94) !important;
+      border-color: rgba(94, 135, 96, 0.38) !important;
+      color: #e1eee4 !important;
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.55) !important;
+    }
+
+    body.night-mode form {
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+    }
+
+    body.night-mode #programma,
+    body.night-mode #luoghi {
+      background-color: rgba(7, 18, 11, 0.96) !important;
+      border-color: rgba(94, 135, 96, 0.3) !important;
+    }
+
+    body.night-mode [class*="bg-salvia-50"],
+    body.night-mode [class*="bg-salvia-100"],
+    body.night-mode [class*="bg-cipria-50"],
+    body.night-mode [class*="bg-cipria-100"] {
+      background-color: rgba(24, 48, 32, 0.85) !important;
+      border-color: rgba(157, 191, 158, 0.35) !important;
+    }
+
+    .truck-tab-btn {
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      position: relative;
+    }
+    .truck-tab-btn:hover {
+      transform: translateY(-2px) scale(1.02);
+    }
+    .truck-tab-btn:active {
+      transform: translateY(0) scale(0.96);
+    }
+
+    /* Stato Selezionato (Attivo): Verde salvia pieno, testo bianco nitido con ombra */
+    .truck-tab-btn.active-truck-tab {
+      background-color: #5e8760 !important;
+      border-color: #4c6f4e !important;
+      color: #ffffff !important;
+      box-shadow: 0 6px 18px -2px rgba(94, 135, 96, 0.45) !important;
+    }
+    .truck-tab-btn.active-truck-tab:hover {
+      background-color: #4c6f4e !important;
+      color: #ffffff !important;
+    }
+    .truck-tab-btn.active-truck-tab .truck-tab-icon {
+      transform: scale(1.18);
+    }
+
+    /* Stato Non Selezionato: Bianco/avorio con testo legno a contrasto */
+    .truck-tab-btn:not(.active-truck-tab) {
+      background-color: #ffffff;
+      color: #4a3b2c;
+      border-color: #c5d8c5;
+    }
+    .truck-tab-btn:not(.active-truck-tab):hover {
+      background-color: #e3ece3 !important;
+      color: #2b3f2c !important;
+      border-color: #9dbf9e !important;
+      box-shadow: 0 4px 12px rgba(94, 135, 96, 0.15) !important;
+    }
+
+    /* Modalità Notte nel Bosco per i Truck Tabs */
+    body.night-mode .truck-tab-btn.active-truck-tab {
+      background-color: #3d583e !important;
+      border-color: #92d998 !important;
+      color: #ffffff !important;
+      box-shadow: 0 0 20px rgba(146, 217, 152, 0.4) !important;
+    }
+    body.night-mode .truck-tab-btn.active-truck-tab:hover {
+      background-color: #4c6f4e !important;
+      color: #ffffff !important;
+    }
+    body.night-mode .truck-tab-btn:not(.active-truck-tab) {
+      background-color: rgba(18, 40, 26, 0.88) !important;
+      border-color: rgba(157, 191, 158, 0.4) !important;
+      color: #f1faf3 !important;
+    }
+    body.night-mode .truck-tab-btn:not(.active-truck-tab):hover {
+      background-color: rgba(28, 60, 39, 0.95) !important;
+      color: #ffffff !important;
+      border-color: rgba(146, 217, 152, 0.6) !important;
+    }
+
+    /* Animazione Pop e Fade-in al cambio Truck */
+    @keyframes tabPop {
+      0% { transform: scale(0.94); }
+      50% { transform: scale(1.05) translateY(-2px); }
+      100% { transform: scale(1) translateY(0); }
+    }
+    .animate-tab-pop {
+      animation: tabPop 0.32s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    @keyframes fadeInTruck {
+      0% { opacity: 0.5; transform: translateY(6px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    .animate-truck-fade {
+      animation: fadeInTruck 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    body.night-mode .filter-diet-btn:not(.active-filter),
+    body.night-mode .sound-instrument-btn,
+    body.night-mode .combo-preset-btn,
+    body.night-mode #combo-picker-grid button:not(.bg-salvia-100),
+    body.night-mode a[href*="maps.google.com"],
+    body.night-mode #add-calendar-btn {
+      background-color: rgba(18, 40, 26, 0.88) !important;
+      border-color: rgba(157, 191, 158, 0.4) !important;
+      color: #f1faf3 !important;
+    }
+
+    body.night-mode .filter-diet-btn.active-filter#filter-veg-btn {
+      background-color: #3d583e !important;
+      border-color: #92d998 !important;
+      color: #ffffff !important;
+    }
+
+    body.night-mode .filter-diet-btn.active-filter#filter-baby-btn {
+      background-color: #ba735f !important;
+      border-color: #f3b8aa !important;
+      color: #ffffff !important;
+    }
+
+    body.night-mode .filter-diet-btn:not(.active-filter):hover,
+    body.night-mode .sound-instrument-btn:hover,
+    body.night-mode .combo-preset-btn:hover,
+    body.night-mode a[href*="maps.google.com"]:hover,
+    body.night-mode #add-calendar-btn:hover {
+      background-color: rgba(28, 60, 39, 0.95) !important;
+      color: #ffffff !important;
+    }
+
+    body.night-mode #combo-picker-grid button.bg-salvia-100 {
+      background-color: rgba(45, 95, 60, 0.9) !important;
+      border-color: #92d998 !important;
+      color: #ffffff !important;
+    }
+
+    body.night-mode h1,
+    body.night-mode h2,
+    body.night-mode h3,
+    body.night-mode h4,
+    body.night-mode h5,
+    body.night-mode .text-legno {
+      color: #f6fcf7 !important;
+    }
+
+    body.night-mode p,
+    body.night-mode label,
+    body.night-mode .text-legno\/80,
+    body.night-mode .text-legno\/75,
+    body.night-mode .text-legno\/70,
+    body.night-mode .text-legno\/85 {
+      color: #d1e2d5 !important;
+    }
+
+    body.night-mode .text-legno\/60,
+    body.night-mode .text-legno\/65,
+    body.night-mode .text-legno\/50,
+    body.night-mode .card-bottom-note {
+      color: #b8d9c2 !important;
+    }
+
+    body.night-mode .text-salvia-800,
+    body.night-mode .text-salvia-700,
+    body.night-mode .text-salvia-600 {
+      color: #a3e3aa !important;
+    }
+
+    body.night-mode .text-cipria-500,
+    body.night-mode .text-cipria-400 {
+      color: #f3b8aa !important;
+    }
+
+    body.night-mode #days,
+    body.night-mode #hours,
+    body.night-mode #minutes,
+    body.night-mode #seconds {
+      color: #92d998 !important;
+    }
+
+    body.night-mode input,
+    body.night-mode select,
+    body.night-mode textarea {
+      background-color: rgba(9, 22, 14, 0.92) !important;
+      border-color: rgba(94, 135, 96, 0.5) !important;
+      color: #f1faf3 !important;
+    }
+
+    body.night-mode input::placeholder,
+    body.night-mode textarea::placeholder {
+      color: #8da693 !important;
+    }
+
+    body.night-mode label:has(input[type="radio"]:checked) {
+      background-color: rgba(36, 75, 48, 0.9) !important;
+      border-color: #92d998 !important;
+      color: #ffffff !important;
+    }
+
+    body.night-mode #toggle-lights-btn {
+      background-color: rgba(18, 40, 26, 0.95) !important;
+      border-color: rgba(223, 183, 108, 0.7) !important;
+      color: #fef08a !important;
+      box-shadow: 0 0 24px rgba(254, 240, 138, 0.35) !important;
+    }
+
+    body.night-mode .fairy-bulb {
+      fill: #ffffff !important;
+      filter: drop-shadow(0 0 12px #fef08a) drop-shadow(0 0 24px #eab308) !important;
+    }
+
+    body.night-mode #palette-info {
+      background-color: rgba(24, 48, 32, 0.9) !important;
+      border-color: rgba(157, 191, 158, 0.4) !important;
+      color: #e5f5e8 !important;
+    }
+
+    body.night-mode #combo-swatch-bar span {
+      background-color: rgba(10, 24, 15, 0.85) !important;
+      color: #f4fbf5 !important;
+    }
+
+    body.night-mode #combo-badges-list span {
+      background-color: rgba(20, 44, 29, 0.9) !important;
+      border-color: rgba(94, 135, 96, 0.5) !important;
+      color: #e5f5e8 !important;
+    }
+
+    body.night-mode #selected-count-badge {
+      background-color: rgba(45, 95, 60, 0.9) !important;
+      color: #ffffff !important;
+    }
+
+    body.night-mode #combo-empty-state,
+    body.night-mode .empty-swatch-text {
+      color: #c4ded0 !important;
+    }
+
+    /* Stili modalità notturna per il modulo votazione canzoni */
+    body.night-mode .song-rank-item {
+      background-color: rgba(18, 40, 26, 0.88) !important;
+      border-color: rgba(94, 135, 96, 0.38) !important;
+    }
+    body.night-mode .song-leader-banner {
+      background: linear-gradient(135deg, rgba(16, 42, 26, 0.96) 0%, rgba(26, 58, 38, 0.96) 100%) !important;
+      background-image: linear-gradient(135deg, rgba(16, 42, 26, 0.96) 0%, rgba(26, 58, 38, 0.96) 100%) !important;
+      border-color: rgba(223, 183, 108, 0.75) !important;
+      box-shadow: 0 6px 22px rgba(0, 0, 0, 0.45), inset 0 0 16px rgba(223, 183, 108, 0.1) !important;
+    }
+    body.night-mode .song-leader-banner #leader-song-title {
+      color: #ffffff !important;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    }
+    body.night-mode .song-leader-banner .leader-badge-label {
+      color: #dfb76c !important;
+    }
+    body.night-mode .song-leader-banner #leader-song-votes {
+      background-color: rgba(8, 22, 13, 0.92) !important;
+      border-color: #dfb76c !important;
+      color: #fef08a !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35) !important;
+    }
+    body.night-mode .song-vote-btn:not(.has-voted) {
+      background-color: rgba(24, 52, 34, 0.85) !important;
+      border-color: rgba(157, 191, 158, 0.4) !important;
+      color: #f1faf3 !important;
+    }
+    body.night-mode .song-vote-btn:not(.has-voted):hover {
+      background-color: rgba(36, 75, 48, 0.95) !important;
+    }
+    body.night-mode .song-vote-btn.has-voted {
+      background-color: #3d583e !important;
+      border-color: #92d998 !important;
+      color: #ffffff !important;
+    }
+    body.night-mode .song-delete-btn {
+      color: #fca5a5 !important;
+    }
+    body.night-mode .song-delete-btn:hover {
+      background-color: rgba(127, 29, 29, 0.35) !important;
+      border-color: rgba(248, 113, 113, 0.4) !important;
+    }
+
+    #petals-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 30;
+    }
+
+    .shadow-ambient {
+      box-shadow: 0 12px 36px -8px rgba(94, 135, 96, 0.12), 0 6px 18px -4px rgba(206, 147, 128, 0.14);
+    }
+
+    .shadow-soft {
+      box-shadow: 0 4px 20px -2px rgba(94, 135, 96, 0.08), 0 2px 8px -1px rgba(74, 59, 44, 0.04);
+    }
+
+    @keyframes sway {
+      0%, 100% { transform: rotate(-1.5deg); }
+      50% { transform: rotate(1.5deg); }
+    }
+    .animate-sway {
+      animation: sway 7s ease-in-out infinite;
+      transform-box: fill-box;
+      transform-origin: top center;
+    }
+
+    @keyframes floatNote {
+      0% { transform: translateY(0) rotate(0deg); opacity: 0.8; }
+      50% { transform: translateY(-12px) rotate(6deg); opacity: 1; }
+      100% { transform: translateY(0) rotate(0deg); opacity: 0.8; }
+    }
+    .animate-float-note {
+      animation: floatNote 4s ease-in-out infinite;
+    }
+
+    #food-truck-body, #musicians-body, #oak-left-leaves, #oak-right-leaves {
+      transform-box: fill-box;
+      transform-origin: center bottom;
+      will-change: transform;
+    }
+
+    @keyframes truckBounce {
+      0% { transform: translateY(0) scale(1, 1); }
+      20% { transform: translateY(-28px) scale(0.94, 1.08); }
+      40% { transform: translateY(6px) scale(1.06, 0.92); }
+      65% { transform: translateY(-12px) scale(0.98, 1.03); }
+      85% { transform: translateY(3px) scale(1.02, 0.98); }
+      100% { transform: translateY(0) scale(1, 1); }
+    }
+    .animate-truck-bounce {
+      animation: truckBounce 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    @keyframes musiciansGroove {
+      0% { transform: rotate(0deg) scale(1); }
+      20% { transform: rotate(-8deg) scale(1.1); }
+      40% { transform: rotate(8deg) scale(1.08); }
+      60% { transform: rotate(-5deg) scale(1.04); }
+      80% { transform: rotate(3deg) scale(1.02); }
+      100% { transform: rotate(0deg) scale(1); }
+    }
+    .animate-groove {
+      animation: musiciansGroove 0.75s ease-in-out forwards;
+      transform-origin: center bottom;
+    }
+
+    @keyframes treeRustle {
+      0% { transform: scale(1) rotate(0deg); }
+      20% { transform: scale(1.04) rotate(-4deg); }
+      40% { transform: scale(0.97) rotate(5deg); }
+      60% { transform: scale(1.02) rotate(-2deg); }
+      80% { transform: scale(0.99) rotate(1.5deg); }
+      100% { transform: scale(1) rotate(0deg); }
+    }
+    .animate-rustle {
+      animation: treeRustle 0.75s ease-in-out forwards;
+      transform-origin: top center;
+    }
+
+    @keyframes headlightFlash {
+      0% { opacity: 0; transform: scaleX(0.7); }
+      15% { opacity: 0.95; transform: scaleX(1.05); }
+      35% { opacity: 0; transform: scaleX(0.85); }
+      50% { opacity: 0.95; transform: scaleX(1.05); }
+      75% { opacity: 0.4; transform: scaleX(0.95); }
+      100% { opacity: 0; transform: scaleX(0.7); }
+    }
+    .animate-headlight-flash {
+      animation: headlightFlash 0.65s ease-out forwards;
+      transform-origin: 260px 132px;
+    }
+
+    @keyframes horizontalTurn3D {
+      0% { transform: perspective(300px) rotateY(0deg) scale(1); }
+      50% { transform: perspective(300px) rotateY(180deg) scale(1.2); }
+      100% { transform: perspective(300px) rotateY(360deg) scale(1); }
+    }
+    .animate-horizontal-turn {
+      animation: horizontalTurn3D 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+
+    @keyframes sunTwirl {
+      0% { transform: rotate(0deg) scale(1); }
+      50% { transform: rotate(180deg) scale(1.3); }
+      100% { transform: rotate(360deg) scale(1); }
+    }
+    .animate-sun-twirl {
+      animation: sunTwirl 0.65s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+
+    @keyframes noteSmoothDrift {
+      0% { transform: translate(0, 0) scale(0.6) rotate(0deg); opacity: 0; }
+      20% { opacity: 0.9; }
+      100% { transform: translate(var(--dx), var(--dy)) scale(1.1) rotate(var(--drot)); opacity: 0; }
+    }
+    .music-note-particle {
+      position: absolute;
+      pointer-events: none;
+      animation: noteSmoothDrift 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+      font-size: 18px;
+      z-index: 50;
+      user-select: none;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+    }
+
+    .interactive-element {
+      cursor: pointer;
+      pointer-events: auto !important;
+      transition: filter 0.25s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .interactive-element:hover {
+      filter: drop-shadow(0 0 14px rgba(223, 183, 108, 0.9));
+    }
+
+    /* Scrollbar delicata */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #faf6ef;
+    }
+    body.night-mode ::-webkit-scrollbar-track {
+      background: #07140b;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #9dbf9e;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="font-sans antialiased bg-forest-texture relative selection:bg-salvia-200 selection:text-salvia-800">
+
+  <!-- Container particelle note musicali -->
+  <div id="notes-container" class="fixed inset-0 pointer-events-none z-50 overflow-hidden"></div>
+
+  <!-- Canvas Petali, Foglie di Quercia e Lucciole Notturne -->
+  <canvas id="petals-canvas"></canvas>
+
+  <!-- Header con navigazione Sticky e Blur -->
+  <header class="fixed top-3 sm:top-4 inset-x-0 z-40 max-w-4xl mx-auto px-3 sm:px-4">
+    <nav class="bg-white/90 backdrop-blur-md rounded-full px-4 sm:px-6 py-2 sm:py-2.5 border border-salvia-200/80 shadow-soft flex items-center justify-between transition-all duration-300">
+      
+      <!-- Logo Sposi -->
+      <a href="#hero" class="font-script text-xl sm:text-2xl text-salvia-800 hover:text-salvia-600 transition flex items-center gap-1.5 shrink-0 tracking-wide">
+        <span>Azzurra</span>
+        <span class="text-cipria-400 font-serif text-base sm:text-lg italic">&amp;</span>
+        <span>Leonardo</span>
+      </a>
+
+      <!-- Voci Desktop -->
+      <div class="hidden lg:flex items-center space-x-5 text-xs font-medium text-legno/85">
+        <a href="#benvenuto" class="hover:text-salvia-700 transition">Benvenuti</a>
+        <a href="#programma" class="hover:text-salvia-700 transition">Programma</a>
+        <a href="#esperienze" class="hover:text-salvia-700 transition">Food Truck &amp; Musica</a>
+        <a href="#luoghi" class="hover:text-salvia-700 transition">I Luoghi</a>
+        <a href="#dettagli" class="hover:text-salvia-700 transition">Dress Code</a>
+        <a href="#conferma-presenza" class="bg-salvia-500 hover:bg-salvia-600 text-white px-4 py-1.5 rounded-full transition shadow-xs text-xs font-semibold whitespace-nowrap">
+          Conferma Presenza
+        </a>
+      </div>
+
+      <!-- Tasto Mobile Menu -->
+      <button id="mobile-menu-btn" class="lg:hidden text-salvia-700 p-1.5 rounded-full hover:bg-salvia-50 focus:outline-none transition" aria-label="Menu di navigazione">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+        </svg>
+      </button>
+    </nav>
+    
+    <!-- Menu a scomparsa Mobile -->
+    <div id="mobile-menu" class="hidden lg:hidden mt-2 bg-white/95 backdrop-blur-lg rounded-2xl p-4 border border-salvia-200/80 shadow-lg flex flex-col space-y-2 text-center text-xs sm:text-sm font-medium">
+      <a href="#benvenuto" class="py-1.5 text-legno hover:text-salvia-600 mobile-nav-link">Benvenuti</a>
+      <a href="#programma" class="py-1.5 text-legno hover:text-salvia-600 mobile-nav-link">Programma</a>
+      <a href="#esperienze" class="py-1.5 text-legno hover:text-salvia-600 mobile-nav-link">Food Truck &amp; Musica</a>
+      <a href="#luoghi" class="py-1.5 text-legno hover:text-salvia-600 mobile-nav-link">I Luoghi</a>
+      <a href="#dettagli" class="py-1.5 text-legno hover:text-salvia-600 mobile-nav-link">Dettagli &amp; Dress Code</a>
+      <a href="#conferma-presenza" class="py-2 bg-salvia-500 text-white rounded-full font-semibold mobile-nav-link shadow-xs">Conferma Presenza</a>
+    </div>
+  </header>
+
+  <!-- HERO SECTION CON PANORAMA ILLUSTRATO INTERATTIVO -->
+  <section id="hero" class="relative min-h-screen flex flex-col items-center justify-center pt-24 pb-12 px-4 overflow-hidden">
+    
+    <!-- PANORAMA GRAFICO ILLUSTRATO IN SVG -->
+    <div class="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+      <svg class="w-full h-full object-cover" viewBox="0 0 1440 950" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <linearGradient id="oakCanopyLeft" x1="0%" y1="0%" x2="70%" y2="80%">
+            <stop offset="0%" stop-color="#739a75" stop-opacity="0.8"/>
+            <stop offset="50%" stop-color="#557c57" stop-opacity="0.6"/>
+            <stop offset="100%" stop-color="#3d583e" stop-opacity="0.45"/>
+          </linearGradient>
+          <linearGradient id="oakCanopyRight" x1="100%" y1="0%" x2="30%" y2="80%">
+            <stop offset="0%" stop-color="#84aa86" stop-opacity="0.8"/>
+            <stop offset="50%" stop-color="#557c57" stop-opacity="0.6"/>
+            <stop offset="100%" stop-color="#3d583e" stop-opacity="0.45"/>
+          </linearGradient>
+          <linearGradient id="oakLayerSoft" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#a9c4aa" stop-opacity="0.65"/>
+            <stop offset="100%" stop-color="#6f9671" stop-opacity="0.35"/>
+          </linearGradient>
+          <linearGradient id="headlightBeamGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#fffde7" stop-opacity="0.95"/>
+            <stop offset="35%" stop-color="#fef08a" stop-opacity="0.75"/>
+            <stop offset="70%" stop-color="#fef08a" stop-opacity="0.3"/>
+            <stop offset="100%" stop-color="#fef08a" stop-opacity="0.0"/>
+          </linearGradient>
+          <filter id="softGlow" x="-30%" y="-30%" width="160%" height="160%">
+            <feGaussianBlur stdDeviation="8" result="blur" />
+            <feComposite in="SourceGraphic" in2="blur" operator="over" />
+          </filter>
+          <filter id="headlightIntenseGlow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="12" result="blur" />
+            <feComposite in="SourceGraphic" in2="blur" operator="over" />
+          </filter>
+        </defs>
+
+        <!-- CIELO NOTTURNO CON LUNA PIENA E STELLE -->
+        <g id="hero-night-sky" class="opacity-0 pointer-events-none transition-opacity duration-700">
+          <rect width="1440" height="950" fill="#06130b" fill-opacity="0.95"/>
+          <circle cx="720" cy="170" r="54" fill="#fef9c3" opacity="0.9" filter="url(#softGlow)"/>
+          <circle cx="720" cy="170" r="42" fill="#fffde7"/>
+          <circle cx="740" cy="158" r="8" fill="#fde047" opacity="0.25"/>
+          <circle cx="706" cy="184" r="6" fill="#fde047" opacity="0.2"/>
+          <circle cx="732" cy="188" r="4" fill="#fde047" opacity="0.25"/>
+
+          <circle cx="160" cy="90" r="2.5" fill="#ffffff" opacity="0.85"/>
+          <circle cx="280" cy="140" r="2" fill="#ffffff" opacity="0.75"/>
+          <circle cx="420" cy="70" r="3" fill="#fef08a" opacity="0.9"/>
+          <circle cx="560" cy="120" r="1.8" fill="#ffffff" opacity="0.8"/>
+          <circle cx="890" cy="100" r="2.8" fill="#fef08a" opacity="0.85"/>
+          <circle cx="1020" cy="65" r="2" fill="#ffffff" opacity="0.9"/>
+          <circle cx="1180" cy="130" r="2.5" fill="#ffffff" opacity="0.75"/>
+          <circle cx="1320" cy="80" r="2" fill="#fef08a" opacity="0.8"/>
+          <circle cx="630" cy="60" r="2.2" fill="#ffffff" opacity="0.9"/>
+          <circle cx="790" cy="75" r="1.8" fill="#ffffff" opacity="0.85"/>
+        </g>
+
+        <!-- Tronchi di Quercia maestosi ai bordi -->
+        <g opacity="0.65">
+          <path d="M -20 -10 L 90 -10 Q 150 180, 160 380 Q 170 580, 110 950 L -30 950 Z" fill="#695643"/>
+          <path d="M 120 220 Q 280 200, 420 260 Q 300 280, 140 270 Z" fill="#5c4d3c" opacity="0.8"/>
+          <path d="M 140 340 Q 290 350, 390 400 Q 280 430, 130 400 Z" fill="#5c4d3c" opacity="0.8"/>
+          <path d="M 90 120 Q 240 80, 340 100 Q 230 130, 100 150 Z" fill="#5c4d3c" opacity="0.8"/>
+
+          <path d="M 1470 -10 L 1350 -10 Q 1290 180, 1280 380 Q 1270 580, 1330 950 L 1470 950 Z" fill="#695643"/>
+          <path d="M 1320 220 Q 1160 200, 1020 260 Q 1140 280, 1300 270 Z" fill="#5c4d3c" opacity="0.8"/>
+          <path d="M 1300 340 Q 1150 350, 1050 400 Q 1160 430, 1310 400 Z" fill="#5c4d3c" opacity="0.8"/>
+          <path d="M 1350 120 Q 1200 80, 1100 100 Q 1210 130, 1340 150 Z" fill="#5c4d3c" opacity="0.8"/>
+        </g>
+
+        <!-- CHIOMA QUERCIA SINISTRA -->
+        <g id="interactive-oak-left" class="interactive-element animate-sway">
+          <g id="oak-left-leaves">
+            <path d="M -50 -40 L 680 -40 C 660 40, 690 90, 640 140 C 590 190, 620 250, 560 290 C 500 330, 510 390, 440 430 C 370 470, 330 510, 240 500 C 160 490, 110 530, 30 510 C -20 490, -40 420, -50 360 Z" fill="url(#oakCanopyLeft)"/>
+            <path d="M -40 -30 L 580 -30 C 560 30, 590 80, 540 130 C 490 170, 510 220, 460 260 C 400 300, 410 360, 340 390 C 270 420, 220 460, 140 440 C 70 420, 20 450, -40 430 Z" fill="url(#oakLayerSoft)"/>
+            <path d="M -30 -20 L 460 -20 C 440 40, 470 90, 420 130 C 370 170, 380 230, 320 260 C 250 290, 220 350, 150 360 C 80 370, 20 390, -30 370 Z" fill="#ceddce" fill-opacity="0.45"/>
+          </g>
+        </g>
+
+        <!-- CHIOMA QUERCIA DESTRA -->
+        <g id="interactive-oak-right" class="interactive-element animate-sway" style="animation-delay: -3.5s;">
+          <g id="oak-right-leaves">
+            <path d="M 1490 -40 L 760 -40 C 780 40, 750 90, 800 140 C 850 190, 820 250, 880 290 C 940 330, 930 390, 1000 430 C 1070 470, 1110 510, 1200 500 C 1280 490, 1330 530, 1410 510 C 1460 490, 1480 420, 1490 360 Z" fill="url(#oakCanopyRight)"/>
+            <path d="M 1480 -30 L 860 -30 C 880 30, 850 80, 900 130 C 950 170, 930 220, 980 260 C 1040 300, 1030 360, 1100 390 C 1170 420, 1220 460, 1300 440 C 1370 420, 1420 450, 1480 430 Z" fill="url(#oakLayerSoft)"/>
+            <path d="M 1470 -20 L 980 -20 C 1000 40, 970 90, 1020 130 C 1070 170, 1060 230, 1120 260 C 1190 290, 1220 350, 1290 360 C 1360 370, 1420 390, 1470 370 Z" fill="#ceddce" fill-opacity="0.45"/>
+          </g>
+        </g>
+
+        <!-- Cavi Ghirlanda di lucine vintage appesa -->
+        <path d="M 120 240 Q 720 460 1320 240" stroke="#bfa15f" stroke-width="2.5" stroke-dasharray="6 8" fill="none" opacity="0.75"/>
+        <path d="M 160 320 Q 720 530 1280 320" stroke="#bfa15f" stroke-width="1.8" stroke-dasharray="4 6" fill="none" opacity="0.5"/>
+
+        <!-- Lampadine Vintage con Bagliore (Cliccabili) -->
+        <g id="fairy-lights-group" class="interactive-element" title="Clicca per accendere o spegnere le luci!">
+          <g transform="translate(260, 315)"><circle cx="0" cy="0" r="14" fill="#fef08a" opacity="0.4" filter="url(#softGlow)"/><circle cx="0" cy="0" r="7" fill="#fef08a" class="fairy-bulb"/><line x1="0" y1="-12" x2="0" y2="0" stroke="#8c774b" stroke-width="2"/></g>
+          <g transform="translate(440, 375)"><circle cx="0" cy="0" r="16" fill="#fef08a" opacity="0.4" filter="url(#softGlow)"/><circle cx="0" cy="0" r="8" fill="#fde047" class="fairy-bulb"/><line x1="0" y1="-14" x2="0" y2="0" stroke="#8c774b" stroke-width="2"/></g>
+          <g transform="translate(630, 410)"><circle cx="0" cy="0" r="18" fill="#fef08a" opacity="0.45" filter="url(#softGlow)"/><circle cx="0" cy="0" r="9" fill="#fef08a" class="fairy-bulb"/><line x1="0" y1="-15" x2="0" y2="0" stroke="#8c774b" stroke-width="2"/></g>
+          <g transform="translate(810, 410)"><circle cx="0" cy="0" r="18" fill="#fef08a" opacity="0.45" filter="url(#softGlow)"/><circle cx="0" cy="0" r="9" fill="#fef08a" class="fairy-bulb"/><line x1="0" y1="-15" x2="0" y2="0" stroke="#8c774b" stroke-width="2"/></g>
+          <g transform="translate(1000, 375)"><circle cx="0" cy="0" r="16" fill="#fef08a" opacity="0.4" filter="url(#softGlow)"/><circle cx="0" cy="0" r="8" fill="#fde047" class="fairy-bulb"/><line x1="0" y1="-14" x2="0" y2="0" stroke="#8c774b" stroke-width="2"/></g>
+          <g transform="translate(1180, 315)"><circle cx="0" cy="0" r="14" fill="#fef08a" opacity="0.4" filter="url(#softGlow)"/><circle cx="0" cy="0" r="7" fill="#fef08a" class="fairy-bulb"/><line x1="0" y1="-12" x2="0" y2="0" stroke="#8c774b" stroke-width="2"/></g>
+        </g>
+
+        <!-- Food truck illustrato interattivo (Sinistra) -->
+        <g id="interactive-food-truck" class="interactive-element" transform="translate(65, 620) scale(0.96)" title="Clicca per suonare il clacson e accendere i fari!">
+          <g id="food-truck-body">
+            <ellipse cx="145" cy="208" rx="140" ry="14" fill="#3b3226" fill-opacity="0.18"/>
+
+            <g id="truck-headlight-beam-group" class="opacity-0 pointer-events-none transition-opacity duration-200">
+              <polygon points="262,126 440,70 470,185 262,142" fill="url(#headlightBeamGrad)" opacity="0.9"/>
+              <circle cx="260" cy="132" r="32" fill="#fffde7" filter="url(#headlightIntenseGlow)" opacity="0.85"/>
+              <circle cx="260" cy="132" r="18" fill="#fef08a" opacity="0.95"/>
+            </g>
+
+            <!-- Lavagnetta menu -->
+            <g transform="translate(-18, 115)">
+              <line x1="12" y1="5" x2="2" y2="85" stroke="#695643" stroke-width="3" stroke-linecap="round"/>
+              <line x1="18" y1="5" x2="28" y2="85" stroke="#695643" stroke-width="3" stroke-linecap="round"/>
+              <line x1="15" y1="5" x2="20" y2="85" stroke="#4a3b2c" stroke-width="2" stroke-linecap="round"/>
+              <rect x="0" y="20" width="30" height="42" rx="3" fill="#2d2722" stroke="#8c774b" stroke-width="2"/>
+              <text x="15" y="34" font-family="'Plus Jakarta Sans'" font-size="5.5" font-weight="700" fill="#dfb76c" text-anchor="middle" letter-spacing="0.5">MENU</text>
+              <line x1="5" y1="38" x2="25" y2="38" stroke="#dfb76c" stroke-width="0.6" opacity="0.6"/>
+              <text x="15" y="47" font-family="'Cormorant Garamond'" font-size="7" font-style="italic" fill="#faf6ef" text-anchor="middle">Gourmet</text>
+              <text x="15" y="55" font-family="'Cormorant Garamond'" font-size="6.5" font-style="italic" fill="#a9c4aa" text-anchor="middle">&amp; Drink</text>
+            </g>
+
+            <!-- Carrozzeria Furgoncino Vintage -->
+            <path d="M 22 58 Q 22 36, 48 34 L 210 34 Q 248 36, 258 68 L 262 115 L 20 115 Z" fill="#f8ede8" stroke="#ba735f" stroke-width="2.5"/>
+            <path d="M 20 115 L 262 115 L 260 162 Q 258 178, 238 178 L 40 178 Q 20 178, 20 158 Z" fill="#5e8760" stroke="#3d583e" stroke-width="2.5"/>
+
+            <line x1="18" y1="115" x2="264" y2="115" stroke="#c8a85f" stroke-width="3.5" stroke-linecap="round"/>
+            <line x1="20" y1="115" x2="262" y2="115" stroke="#faf6ef" stroke-width="1.2" stroke-linecap="round"/>
+
+            <!-- Parabrezza -->
+            <path d="M 202 46 Q 235 48, 245 74 L 247 106 L 202 106 Z" fill="#e8f1ec" stroke="#5c4d3c" stroke-width="2"/>
+            <path d="M 202 46 L 202 106" stroke="#8c774b" stroke-width="2"/>
+            <ellipse cx="228" cy="88" rx="8" ry="4" fill="none" stroke="#4a3b2c" stroke-width="2" transform="rotate(-15 228 88)"/>
+
+            <!-- Finestra di servizio / Insegna centrale -->
+            <rect x="34" y="52" width="154" height="66" rx="6" fill="#2d2722" stroke="#695643" stroke-width="2.5"/>
+            <rect x="38" y="56" width="146" height="58" rx="4" fill="#231f1b" stroke="#dfb76c" stroke-width="1" stroke-dasharray="2 3" opacity="0.6"/>
+
+            <g id="truck-centered-text">
+              <text x="111" y="68" font-family="'Plus Jakarta Sans'" font-size="8" fill="#dfb76c" text-anchor="middle" opacity="0.8">✦ ✦ ✦</text>
+              <text x="111" y="83" font-family="'Plus Jakarta Sans'" font-size="12" font-weight="800" fill="#9dbf9e" letter-spacing="3" text-anchor="middle">FOOD TRUCK</text>
+              <line x1="68" y1="89" x2="154" y2="89" stroke="#dfb76c" stroke-width="1" opacity="0.75"/>
+              <text x="111" y="104" font-family="'Cormorant Garamond'" font-size="14" font-style="italic" font-weight="600" fill="#fcfaf5" text-anchor="middle" letter-spacing="0.5">Delizie nel Bosco</text>
+            </g>
+
+            <!-- Bancone e tendalino -->
+            <rect x="28" y="117" width="166" height="7" rx="2" fill="#8c774b" stroke="#5c4d3c" stroke-width="1.5"/>
+            <line x1="32" y1="52" x2="22" y2="24" stroke="#8c774b" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="190" y1="52" x2="200" y2="24" stroke="#8c774b" stroke-width="2.5" stroke-linecap="round"/>
+            <path d="M 18 24 L 204 24 L 198 48 C 188 53, 178 53, 168 48 C 158 53, 148 53, 138 48 C 128 53, 118 53, 108 48 C 98 53, 88 53, 78 48 C 68 53, 58 53, 48 48 C 38 53, 28 53, 18 48 Z" fill="#dfb5a6" stroke="#ba735f" stroke-width="2"/>
+            <path d="M 48 24 L 48 48 M 78 24 L 78 48 M 108 24 L 108 48 M 138 24 L 138 48 M 168 24 L 168 48" stroke="#fcfaf5" stroke-width="7" opacity="0.9"/>
+            <path d="M 18 24 L 204 24 L 198 48 C 188 53, 178 53, 168 48 C 158 53, 148 53, 138 48 C 128 53, 118 53, 108 48 C 98 53, 88 53, 78 48 C 68 53, 58 53, 48 48 C 38 53, 28 53, 18 48 Z" fill="none" stroke="#ba735f" stroke-width="2"/>
+
+            <!-- Ruote -->
+            <path d="M 45 178 A 30 30 0 0 1 105 178 Z" fill="#2b3f2c"/>
+            <circle cx="75" cy="178" r="26" fill="#36302a"/>
+            <circle cx="75" cy="178" r="17" fill="#fcfaf5" stroke="#c8a85f" stroke-width="2"/>
+            <circle cx="75" cy="178" r="7" fill="#5e8760" stroke="#8c774b" stroke-width="1.5"/>
+
+            <path d="M 175 178 A 30 30 0 0 1 235 178 Z" fill="#2b3f2c"/>
+            <circle cx="205" cy="178" r="26" fill="#36302a"/>
+            <circle cx="205" cy="178" r="17" fill="#fcfaf5" stroke="#c8a85f" stroke-width="2"/>
+            <circle cx="205" cy="178" r="7" fill="#5e8760" stroke="#8c774b" stroke-width="1.5"/>
+
+            <!-- Faro e targa -->
+            <rect x="254" y="152" width="14" height="18" rx="4" fill="#d4cebe" stroke="#8c774b" stroke-width="1.5"/>
+            <circle cx="258" cy="132" r="11" fill="#c8a85f" stroke="#8c774b" stroke-width="1.5"/>
+            <circle id="truck-headlight" cx="258" cy="132" r="9" fill="#fef08a" stroke="#ffffff" stroke-width="1.5" filter="url(#softGlow)"/>
+            <circle id="truck-headlight-core" cx="258" cy="132" r="5" fill="#ffffff" opacity="0.85"/>
+            
+            <rect x="246" y="162" width="18" height="9" rx="2" fill="#faf6ef" stroke="#5c4d3c" stroke-width="1"/>
+            <text x="255" y="169" font-family="'Plus Jakarta Sans'" font-size="5" font-weight="700" fill="#3d583e" text-anchor="middle">2027</text>
+          </g>
+        </g>
+
+        <!-- Musicisti jazz illustrati interattivi (Destra) -->
+        <g id="interactive-musicians" class="interactive-element" transform="translate(1140, 620) scale(0.95)" title="Clicca per far suonare la jazz band ('L-O-V-E')!">
+          <g id="musicians-body">
+            <ellipse cx="140" cy="225" rx="140" ry="15" fill="#3b3226" fill-opacity="0.15"/>
+
+            <!-- Contrabbassista -->
+            <g>
+              <circle cx="65" cy="65" r="14" fill="#4a3b2c"/>
+              <path d="M50 82 C50 82 65 78 80 82 L86 160 L44 160 Z" fill="#4c6f4e"/>
+              <line x1="52" y1="160" x2="48" y2="215" stroke="#4a3b2c" stroke-width="6" stroke-linecap="round"/>
+              <line x1="78" y1="160" x2="82" y2="215" stroke="#4a3b2c" stroke-width="6" stroke-linecap="round"/>
+              <path d="M105 85 C90 98 90 118 105 130 C85 145 85 185 110 205 C132 205 145 185 128 130 C142 118 142 98 128 85 Z" fill="#c8a85f" stroke="#8c774b" stroke-width="2"/>
+              <rect x="113" y="40" width="8" height="175" rx="3" fill="#3d2c1e"/>
+              <line x1="117" y1="35" x2="117" y2="215" stroke="#fff" stroke-width="1.5" opacity="0.7"/>
+              <line x1="58" y1="110" x2="115" y2="120" stroke="#4a3b2c" stroke-width="5" stroke-linecap="round"/>
+            </g>
+
+            <!-- Trombettista -->
+            <g transform="translate(110, 20)">
+              <circle cx="50" cy="55" r="13" fill="#4a3b2c"/>
+              <path d="M38 72 C38 72 50 68 64 72 L68 150 L34 150 Z" fill="#ce9380"/>
+              <line x1="42" y1="150" x2="40" y2="195" stroke="#4a3b2c" stroke-width="6" stroke-linecap="round"/>
+              <line x1="60" y1="150" x2="62" y2="195" stroke="#4a3b2c" stroke-width="6" stroke-linecap="round"/>
+              <path d="M55 70 L95 62 L120 48 L120 80 L95 68 Z" fill="#dfb76c" stroke="#8c774b" stroke-width="2"/>
+              <line x1="44" y1="76" x2="82" y2="70" stroke="#4a3b2c" stroke-width="4" stroke-linecap="round"/>
+            </g>
+
+            <!-- Note fluttuanti animate -->
+            <g class="animate-float-note">
+              <text x="180" y="30" font-family="'Plus Jakarta Sans'" font-size="26" font-weight="bold" fill="#5e8760">♪</text>
+              <text x="215" y="10" font-family="'Plus Jakarta Sans'" font-size="32" font-weight="bold" fill="#ba735f">♫</text>
+              <text x="90" y="15" font-family="'Plus Jakarta Sans'" font-size="22" font-weight="bold" fill="#dfb76c">♩</text>
+              <text x="15" y="45" font-family="'Plus Jakarta Sans'" font-size="28" font-weight="bold" fill="#5e8760">♬</text>
+            </g>
+          </g>
+        </g>
+      </svg>
+    </div>
+
+    <!-- Contenuto Principale Hero -->
+    <div class="relative z-10 max-w-4xl mx-auto text-center px-2">
+      
+      <!-- Badge Data & Luogo -->
+      <div class="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-white/90 backdrop-blur border border-salvia-300 text-salvia-800 text-xs font-semibold tracking-widest uppercase shadow-sm mb-5">
+        <span>10 Aprile 2027</span>
+        <span class="text-cipria-400">•</span>
+        <span>Latina</span>
+      </div>
+
+      <!-- Titolo Principale Nomi Sposi -->
+      <h1 class="font-serif text-3xl sm:text-5xl md:text-7xl lg:text-8xl text-legno font-normal tracking-tight mb-3 whitespace-nowrap flex items-center justify-center gap-1.5 sm:gap-3">
+        <span>Azzurra</span>
+        <span class="font-script text-salvia-600 text-4xl sm:text-6xl md:text-8xl lg:text-9xl font-normal">&amp;</span>
+        <span>Leonardo</span>
+      </h1>
+
+      <!-- Sottotitolo Invitante -->
+      <p class="font-serif italic text-xl sm:text-2xl md:text-3xl text-legno/90 max-w-2xl mx-auto mt-2 leading-relaxed">
+        Vi aspettiamo con gioia per condividere l’emozione del nostro "Sì" e festeggiare insieme alle persone che amiamo.
+      </p>
+
+      <!-- Interruttore Notte nel Bosco / Lucine Magiche -->
+      <div class="mt-5 inline-flex items-center gap-2 bg-white/85 backdrop-blur-md px-4 py-2 rounded-full border border-salvia-200 text-xs text-legno/80 shadow-sm cursor-pointer hover:bg-salvia-50 transition" id="toggle-lights-btn" role="button" tabindex="0">
+        <span class="w-2.5 h-2.5 rounded-full bg-yellow-400 animate-ping"></span>
+        <span id="lights-text">✨ Clicca per accendere le lucine e vivere la notte nel bosco</span>
+      </div>
+
+      <!-- BOX COUNTDOWN DINAMICO -->
+      <div class="my-8 grid grid-cols-4 gap-2 sm:gap-4 max-w-lg mx-auto">
+        <div class="bg-white/90 backdrop-blur-md rounded-2xl p-3 sm:p-5 border border-salvia-200 shadow-ambient text-center transform hover:scale-105 transition">
+          <span id="days" class="block font-serif text-3xl sm:text-5xl font-semibold text-salvia-700">00</span>
+          <span class="text-[10px] sm:text-xs font-semibold tracking-wider uppercase text-legno/70">Giorni</span>
+        </div>
+        <div class="bg-white/90 backdrop-blur-md rounded-2xl p-3 sm:p-5 border border-salvia-200 shadow-ambient text-center transform hover:scale-105 transition">
+          <span id="hours" class="block font-serif text-3xl sm:text-5xl font-semibold text-salvia-700">00</span>
+          <span class="text-[10px] sm:text-xs font-semibold tracking-wider uppercase text-legno/70">Ore</span>
+        </div>
+        <div class="bg-white/90 backdrop-blur-md rounded-2xl p-3 sm:p-5 border border-salvia-200 shadow-ambient text-center transform hover:scale-105 transition">
+          <span id="minutes" class="block font-serif text-3xl sm:text-5xl font-semibold text-salvia-700">00</span>
+          <span class="text-[10px] sm:text-xs font-semibold tracking-wider uppercase text-legno/70">Minuti</span>
+        </div>
+        <div class="bg-white/90 backdrop-blur-md rounded-2xl p-3 sm:p-5 border border-salvia-200 shadow-ambient text-center transform hover:scale-105 transition">
+          <span id="seconds" class="block font-serif text-3xl sm:text-5xl font-semibold text-salvia-700">00</span>
+          <span class="text-[10px] sm:text-xs font-semibold tracking-wider uppercase text-legno/70">Secondi</span>
+        </div>
+      </div>
+
+      <!-- Pulsanti d'Azione Rapida -->
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
+        <a href="#conferma-presenza" class="w-full sm:w-auto px-8 py-3.5 bg-salvia-500 hover:bg-salvia-600 text-white font-semibold rounded-full shadow-ambient transition duration-300 transform hover:-translate-y-1 text-center flex items-center justify-center gap-2 text-sm">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+          <span>Conferma Presenza</span>
+        </a>
+        <button id="add-calendar-btn" class="w-full sm:w-auto px-6 py-3.5 bg-white/90 hover:bg-cipria-50 text-legno font-medium rounded-full border border-salvia-300 shadow-sm transition duration-300 transform hover:-translate-y-1 text-center flex items-center justify-center gap-2 text-sm">
+          <svg class="w-4 h-4 text-cipria-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+          <span>Aggiungi al Calendario</span>
+        </button>
+      </div>
+
+      <p class="text-xs text-legno/60 mt-4 italic">
+        💡 Suggerimento: tocca i disegni nello sfondo (food truck, musicisti, querce e lucine) per interagire con loro!
+      </p>
+
+    </div>
+  </section>
+
+  <!-- SEZIONE BENVENUTO -->
+  <section id="benvenuto" class="py-20 px-4 relative">
+    <div class="max-w-3xl mx-auto text-center bg-white/85 backdrop-blur-md rounded-3xl p-8 sm:p-14 border border-salvia-200 shadow-ambient relative overflow-hidden">
+      
+      <div class="flex justify-center items-center gap-2 sm:gap-3 mb-4 text-salvia-600">
+        <svg class="w-6 h-6 sm:w-7 sm:h-7 opacity-75 shrink-0" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M17,8C8,10 5.9,16.17 3.82,21.34L5.71,22L6.66,19.7C7.14,19.87 7.64,20 8,20C19,20 22,3 22,3C21,5 14,5.25 9,6.25C4,7.25 2,11.5 2,13.5C2,15.5 3.75,17.25 3.75,17.25C7,8 17,8 17,8Z"/>
+        </svg>
+        <span class="font-serif italic text-lg sm:text-2xl text-salvia-700 whitespace-nowrap">Benvenuti al nostro matrimonio</span>
+        <svg class="w-6 h-6 sm:w-7 sm:h-7 opacity-75 shrink-0 transform -scale-x-100" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M17,8C8,10 5.9,16.17 3.82,21.34L5.71,22L6.66,19.7C7.14,19.87 7.64,20 8,20C19,20 22,3 22,3C21,5 14,5.25 9,6.25C4,7.25 2,11.5 2,13.5C2,15.5 3.75,17.25 3.75,17.25C7,8 17,8 17,8Z"/>
+        </svg>
+      </div>
+
+      <h2 class="font-serif text-3xl sm:text-5xl text-legno font-normal mb-6">
+        Vi aspettiamo per festeggiare!
+      </h2>
+
+      <div class="space-y-4 text-base sm:text-lg text-legno/80 font-light leading-relaxed">
+        <p>
+          Abbiamo pensato a questa giornata come a un momento autentico, intimo e gioioso, da vivere senza pensieri e in piena spensieratezza.
+        </p>
+        <p>
+          Dopo il rito in chiesa, ci sposteremo nel boschetto di querce per gustare insieme piatti gourmet preparati al momento dai nostri tre Food Truck, sorseggiare calici freschi al profumo di bosco e lasciarci trasportare dall'energia swing della musica dal vivo.
+        </p>
+        <p class="font-serif italic text-2xl text-salvia-700 pt-4 font-semibold">
+          La vostra presenza è il dono più bello per noi!
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROGRAMMA DELLA GIORNATA (TIMELINE VERTICALE) -->
+  <section id="programma" class="py-20 px-4 relative bg-salvia-50/70 border-y border-salvia-200">
+    <div class="max-w-4xl mx-auto">
+      
+      <div class="text-center max-w-xl mx-auto mb-16">
+        <span class="text-salvia-700 font-semibold tracking-widest text-xs uppercase block mb-2">I Momenti Salienti</span>
+        <h2 class="font-serif text-4xl sm:text-5xl text-legno">Il Programma della Giornata</h2>
+        <p class="text-legno/70 mt-3 text-sm sm:text-base">Dalla cerimonia religiosa alla festa nel verde</p>
+      </div>
+
+      <div class="relative">
+        <div class="hidden md:block absolute top-0 bottom-0 left-1/2 w-0.5 bg-salvia-300 -translate-x-1/2"></div>
+
+        <div class="space-y-12">
+          
+          <!-- 1. Cerimonia Ore 11:00 -->
+          <div class="relative flex flex-col md:flex-row items-center">
+            <div class="flex-1 md:w-1/2 md:pr-12 text-center md:text-right">
+              <div class="bg-white p-6 rounded-2xl border border-salvia-200 shadow-sm hover:shadow-md transition">
+                <span class="inline-block px-3 py-1 bg-cipria-100 text-cipria-500 text-xs font-bold rounded-full mb-2">Ore 11:00</span>
+                <h3 class="font-serif text-2xl text-legno font-semibold mb-1">Rito Religioso</h3>
+                <p class="text-sm text-legno/75 mb-2">Celebrazione del Matrimonio nella Chiesa parrocchiale</p>
+                <span class="text-xs text-salvia-700 font-medium block">Chiesa San Giuseppe Lavoratore, Latina</span>
+              </div>
+            </div>
+            <div class="my-4 md:my-0 w-12 h-12 rounded-full bg-salvia-500 text-white flex items-center justify-center z-10 shadow-md border-4 border-white transition-transform duration-300 hover:scale-110">
+              <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 21h20"/>
+                <path d="M4 21V8.5l3-3v15.5"/>
+                <path d="M5.5 3.5v2M4.5 4.5h2"/>
+                <path d="M5.5 11v1.5"/>
+                <path d="M7 11.5l5.5-4.5 6.5 5v9H7"/>
+                <path d="M12.5 3.5v3.5M11 5h3"/>
+                <circle cx="12.5" cy="12.5" r="1.5"/>
+                <path d="M11 21v-3.5a1.5 1.5 0 0 1 3 0V21"/>
+              </svg>
+            </div>
+            <div class="hidden md:block flex-1 md:w-1/2 md:pl-12"></div>
+          </div>
+
+          <!-- 2. Bosco di Querce Ore 13:30 -->
+          <div class="relative flex flex-col md:flex-row items-center">
+            <div class="hidden md:block flex-1 md:w-1/2 md:pr-12"></div>
+            <div class="my-4 md:my-0 w-12 h-12 rounded-full bg-salvia-500 text-white flex items-center justify-center z-10 shadow-md border-4 border-white transition-transform duration-300 hover:scale-110">
+              <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 21h18"/>
+                <path d="M12 21v-6"/>
+                <path d="M9.5 21c.6-2.5 1.4-4 2.5-5 1.1 1 1.9 2.5 2.5 5"/>
+                <path d="M12 15l-3-2.5"/>
+                <path d="M12 14l3-2"/>
+                <path d="M12 3.5c-2 0-3.5 1.2-4 2.8-1.2-.2-2.3.4-2.8 1.5-.7 1.3-.4 2.8.5 3.8-.8 1-.7 2.4.2 3.3.7.7 1.8 1.1 2.8 1.1h6.6c1 0 2.1-.4 2.8-1.1.9-.9 1-2.3.2-3.3.9-1 1.2-2.5.5-3.8-.5-1.1-1.6-1.7-2.8-1.5-.5-1.6-2-2.8-4-2.8z"/>
+              </svg>
+            </div>
+            <div class="flex-1 md:w-1/2 md:pl-12 text-center md:text-left">
+              <div class="bg-white p-6 rounded-2xl border border-salvia-200 shadow-sm hover:shadow-md transition">
+                <span class="inline-block px-3 py-1 bg-salvia-100 text-salvia-700 text-xs font-bold rounded-full mb-2">Ore 13:30</span>
+                <h3 class="font-serif text-2xl text-legno font-semibold mb-1">Benvenuto nel Bosco</h3>
+                <p class="text-sm text-legno/75 mb-2">Arrivo e accoglienza all’ombra delle querce secolari per iniziare a festeggiare insieme</p>
+                <span class="text-xs text-salvia-700 font-medium block">Parco delle Querce - Sporting Club, Latina</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Food Truck & Live Band Ore 14:30 -->
+          <div class="relative flex flex-col md:flex-row items-center">
+            <div class="flex-1 md:w-1/2 md:pr-12 text-center md:text-right">
+              <div class="bg-white p-6 rounded-2xl border border-salvia-200 shadow-sm hover:shadow-md transition">
+                <span class="inline-block px-3 py-1 bg-cipria-100 text-cipria-500 text-xs font-bold rounded-full mb-2">Ore 14:30</span>
+                <h3 class="font-serif text-2xl text-legno font-semibold mb-1">Food Truck &amp; Musica Live</h3>
+                <p class="text-sm text-legno/75 mb-2">Pranzo itinerante tra le tre postazioni gastronomiche accompagnato dalla nostra jazz band</p>
+                <span class="text-xs text-salvia-700 font-medium block">Menu gourmet espresso e musica per tutti</span>
+              </div>
+            </div>
+            <div class="my-4 md:my-0 w-12 h-12 rounded-full bg-salvia-500 text-white flex items-center justify-center z-10 shadow-md border-4 border-white transition-transform duration-300 hover:scale-110">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/></svg>
+            </div>
+            <div class="hidden md:block flex-1 md:w-1/2 md:pl-12"></div>
+          </div>
+
+          <!-- 4. Taglio Torta & Brindisi Finale Ore 17:30 -->
+          <div class="relative flex flex-col md:flex-row items-center">
+            <div class="hidden md:block flex-1 md:w-1/2 md:pr-12"></div>
+            <div class="my-4 md:my-0 w-12 h-12 rounded-full bg-salvia-500 text-white flex items-center justify-center z-10 shadow-md border-4 border-white transition-transform duration-300 hover:scale-110">
+              <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 21h18"/>
+                <path d="M5 21v-4a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v4z"/>
+                <path d="M7 16v-3.5a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1V16z"/>
+                <path d="M9 11.5V8.5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3z"/>
+                <path d="M12 7.5V5m0-1.5v.5"/>
+                <path d="M12 2.5c-.6.6-.6 1.4 0 2 .6-.6.6-1.4 0-2z" fill="currentColor"/>
+              </svg>
+            </div>
+            <div class="flex-1 md:w-1/2 md:pl-12 text-center md:text-left">
+              <div class="bg-white p-6 rounded-2xl border border-salvia-200 shadow-sm hover:shadow-md transition">
+                <span class="inline-block px-3 py-1 bg-salvia-100 text-salvia-700 text-xs font-bold rounded-full mb-2">Ore 17:30</span>
+                <h3 class="font-serif text-2xl text-legno font-semibold mb-1">Taglio della Torta &amp; Brindisi Finale</h3>
+                <p class="text-sm text-legno/75 mb-2">Momento del dolce sotto le fronde, brindisi augurale e saluti a conclusione della festa</p>
+                <span class="text-xs text-salvia-700 font-medium block">Brindisi finale e ringraziamenti</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SEZIONE ESPERIENZE (FOOD TRUCK & JUKEBOX LIVE) -->
+  <section id="esperienze" class="py-20 px-4 relative">
+    <div class="max-w-6xl mx-auto">
+      
+      <div class="text-center max-w-xl mx-auto mb-14">
+        <span class="text-salvia-700 font-semibold tracking-widest text-xs uppercase block mb-2">L'Atmosfera del Ricevimento</span>
+        <h2 class="font-serif text-4xl sm:text-5xl text-legno">Gusto &amp; Musica tra gli Alberi</h2>
+        <p class="text-legno/70 mt-3 text-sm sm:text-base">Esplora in anteprima i piatti dei nostri food truck e ascolta gli assoli della band</p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+        
+        <!-- CARD INTERATTIVA 1: ESPLORATORE DEI FOOD TRUCK -->
+        <div class="bg-white/90 backdrop-blur-md rounded-3xl p-6 sm:p-8 border border-salvia-200 shadow-ambient flex flex-col justify-between">
+          <div>
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
+              <span class="px-3 py-1 bg-cipria-100 text-cipria-500 text-xs font-bold rounded-full w-fit">Cucina Espressa nel Bosco</span>
+              
+              <!-- PULSANTI FILTRO CIBI: VEGETARIANI & PER I PIÙ PICCOLI -->
+              <div class="flex items-center gap-2 flex-wrap" id="diet-filters-container">
+                <button id="filter-veg-btn" type="button" class="filter-diet-btn px-3 py-1.5 rounded-full text-xs font-semibold border border-salvia-300 bg-white text-salvia-800 hover:bg-salvia-50 transition-all shadow-xs flex items-center gap-1.5 select-none" title="Filtra: Mostra solo opzioni vegetariane">
+                  <span>🍃</span>
+                  <span>Opzioni Vegetariane</span>
+                </button>
+                <button id="filter-baby-btn" type="button" class="filter-diet-btn px-3 py-1.5 rounded-full text-xs font-semibold border border-cipria-300 bg-white text-cipria-600 hover:bg-cipria-50 transition-all shadow-xs flex items-center gap-1.5 select-none" title="Filtra: Mostra solo opzioni per i più piccoli">
+                  <span>👶</span>
+                  <span>Opzioni per i più piccoli</span>
+                </button>
+              </div>
+            </div>
+            
+            <h3 class="font-serif text-3xl text-legno mb-1">I Nostri Tre Food Truck</h3>
+            <p class="text-xs sm:text-sm text-legno/75 mb-6">Tocca i pulsanti dei corner per scoprire il menu ufficiale completo:</p>
+
+            <!-- TAB TRUCK A 3 PULSANTI OMOGENEI -->
+            <div class="grid grid-cols-3 gap-2 sm:gap-3 mb-6" id="truck-tabs">
+              <button data-truck="stravizio" type="button" class="truck-tab-btn active-truck-tab py-2.5 px-2 sm:px-3 rounded-xl text-xs font-bold border text-center shadow-xs cursor-pointer select-none flex items-center justify-center gap-1.5" title="Corner 1: Stravizio">
+                <span class="truck-tab-icon text-sm sm:text-base inline-block transition-transform duration-200">🐙</span>
+                <span class="truck-tab-label">Stravizio</span>
+              </button>
+              <button data-truck="gastronomade" type="button" class="truck-tab-btn py-2.5 px-2 sm:px-3 rounded-xl text-xs font-bold border text-center shadow-xs cursor-pointer select-none flex items-center justify-center gap-1.5" title="Corner 2: Gastronomade">
+                <span class="truck-tab-icon text-sm sm:text-base inline-block transition-transform duration-200">🍝</span>
+                <span class="truck-tab-label">Gastronomade</span>
+              </button>
+              <button data-truck="gingiro" type="button" class="truck-tab-btn py-2.5 px-2 sm:px-3 rounded-xl text-xs font-bold border text-center shadow-xs cursor-pointer select-none flex items-center justify-center gap-1.5" title="Corner 3: Gingiro">
+                <span class="truck-tab-icon text-sm sm:text-base inline-block transition-transform duration-200">🌮</span>
+                <span class="truck-tab-label">Gingiro</span>
+              </button>
+            </div>
+
+            <!-- CONTENUTO DEL TRUCK CON LISTA PIATTI E BADGE -->
+            <div id="truck-content" class="bg-avorio/90 p-5 sm:p-6 rounded-2xl border border-salvia-200 min-h-[360px] flex flex-col justify-between">
+              <div>
+                <div class="border-b border-salvia-200/80 pb-3 mb-4">
+                  <h4 id="truck-title" class="font-serif text-2xl text-salvia-800 font-semibold mb-1">Corner 1: Stravizio — Friggitoria &amp; Mini Bun Gourmet</h4>
+                  <p id="truck-subtitle" class="text-xs text-legno/70 italic">Friggitoria fragrante espressa e panini gourmet pluripremiati</p>
+                </div>
+                
+                <div id="truck-dishes-list" class="space-y-3.5">
+                  <!-- Piatti renderizzati via JS -->
+                </div>
+              </div>
+
+              <!-- Nota di fondo del riquadro per i primi espressi -->
+              <div id="truck-bottom-notice" class="hidden mt-4 p-3.5 rounded-xl bg-salvia-100/90 border border-salvia-300/90 text-xs text-salvia-900 flex items-start gap-2 shadow-xs">
+                <span class="text-sm shrink-0">ℹ️</span>
+                <p class="leading-relaxed">
+                  <strong>Nota:</strong> Questa pasta è preparata espressa ed è esclusivamente per chi, nella compilazione della conferma presenza, nelle esigenze alimentari, segnala di essere vegetariano oppure di portare un bambino.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-6 pt-4 border-t border-salvia-100 text-center">
+            <span class="card-bottom-note text-xs text-legno/60">Tutti i food truck saranno aperti e accessibili liberamente per tutta la durata dell'evento.</span>
+          </div>
+        </div>
+
+        <!-- CARD INTERATTIVA 2: JUKEBOX LIVE -->
+        <div class="bg-white/90 backdrop-blur-md rounded-3xl p-6 sm:p-8 border border-salvia-200 shadow-ambient flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <span class="px-3 py-1 bg-salvia-100 text-salvia-700 text-xs font-bold rounded-full">Musica dal Vivo</span>
+              <span class="text-xs text-cipria-500 font-medium">🎺 Jazz, Swing &amp; Acustico</span>
+            </div>
+            
+            <h3 class="font-serif text-3xl text-legno mb-2">Il Jukebox della Band</h3>
+            <p class="text-xs sm:text-sm text-legno/75 mb-6">Tocca uno strumento per ascoltare l'assolo; un secondo tocco interrompe la musica:</p>
+
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+              
+              <!-- Tromba -->
+              <button id="btn-sound-trumpet" class="sound-instrument-btn p-3 rounded-2xl border border-salvia-300 bg-avorio hover:bg-salvia-100 text-center transition transform active:scale-95 group relative overflow-hidden">
+                <span class="instrument-icon text-2xl block mb-1 group-hover:scale-110 transition">🎺</span>
+                <span class="text-xs font-semibold text-legno block">Tromba</span>
+                <span class="instrument-status text-[10px] text-salvia-600 block transition">Assolo a Fiato</span>
+              </button>
+
+              <!-- Contrabbasso -->
+              <button id="btn-sound-bass" class="sound-instrument-btn p-3 rounded-2xl border border-salvia-300 bg-avorio hover:bg-salvia-100 text-center transition transform active:scale-95 group relative overflow-hidden">
+                <span class="instrument-icon text-2xl block mb-1 group-hover:scale-110 transition">🎻</span>
+                <span class="text-xs font-semibold text-legno block">Contrabbasso</span>
+                <span class="instrument-status text-[10px] text-salvia-600 block transition">Pizzicato Jazz</span>
+              </button>
+              
+              <!-- Chitarra -->
+              <button id="btn-sound-guitar" class="sound-instrument-btn p-3 rounded-2xl border border-salvia-300 bg-avorio hover:bg-salvia-100 text-center transition transform active:scale-95 group relative overflow-hidden">
+                <span class="instrument-icon text-2xl block mb-1 group-hover:scale-110 transition">🎸</span>
+                <span class="text-xs font-semibold text-legno block">Chitarra</span>
+                <span class="instrument-status text-[10px] text-salvia-600 block transition">Tono Jazz Elettrico</span>
+              </button>
+
+              <!-- Batteria -->
+              <button id="btn-sound-drums" class="sound-instrument-btn p-3 rounded-2xl border border-salvia-300 bg-avorio hover:bg-salvia-100 text-center transition transform active:scale-95 group relative overflow-hidden">
+                <span class="instrument-icon text-2xl block mb-1 group-hover:scale-110 transition">🥁</span>
+                <span class="text-xs font-semibold text-legno block">Batteria</span>
+                <span class="instrument-status text-[10px] text-salvia-600 block transition">Ritmo Swing</span>
+              </button>
+            </div>
+
+            <!-- BOX VOTAZIONE SEGRETA CANZONI CON CONTATORE SEMPRE AGGIORNATO -->
+            <div class="bg-avorio/90 p-5 rounded-2xl border border-salvia-300 shadow-xs mb-6 space-y-4">
+              
+              <!-- Intestazione e Nota Ufficiale della Votazione -->
+              <div class="border-b border-salvia-200/80 pb-3">
+                <div class="flex items-center justify-between gap-2 flex-wrap mb-1">
+                  <h4 class="font-serif text-xl font-bold text-salvia-800 flex items-center gap-1.5">
+                    <span>🗳️</span>
+                    <span>Vota il Brano per la Band</span>
+                  </h4>
+                  <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-salvia-100 text-salvia-800 border border-salvia-200">
+                    <span>🔒</span> Voto 100% Segreto &amp; Anonimo
+                  </span>
+                </div>
+                
+                <!-- NOTA OBBLIGATORIA: Il brano più votato sarà richiesto alla band + Voto segreto -->
+                <p class="text-xs text-legno/80 leading-relaxed mt-2 bg-white/80 p-3 rounded-xl border border-salvia-200">
+                  <strong class="text-salvia-800">Nota:</strong> <strong>La canzone che risulterà la più votata sarà quella ufficialmente richiesta alla nostra live band</strong> per essere eseguita durante la festa nel bosco! Il voto è <strong class="text-salvia-800">completamente segreto e anonimo</strong>: nessuno vedrà chi ha votato cosa, vedrai soltanto il contatore dei voti aggiornato in tempo reale.
+                </p>
+              </div>
+
+              <!-- Banner In Evidenza: Canzone Attualmente Più Votata (Contatore Live) -->
+              <div id="song-leader-banner" class="song-leader-banner bg-gradient-to-r from-salvia-100 to-amber-50 border border-oro/60 p-3.5 rounded-xl flex items-center justify-between gap-3 shadow-xs">
+                <div class="flex items-center gap-2.5 min-w-0">
+                  <span class="text-2xl shrink-0 animate-bounce">👑</span>
+                  <div class="min-w-0">
+                    <span class="leader-badge-label text-[10px] font-bold uppercase tracking-wider text-salvia-700 block">Attualmente al 1° Posto</span>
+                    <span id="leader-song-title" class="font-serif text-base font-bold text-legno truncate block">Caricamento classifica...</span>
+                  </div>
+                </div>
+                <div class="text-right shrink-0">
+                  <span id="leader-song-votes" class="px-2.5 py-1 bg-white font-bold text-xs rounded-full text-salvia-800 border border-oro shadow-xs block">
+                    0 voti
+                  </span>
+                </div>
+              </div>
+
+              <!-- Lista Canzoni con Contatori Live e Tasto Voto Anonimo -->
+              <div class="space-y-2">
+                <span class="text-[11px] font-bold uppercase tracking-wider text-legno/70 block mb-1">Classifica in tempo reale:</span>
+                <div id="songs-ranking-list" class="space-y-2 max-h-[260px] overflow-y-auto pr-1">
+                  <!-- Generato dinamicamente via JS -->
+                </div>
+              </div>
+
+              <!-- Modulo Rapido per Aggiungere e Votare un Nuovo Brano in Segreto -->
+              <div class="pt-3 border-t border-salvia-200/80">
+                <label for="new-song-input" class="block text-[11px] font-semibold text-legno/80 mb-1.5">Non trovi la tua canzone preferita? Proponila in segreto:</label>
+                <div class="flex items-center gap-2">
+                  <input type="text" id="new-song-input" placeholder="Es. Volare — Domenico Modugno" class="flex-1 px-3 py-2 text-xs rounded-xl border border-salvia-300 focus:outline-none focus:ring-2 focus:ring-salvia-400 bg-white text-legno">
+                  <button type="button" id="add-song-vote-btn" class="px-3.5 py-2 bg-salvia-500 hover:bg-salvia-600 text-white rounded-xl text-xs font-semibold shadow-xs transition flex items-center gap-1 shrink-0">
+                    <span>+</span> <span>Vota</span>
+                  </button>
+                </div>
+                <p class="text-[10px] text-legno/60 mt-1.5 italic leading-relaxed">
+                  Verrà aggiunta subito alla lista con il tuo voto segreto conteggiato. Se commetti un errore di battitura, potrai eliminarla direttamente dalla lista tramite l'icona 🗑️ visibile solo a te.
+                </p>
+              </div>
+
+            </div>
+
+            <!-- Mini pillola informativa band -->
+            <div class="bg-salvia-50/70 p-4 rounded-2xl border border-salvia-200 flex items-center gap-3">
+              <span class="text-2xl shrink-0">🎷</span>
+              <p class="text-xs text-legno/80 leading-relaxed">
+                Repertorio swing e jazz d'annata per creare un sottofondo caldo, frizzante ed elegante tra gli alberi del parco.
+              </p>
+            </div>
+          </div>
+
+          <div class="mt-6 pt-4 border-t border-salvia-100 text-center">
+            <span class="card-bottom-note text-xs text-legno/60">Quattro musicisti dal vivo scandiranno i brindisi e le danze nel bosco.</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- MODULO CONFERMA PRESENZA DINAMICO -->
+  <section id="conferma-presenza" class="py-20 px-4 relative">
+    <div class="max-w-2xl mx-auto bg-white rounded-3xl p-8 sm:p-12 border border-salvia-300 shadow-ambient relative overflow-hidden">
+      
+      <div class="relative z-10 text-center mb-8">
+        <span class="text-salvia-700 font-semibold tracking-widest text-xs uppercase block mb-1">Ci Sarai?</span>
+        <h2 class="font-serif text-4xl text-legno font-normal">Conferma Presenza</h2>
+        <p class="text-sm text-legno/70 mt-2">
+          Vi preghiamo gentilmente di confermare la vostra presenza entro il <strong class="font-semibold text-legno">15 Febbraio 2027</strong>
+        </p>
+      </div>
+
+      <!-- Form con invio AJAX FormSubmit -->
+      <form id="conferma-presenza-form" class="relative z-10 space-y-5">
+        
+        <div>
+          <label class="block text-xs font-semibold text-legno uppercase tracking-wider mb-1.5" for="name">Nome e Cognome *</label>
+          <input type="text" name="Nome_e_Cognome" id="name" required placeholder="Es. Mario Rossi" class="w-full px-4 py-3 rounded-xl border border-salvia-300 focus:outline-none focus:ring-2 focus:ring-salvia-400 bg-avorio/50 text-sm">
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-legno uppercase tracking-wider mb-1.5" for="email">Email *</label>
+            <input type="email" name="Email" id="email" required placeholder="mario@esempio.it" class="w-full px-4 py-3 rounded-xl border border-salvia-300 focus:outline-none focus:ring-2 focus:ring-salvia-400 bg-avorio/50 text-sm">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-legno uppercase tracking-wider mb-1.5" for="phone">Telefono</label>
+            <input type="tel" name="Telefono" id="phone" placeholder="+39 333 0000000" class="w-full px-4 py-3 rounded-xl border border-salvia-300 focus:outline-none focus:ring-2 focus:ring-salvia-400 bg-avorio/50 text-sm">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-legno uppercase tracking-wider mb-1.5">Parteciperai? *</label>
+          <div class="grid grid-cols-2 gap-3">
+            <label class="flex items-center justify-center p-3 rounded-xl border border-salvia-300 cursor-pointer hover:bg-salvia-50 transition font-medium text-sm text-legno has-[:checked]:bg-salvia-100 has-[:checked]:border-salvia-600">
+              <input type="radio" name="Presenza" value="Sì, con gioia!" checked class="mr-2 accent-salvia-600">
+              Sì, con gioia!
+            </label>
+            <label class="flex items-center justify-center p-3 rounded-xl border border-salvia-300 cursor-pointer hover:bg-salvia-50 transition font-medium text-sm text-legno has-[:checked]:bg-cipria-100 has-[:checked]:border-cipria-400">
+              <input type="radio" name="Presenza" value="Purtroppo no" class="mr-2 accent-cipria-500">
+              Purtroppo no
+            </label>
+          </div>
+        </div>
+
+        <div id="conferma-presenza-extra-options" class="space-y-4">
+          <div>
+            <label class="block text-xs font-semibold text-legno uppercase tracking-wider mb-1.5" for="guests">Numero Totale Partecipanti (incluso te)</label>
+            <select name="Numero_Ospiti" id="guests" class="w-full px-4 py-3 rounded-xl border border-salvia-300 focus:outline-none focus:ring-2 focus:ring-salvia-400 bg-avorio/50 text-sm">
+              <option value="1 persona">1 persona</option>
+              <option value="2 persone" selected>2 persone</option>
+              <option value="3 persone">3 persone</option>
+              <option value="4 persone">4 persone</option>
+              <option value="5 o più persone">5 o più persone</option>
+            </select>
+          </div>
+
+          <!-- Riquadro dinamico per nominativi di ciascun ospite aggiuntivo -->
+          <div id="dynamic-guests-container" class="space-y-3 p-4 bg-salvia-50/70 rounded-2xl border border-salvia-200"></div>
+
+          <div>
+            <label class="block text-xs font-semibold text-legno uppercase tracking-wider mb-1.5" for="diet">Esigenze alimentari, allergie o intolleranze</label>
+            <input type="text" name="Esigenze_Alimentari" id="diet" placeholder="Es. Celiachia, Vegetariano, Vegano, Bambini (pasta al pomodoro/burro), Allergie specifiche..." class="w-full px-4 py-3 rounded-xl border border-salvia-300 focus:outline-none focus:ring-2 focus:ring-salvia-400 bg-avorio/50 text-sm">
+            <p class="text-[11px] text-legno/65 mt-1.5 italic">💡 Segnala qui se sei vegetariano o se porti bambini per la preparazione della pasta al pomodoro o al burro e parmigiano espressa.</p>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-legno uppercase tracking-wider mb-1.5" for="message">Un pensiero o messaggio per gli sposi</label>
+          <textarea name="Messaggio_per_gli_sposi" id="message" rows="3" placeholder="Scrivi qui il tuo augurio o nota speciale..." class="w-full px-4 py-3 rounded-xl border border-salvia-300 focus:outline-none focus:ring-2 focus:ring-salvia-400 bg-avorio/50 text-sm"></textarea>
+        </div>
+
+        <button type="submit" id="conferma-presenza-submit-btn" class="w-full py-4 bg-salvia-500 hover:bg-salvia-600 text-white font-semibold rounded-xl shadow-ambient transition duration-300 transform hover:-translate-y-0.5 flex items-center justify-center gap-2">
+          <span>Invia la tua Risposta</span>
+        </button>
+      </form>
+
+      <!-- Feedback di avvenuta conferma -->
+      <div id="conferma-presenza-success" class="hidden text-center py-12 space-y-4">
+        <div class="w-16 h-16 bg-salvia-100 text-salvia-600 rounded-full flex items-center justify-center mx-auto mb-2 shadow-inner">
+          <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+        </div>
+        <h3 class="font-serif text-3xl text-legno font-semibold">Grazie di Cuore!</h3>
+        <p class="text-sm text-legno/80 max-w-sm mx-auto leading-relaxed">
+          La tua risposta è stata inviata e registrata con successo. Non vediamo l'ora di festeggiare insieme a te il 10 Aprile 2027 a Latina!
+        </p>
+        <button id="conferma-presenza-reset" class="text-xs text-salvia-700 underline font-medium hover:text-salvia-800 pt-2 block mx-auto">
+          Invia un'altra conferma
+        </button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER ELEGANTE -->
+  <footer class="py-12 px-4 bg-salvia-800 text-white text-center relative overflow-hidden">
+    <div class="max-w-4xl mx-auto relative z-10 space-y-4">
+      <p class="font-script text-4xl sm:text-5xl text-salvia-200">
+        Azzurra &amp; Leonardo
+      </p>
+      <p class="font-serif text-xs tracking-widest text-salvia-100/90 uppercase">
+        10 Aprile 2027 • Latina
+      </p>
+      <div class="w-16 h-px bg-salvia-400/40 mx-auto my-3"></div>
+      <p class="text-xs text-salvia-300/80 font-light">
+        Non vediamo l'ora di vivere e condividere questo giorno indimenticabile con tutti voi.
+      </p>
+    </div>
+  </footer>
+
+  <!-- SCRIPT JS APPLICATIVO COMPLETO -->
+  <script>
+    (function () {
+      "use strict";
+
+      let isNightMode = false;
+
+      // 1. COUNTDOWN MATRIMONIO (10 Aprile 2027, Ore 11:00 CEST)
+      const targetDate = new Date('2027-04-10T11:00:00+02:00').getTime();
+
+      function updateCountdown() {
+        const now = new Date().getTime();
+        const diff = targetDate - now;
+
+        if (diff > 0) {
+          const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+          const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+          const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+          const daysEl = document.getElementById('days');
+          const hoursEl = document.getElementById('hours');
+          const minEl = document.getElementById('minutes');
+          const secEl = document.getElementById('seconds');
+
+          if (daysEl) daysEl.innerText = String(d).padStart(2, '0');
+          if (hoursEl) hoursEl.innerText = String(h).padStart(2, '0');
+          if (minEl) minEl.innerText = String(m).padStart(2, '0');
+          if (secEl) secEl.innerText = String(s).padStart(2, '0');
+        }
+      }
+      setInterval(updateCountdown, 1000);
+      updateCountdown();
+
+      // 2. MOTORE AUDIO AD ALTA FEDELTÀ (WEB AUDIO API & FALLBACK SICURO)
+      let audioCtx = null;
+      let masterGain = null;
+      let compressor = null;
+      let reverbNode = null;
+      let trumpetWave = null;
+      let bassWave = null;
+      let guitarWave = null;
+
+      let instrumentSubGain = null;
+      let activeSynthOscillators = [];
+      let synthTimeoutId = null;
+
+      function createAcousticReverbBuffer(ctx) {
+        const rate = ctx.sampleRate;
+        const length = Math.floor(rate * 1.25);
+        const decay = 2.4;
+        const buffer = ctx.createBuffer(2, length, rate);
+        const left = buffer.getChannelData(0);
+        const right = buffer.getChannelData(1);
+        for (let i = 0; i < length; i++) {
+          const t = i / rate;
+          const env = Math.exp(-t * decay);
+          left[i] = (Math.random() * 2 - 1) * env * (1 + 0.25 * Math.sin(t * 120));
+          right[i] = (Math.random() * 2 - 1) * env * (1 + 0.25 * Math.cos(t * 120));
+        }
+        return buffer;
+      }
+
+      function getAudioContext() {
+        if (!audioCtx) {
+          const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+          if (!AudioContextClass) return null;
+          audioCtx = new AudioContextClass();
+
+          compressor = audioCtx.createDynamicsCompressor();
+          compressor.threshold.setValueAtTime(-16, audioCtx.currentTime);
+          compressor.knee.setValueAtTime(20, audioCtx.currentTime);
+          compressor.ratio.setValueAtTime(3.5, audioCtx.currentTime);
+          compressor.attack.setValueAtTime(0.005, audioCtx.currentTime);
+          compressor.release.setValueAtTime(0.18, audioCtx.currentTime);
+
+          masterGain = audioCtx.createGain();
+          masterGain.gain.setValueAtTime(0.9, audioCtx.currentTime);
+
+          try {
+            reverbNode = audioCtx.createConvolver();
+            reverbNode.buffer = createAcousticReverbBuffer(audioCtx);
+            const reverbGain = audioCtx.createGain();
+            reverbGain.gain.setValueAtTime(0.18, audioCtx.currentTime);
+            reverbNode.connect(reverbGain);
+            reverbGain.connect(compressor);
+          } catch (e) {
+            reverbNode = null;
+          }
+
+          masterGain.connect(compressor);
+          compressor.connect(audioCtx.destination);
+
+          // Tavola d'ottone per tromba
+          const trReal = new Float32Array([0, 0.40, 0.90, 1.00, 0.82, 0.65, 0.48, 0.32, 0.22, 0.14, 0.09, 0.06, 0.03]);
+          const trImag = new Float32Array(trReal.length);
+          trumpetWave = audioCtx.createPeriodicWave(trReal, trImag);
+
+          // Tavola per contrabbasso jazz
+          const bassReal = new Float32Array([0, 1.00, 0.70, 0.40, 0.20, 0.08, 0.04, 0.02]);
+          const bassImag = new Float32Array(bassReal.length);
+          bassWave = audioCtx.createPeriodicWave(bassReal, bassImag);
+
+          // Tavola per chitarra jazz Archtop
+          const gtReal = new Float32Array([0, 1.00, 0.85, 0.55, 0.32, 0.18, 0.08, 0.03, 0.01]);
+          const gtImag = new Float32Array(gtReal.length);
+          guitarWave = audioCtx.createPeriodicWave(gtReal, gtImag);
+        }
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+        return audioCtx;
+      }
+
+      window.addEventListener('touchstart', function unlockAudio() {
+        getAudioContext();
+        window.removeEventListener('touchstart', unlockAudio);
+      }, { once: true });
+
+      function playSingleNote(freq, type = 'sine', duration = 0.25) {
+        try {
+          const ctx = getAudioContext();
+          if (!ctx) return;
+          const now = ctx.currentTime;
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+
+          osc.type = type;
+          osc.frequency.setValueAtTime(freq, now);
+
+          gain.gain.setValueAtTime(0.18, now);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+
+          osc.connect(gain);
+          gain.connect(masterGain);
+
+          osc.start(now);
+          osc.stop(now + duration + 0.05);
+        } catch (e) {}
+      }
+
+      let tubeDistortionCurve = null;
+      function getTubeCurve() {
+        if (!tubeDistortionCurve) {
+          const n_samples = 2048;
+          tubeDistortionCurve = new Float32Array(n_samples);
+          for (let i = 0; i < n_samples; ++i) {
+            const x = (i * 2) / n_samples - 1;
+            tubeDistortionCurve[i] = Math.tanh(1.5 * x) + 0.04 * Math.sin(Math.PI * x);
+          }
+        }
+        return tubeDistortionCurve;
+      }
+
+      // 1. Sintesi Tromba Jazz Acustica
+      function playAcousticTrumpet(freq, startTime, duration = 0.65, addVibrato = true, targetBus = null) {
+        try {
+          const ctx = getAudioContext();
+          if (!ctx) return;
+          const destinationBus = targetBus || masterGain;
+          const t0 = Math.max(ctx.currentTime, startTime);
+
+          // Soffio naturale di fiato
+          const breathLen = Math.floor(ctx.sampleRate * 0.04);
+          const breathBuf = ctx.createBuffer(1, breathLen, ctx.sampleRate);
+          const bData = breathBuf.getChannelData(0);
+          for (let i = 0; i < breathLen; i++) {
+            bData[i] = (Math.random() * 2 - 1) * Math.exp(-i / (ctx.sampleRate * 0.012));
+          }
+          const breathSrc = ctx.createBufferSource();
+          breathSrc.buffer = breathBuf;
+          const bFilter = ctx.createBiquadFilter();
+          bFilter.type = 'bandpass';
+          bFilter.frequency.setValueAtTime(1600, t0);
+          bFilter.Q.setValueAtTime(2.0, t0);
+          const bGain = ctx.createGain();
+          bGain.gain.setValueAtTime(0.06, t0);
+          bGain.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.04);
+          breathSrc.connect(bFilter);
+          bFilter.connect(bGain);
+          bGain.connect(destinationBus);
+          breathSrc.start(t0);
+          breathSrc.stop(t0 + 0.045);
+          activeSynthOscillators.push(breathSrc);
+
+          const osc = ctx.createOscillator();
+          if (trumpetWave) {
+            osc.setPeriodicWave(trumpetWave);
+          } else {
+            osc.type = 'sawtooth';
+          }
+
+          const scoopFreq = freq * 0.985;
+          osc.frequency.setValueAtTime(scoopFreq, t0);
+          osc.frequency.exponentialRampToValueAtTime(freq, t0 + 0.045);
+
+          if (addVibrato && duration > 0.32) {
+            const lfo = ctx.createOscillator();
+            const lfoGain = ctx.createGain();
+            lfo.frequency.setValueAtTime(5.3, t0);
+            lfoGain.gain.setValueAtTime(0.0001, t0);
+            lfoGain.gain.setValueAtTime(0.0001, t0 + 0.16);
+            lfoGain.gain.linearRampToValueAtTime(freq * 0.014, t0 + 0.38);
+            lfo.connect(lfoGain);
+            lfoGain.connect(osc.frequency);
+            lfo.start(t0);
+            lfo.stop(t0 + duration + 0.08);
+            activeSynthOscillators.push(lfo);
+          }
+
+          const dynamicBrassFilter = ctx.createBiquadFilter();
+          dynamicBrassFilter.type = 'lowpass';
+          dynamicBrassFilter.frequency.setValueAtTime(freq * 1.8, t0);
+          dynamicBrassFilter.frequency.exponentialRampToValueAtTime(Math.min(6500, Math.max(200, freq * 5.2)), t0 + 0.07);
+          dynamicBrassFilter.frequency.exponentialRampToValueAtTime(Math.max(100, freq * 3.4), t0 + duration * 0.65);
+          dynamicBrassFilter.frequency.exponentialRampToValueAtTime(Math.max(50, freq * 1.5), t0 + duration);
+
+          const bellPeak = ctx.createBiquadFilter();
+          bellPeak.type = 'peaking';
+          bellPeak.frequency.setValueAtTime(1200, t0);
+          bellPeak.Q.setValueAtTime(2.2, t0);
+          bellPeak.gain.setValueAtTime(5.0, t0);
+
+          const ampGain = ctx.createGain();
+          ampGain.gain.setValueAtTime(0.0001, t0);
+          ampGain.gain.linearRampToValueAtTime(0.24, t0 + 0.04);
+          ampGain.gain.setValueAtTime(0.22, Math.max(t0 + 0.05, t0 + duration - 0.09));
+          ampGain.gain.exponentialRampToValueAtTime(0.0001, t0 + duration);
+
+          osc.connect(dynamicBrassFilter);
+          dynamicBrassFilter.connect(bellPeak);
+          bellPeak.connect(ampGain);
+          ampGain.connect(destinationBus);
+          if (reverbNode) ampGain.connect(reverbNode);
+
+          osc.start(t0);
+          osc.stop(t0 + duration + 0.08);
+          activeSynthOscillators.push(osc);
+        } catch (e) {}
+      }
+
+      // 2. Sintesi Contrabbasso Jazz
+      function playKarplusStrongBass(freq, startTime, duration = 0.95, gainLevel = 1.0, targetBus = null) {
+        try {
+          const ctx = getAudioContext();
+          if (!ctx) return;
+          const destinationBus = targetBus || masterGain;
+          const t0 = Math.max(ctx.currentTime, startTime);
+
+          // Slap del polpastrello
+          const thudLen = Math.floor(ctx.sampleRate * 0.038);
+          const thudBuf = ctx.createBuffer(1, thudLen, ctx.sampleRate);
+          const thudData = thudBuf.getChannelData(0);
+          for (let i = 0; i < thudLen; i++) {
+            thudData[i] = (Math.random() * 2 - 1) * Math.exp(-i / (ctx.sampleRate * 0.007));
+          }
+          const thudSrc = ctx.createBufferSource();
+          thudSrc.buffer = thudBuf;
+          const thudFilter = ctx.createBiquadFilter();
+          thudFilter.type = 'bandpass';
+          thudFilter.frequency.setValueAtTime(140, t0);
+          thudFilter.Q.setValueAtTime(1.8, t0);
+          const thudGain = ctx.createGain();
+          thudGain.gain.setValueAtTime(0.32 * gainLevel, t0);
+          thudGain.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.038);
+          thudSrc.connect(thudFilter);
+          thudFilter.connect(thudGain);
+          thudGain.connect(destinationBus);
+          thudSrc.start(t0);
+          thudSrc.stop(t0 + 0.045);
+          activeSynthOscillators.push(thudSrc);
+
+          // Fondamentale calda
+          const fundOsc = ctx.createOscillator();
+          fundOsc.type = 'sine';
+          fundOsc.frequency.setValueAtTime(freq, t0);
+          const fundGain = ctx.createGain();
+          fundGain.gain.setValueAtTime(0.85 * gainLevel, t0);
+          fundGain.gain.exponentialRampToValueAtTime(0.0001, t0 + duration);
+          fundOsc.connect(fundGain);
+          fundGain.connect(destinationBus);
+          fundOsc.start(t0);
+          fundOsc.stop(t0 + duration + 0.05);
+          activeSynthOscillators.push(fundOsc);
+
+          // Armoniche lignee cassa
+          const woodOsc = ctx.createOscillator();
+          if (bassWave) {
+            woodOsc.setPeriodicWave(bassWave);
+          } else {
+            woodOsc.type = 'triangle';
+          }
+          woodOsc.frequency.setValueAtTime(freq, t0);
+
+          const woodLowPass = ctx.createBiquadFilter();
+          woodLowPass.type = 'lowpass';
+          woodLowPass.frequency.setValueAtTime(360, t0);
+
+          const woodGain = ctx.createGain();
+          woodGain.gain.setValueAtTime(0.55 * gainLevel, t0);
+          woodGain.gain.exponentialRampToValueAtTime(0.0001, t0 + duration * 0.95);
+
+          woodOsc.connect(woodLowPass);
+          woodLowPass.connect(woodGain);
+          woodGain.connect(destinationBus);
+          if (reverbNode) woodGain.connect(reverbNode);
+
+          woodOsc.start(t0);
+          woodOsc.stop(t0 + duration + 0.05);
+          activeSynthOscillators.push(woodOsc);
+        } catch (e) {}
+      }
+
+      // 3. Sintesi Chitarra Jazz Archtop
+      function playElectricGuitar(freq, startTime, duration = 2.2, gainLevel = 0.5, addVibrato = false, targetBus = null) {
+        try {
+          const ctx = getAudioContext();
+          if (!ctx) return;
+          const destinationBus = targetBus || masterGain;
+          const t0 = Math.max(ctx.currentTime, startTime);
+
+          // Attacco a plettro/pollice
+          const pickLen = Math.floor(ctx.sampleRate * 0.022);
+          const pickBuf = ctx.createBuffer(1, pickLen, ctx.sampleRate);
+          const pickData = pickBuf.getChannelData(0);
+          for (let i = 0; i < pickLen; i++) {
+            const env = Math.exp(-i / (ctx.sampleRate * 0.005));
+            pickData[i] = (Math.random() * 2 - 1) * env * 0.14;
+          }
+          const pickSrc = ctx.createBufferSource();
+          pickSrc.buffer = pickBuf;
+          const pickFilter = ctx.createBiquadFilter();
+          pickFilter.type = 'bandpass';
+          pickFilter.frequency.setValueAtTime(1450, t0);
+          pickFilter.Q.setValueAtTime(1.8, t0);
+          const pickGain = ctx.createGain();
+          pickGain.gain.setValueAtTime(gainLevel * 0.22, t0);
+          pickGain.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.022);
+          pickSrc.connect(pickFilter);
+          pickFilter.connect(pickGain);
+          pickGain.connect(destinationBus);
+          pickSrc.start(t0);
+          pickSrc.stop(t0 + 0.025);
+          activeSynthOscillators.push(pickSrc);
+
+          const osc = ctx.createOscillator();
+          if (guitarWave) {
+            osc.setPeriodicWave(guitarWave);
+          } else {
+            osc.type = 'triangle';
+          }
+          osc.frequency.setValueAtTime(freq, t0);
+
+          if (addVibrato && duration > 0.6) {
+            const lfo = ctx.createOscillator();
+            const lfoGain = ctx.createGain();
+            lfo.frequency.setValueAtTime(4.8, t0);
+            lfoGain.gain.setValueAtTime(0.0001, t0);
+            lfoGain.gain.setValueAtTime(0.0001, t0 + 0.25);
+            lfoGain.gain.linearRampToValueAtTime(freq * 0.012, t0 + 0.6);
+            lfo.connect(lfoGain);
+            lfoGain.connect(osc.frequency);
+            lfo.start(t0);
+            lfo.stop(t0 + duration + 0.1);
+            activeSynthOscillators.push(lfo);
+          }
+
+          const dynamicStringFilter = ctx.createBiquadFilter();
+          dynamicStringFilter.type = 'lowpass';
+          dynamicStringFilter.frequency.setValueAtTime(Math.min(3200, Math.max(100, freq * 6.5)), t0);
+          dynamicStringFilter.frequency.exponentialRampToValueAtTime(Math.min(1800, Math.max(100, freq * 3.2)), t0 + 0.15);
+          dynamicStringFilter.frequency.exponentialRampToValueAtTime(Math.min(950, Math.max(100, freq * 1.8)), t0 + duration);
+
+          const woodBody = ctx.createBiquadFilter();
+          woodBody.type = 'peaking';
+          woodBody.frequency.setValueAtTime(380, t0);
+          woodBody.Q.setValueAtTime(1.6, t0);
+          woodBody.gain.setValueAtTime(4.0, t0);
+
+          const ampGain = ctx.createGain();
+          ampGain.gain.setValueAtTime(0.0001, t0);
+          ampGain.gain.linearRampToValueAtTime(gainLevel * 0.85, t0 + 0.016);
+          ampGain.gain.exponentialRampToValueAtTime(Math.max(0.001, gainLevel * 0.45), t0 + 0.25);
+          ampGain.gain.exponentialRampToValueAtTime(0.0001, t0 + duration);
+
+          osc.connect(dynamicStringFilter);
+          dynamicStringFilter.connect(woodBody);
+          woodBody.connect(ampGain);
+          ampGain.connect(destinationBus);
+          if (reverbNode) ampGain.connect(reverbNode);
+
+          osc.start(t0);
+          osc.stop(t0 + duration + 0.05);
+          activeSynthOscillators.push(osc);
+        } catch (e) {}
+      }
+
+      // 4. Sintesi Batteria Jazz Swing (Cassa, Spazzola, Piatto Ride)
+      function playWarmJazzKick(startTime, volume = 0.85, targetBus = null) {
+        try {
+          const ctx = getAudioContext();
+          if (!ctx) return;
+          const destinationBus = targetBus || masterGain;
+          const t0 = Math.max(ctx.currentTime, startTime);
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(115, t0);
+          osc.frequency.exponentialRampToValueAtTime(44, t0 + 0.18);
+          gain.gain.setValueAtTime(0.95 * volume, t0);
+          gain.gain.exponentialRampToValueAtTime(0.001, t0 + 0.24);
+          osc.connect(gain);
+          gain.connect(destinationBus);
+          osc.start(t0);
+          osc.stop(t0 + 0.25);
+          activeSynthOscillators.push(osc);
+        } catch (e) {}
+      }
+
+      function playBrushedSnare(startTime, volume = 0.65, targetBus = null) {
+        try {
+          const ctx = getAudioContext();
+          if (!ctx) return;
+          const destinationBus = targetBus || masterGain;
+          const t0 = Math.max(ctx.currentTime, startTime);
+
+          const toneOsc = ctx.createOscillator();
+          const toneGain = ctx.createGain();
+          toneOsc.type = 'triangle';
+          toneOsc.frequency.setValueAtTime(180, t0);
+          toneOsc.frequency.exponentialRampToValueAtTime(90, t0 + 0.08);
+          toneGain.gain.setValueAtTime(0.35 * volume, t0);
+          toneGain.gain.exponentialRampToValueAtTime(0.001, t0 + 0.09);
+          toneOsc.connect(toneGain);
+          toneGain.connect(destinationBus);
+          toneOsc.start(t0);
+          toneOsc.stop(t0 + 0.10);
+          activeSynthOscillators.push(toneOsc);
+
+          const len = Math.floor(ctx.sampleRate * 0.22);
+          const buf = ctx.createBuffer(1, len, ctx.sampleRate);
+          const d = buf.getChannelData(0);
+          for (let i = 0; i < len; i++) {
+            d[i] = (Math.random() * 2 - 1) * Math.exp(-i / (ctx.sampleRate * 0.065));
+          }
+          const src = ctx.createBufferSource();
+          src.buffer = buf;
+          const bp = ctx.createBiquadFilter();
+          bp.type = 'bandpass';
+          bp.frequency.setValueAtTime(2800, t0);
+          bp.Q.setValueAtTime(1.4, t0);
+          const gain = ctx.createGain();
+          gain.gain.setValueAtTime(0.5 * volume, t0);
+          gain.gain.exponentialRampToValueAtTime(0.0004, t0 + 0.20);
+          src.connect(bp);
+          bp.connect(gain);
+          gain.connect(destinationBus);
+          if (reverbNode) gain.connect(reverbNode);
+          src.start(t0);
+          src.stop(t0 + 0.22);
+          activeSynthOscillators.push(src);
+        } catch (e) {}
+      }
+
+      function playJazzRideCymbal(startTime, volume = 0.45, targetBus = null) {
+        try {
+          const ctx = getAudioContext();
+          if (!ctx) return;
+          const destinationBus = targetBus || masterGain;
+          const t0 = Math.max(ctx.currentTime, startTime);
+          const metalFreqs = [3140, 4820, 5920, 7150, 8930, 11200];
+          metalFreqs.forEach((mf, i) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(mf, t0);
+            const dur = 0.45 + i * 0.08;
+            gain.gain.setValueAtTime((0.12 / metalFreqs.length) * volume, t0);
+            gain.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+            osc.connect(gain);
+            gain.connect(destinationBus);
+            if (reverbNode) gain.connect(reverbNode);
+            osc.start(t0);
+            osc.stop(t0 + dur + 0.02);
+            activeSynthOscillators.push(osc);
+          });
+        } catch (e) {}
+      }
+
+      // Clacson Food truck
+      function playClassicHorn() {
+        try {
+          const ctx = getAudioContext();
+          if (!ctx) return;
+          const now = ctx.currentTime;
+          [0, 0.2].forEach(delay => {
+            const start = now + delay;
+            const dur = 0.14;
+            [440, 554.37].forEach(freq => {
+              const osc = ctx.createOscillator();
+              const gain = ctx.createGain();
+              const filter = ctx.createBiquadFilter();
+              osc.type = 'sawtooth';
+              osc.frequency.setValueAtTime(freq, start);
+              filter.type = 'lowpass';
+              filter.frequency.setValueAtTime(1600, start);
+              gain.gain.setValueAtTime(0.0001, start);
+              gain.gain.linearRampToValueAtTime(0.2, start + 0.015);
+              gain.gain.setValueAtTime(0.2, start + dur - 0.02);
+              gain.gain.linearRampToValueAtTime(0.0001, start + dur);
+              osc.connect(filter);
+              filter.connect(gain);
+              gain.connect(masterGain);
+              osc.start(start);
+              osc.stop(start + dur + 0.02);
+            });
+          });
+        } catch (e) {}
+      }
+
+      // Brano corale standard "L-O-V-E" (Musica dei Musicisti nell'Hero)
+      function playJazzBandSound() {
+        try {
+          const ctx = getAudioContext();
+          if (!ctx) return;
+          const now = ctx.currentTime;
+
+          // 1. Contrabbasso walking swing
+          const bassWalk = [
+            { f: 49.00, t: 0.00 },
+            { f: 61.74, t: 0.28 },
+            { f: 73.42, t: 0.56 },
+            { f: 82.41, t: 0.84 },
+            { f: 87.31, t: 1.12 },
+            { f: 73.42, t: 1.40 },
+            { f: 61.74, t: 1.68 },
+            { f: 49.00, t: 1.96 }
+          ];
+          bassWalk.forEach(b => playKarplusStrongBass(b.f, now + b.t, 0.48, 1.15));
+
+          // 2. Chitarra jazz comping
+          const chordG = [146.83, 196.00, 246.94, 293.66];
+          const chordE = [164.81, 196.00, 246.94, 329.63];
+          const chordA = [146.83, 220.00, 261.63, 329.63];
+          const chordD = [146.83, 220.00, 293.66, 369.99];
+
+          [0.28, 0.84, 1.40, 1.96].forEach((t, i) => {
+            const chord = i === 0 ? chordG : (i === 1 ? chordE : (i === 2 ? chordA : chordD));
+            chord.forEach((f, idx) => playElectricGuitar(f, now + t + idx * 0.015, 0.75, 0.28));
+          });
+
+          // 3. Tromba jazz melodia
+          const loveTrumpetMelody = [
+            { f: 329.63, t: 0.05, d: 0.22 },
+            { f: 392.00, t: 0.28, d: 0.22 },
+            { f: 523.25, t: 0.52, d: 0.24 },
+            { f: 659.25, t: 0.78, d: 0.26 },
+            { f: 587.33, t: 1.06, d: 0.38 },
+            { f: 493.88, t: 1.46, d: 0.24 },
+            { f: 392.00, t: 1.72, d: 0.85 }
+          ];
+          loveTrumpetMelody.forEach((n, idx) => {
+            playAcousticTrumpet(n.f, now + n.t, n.d, idx === loveTrumpetMelody.length - 1);
+          });
+
+          // 4. Batteria swing
+          const drumBeats = [0.00, 0.28, 0.56, 0.84, 1.12, 1.40, 1.68, 1.96];
+          drumBeats.forEach((t, idx) => {
+            playJazzRideCymbal(now + t, 0.35);
+            if (idx % 2 === 0) {
+              playWarmJazzKick(now + t, 0.85);
+            } else {
+              playBrushedSnare(now + t, 0.60);
+            }
+            if (idx % 2 === 1 && idx < drumBeats.length - 1) {
+              playJazzRideCymbal(now + t + 0.18, 0.28);
+            }
+          });
+        } catch (e) {}
+      }
+
+      // Fruscio foglie di quercia
+      function playLeavesRustle() {
+        try {
+          const ctx = getAudioContext();
+          if (!ctx) return;
+          const now = ctx.currentTime;
+          const bufferSize = ctx.sampleRate * 0.85;
+          const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+          const data = buffer.getChannelData(0);
+          for (let i = 0; i < bufferSize; i++) {
+            data[i] = Math.random() * 2 - 1;
+          }
+          const noise = ctx.createBufferSource();
+          noise.buffer = buffer;
+          const filter = ctx.createBiquadFilter();
+          filter.type = 'bandpass';
+          filter.frequency.setValueAtTime(650, now);
+          filter.frequency.exponentialRampToValueAtTime(1400, now + 0.3);
+          filter.frequency.exponentialRampToValueAtTime(450, now + 0.85);
+          filter.Q.value = 2.6;
+          const gain = ctx.createGain();
+          gain.gain.setValueAtTime(0.01, now);
+          gain.gain.linearRampToValueAtTime(0.24, now + 0.2);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.85);
+          noise.connect(filter);
+          filter.connect(gain);
+          gain.connect(masterGain);
+          noise.start(now);
+          noise.stop(now + 0.88);
+        } catch (e) {}
+      }
+
+      // Jukebox Live: Assoli specifici per ciascun strumento
+      function playSynthesizedInstrument(instrument) {
+        const ctx = getAudioContext();
+        if (!ctx) return;
+        const now = ctx.currentTime;
+
+        // Creiamo un sub-bus isolato per consentire lo stop istantaneo
+        instrumentSubGain = ctx.createGain();
+        instrumentSubGain.gain.setValueAtTime(1.0, now);
+        instrumentSubGain.connect(masterGain);
+
+        if (instrument === 'trumpet') {
+          const trumpetSolo = [
+            { f: 392.00, t: 0.00, d: 0.24 },
+            { f: 493.88, t: 0.24, d: 0.22 },
+            { f: 587.33, t: 0.48, d: 0.26 },
+            { f: 659.25, t: 0.74, d: 0.24 },
+            { f: 587.33, t: 1.00, d: 0.24 },
+            { f: 493.88, t: 1.26, d: 0.22 },
+            { f: 440.00, t: 1.50, d: 0.20 },
+            { f: 392.00, t: 1.72, d: 0.95 }
+          ];
+          trumpetSolo.forEach((n, idx) => {
+            playAcousticTrumpet(n.f, now + n.t, n.d, idx === trumpetSolo.length - 1, instrumentSubGain);
+          });
+        } else if (instrument === 'bass') {
+          const bassWalkSolo = [
+            { f: 49.00, t: 0.00, d: 0.30 },
+            { f: 61.74, t: 0.28, d: 0.28 },
+            { f: 73.42, t: 0.56, d: 0.28 },
+            { f: 82.41, t: 0.84, d: 0.28 },
+            { f: 92.50, t: 1.12, d: 0.26 },
+            { f: 98.00, t: 1.38, d: 0.28 },
+            { f: 73.42, t: 1.66, d: 0.28 },
+            { f: 49.00, t: 1.94, d: 1.10 }
+          ];
+          bassWalkSolo.forEach(n => {
+            playKarplusStrongBass(n.f, now + n.t, n.d, 1.25, instrumentSubGain);
+          });
+        } else if (instrument === 'guitar') {
+          playElectricGuitar(246.94, now + 0.00, 0.38, 0.46, false, instrumentSubGain);
+          playElectricGuitar(293.66, now + 0.32, 0.36, 0.48, false, instrumentSubGain);
+          playElectricGuitar(329.63, now + 0.64, 0.85, 0.54, true, instrumentSubGain);
+
+          const jazzChordG = [
+            { f: 98.00,  d: 2.8, g: 0.52 },
+            { f: 146.83, d: 2.7, g: 0.44 },
+            { f: 185.00, d: 2.6, g: 0.46 },
+            { f: 246.94, d: 2.5, g: 0.45 },
+            { f: 329.63, d: 2.5, g: 0.42 }
+          ];
+          jazzChordG.forEach((note, idx) => {
+            playElectricGuitar(note.f, now + 1.28 + idx * 0.045, note.d, note.g, false, instrumentSubGain);
+          });
+        } else if (instrument === 'drums') {
+          playWarmJazzKick(now + 0.00, 1.0, instrumentSubGain);
+          playJazzRideCymbal(now + 0.00, 0.45, instrumentSubGain);
+          playBrushedSnare(now + 0.24, 0.65, instrumentSubGain);
+          playJazzRideCymbal(now + 0.24, 0.40, instrumentSubGain);
+          playJazzRideCymbal(now + 0.38, 0.32, instrumentSubGain);
+
+          playWarmJazzKick(now + 0.50, 0.90, instrumentSubGain);
+          playJazzRideCymbal(now + 0.50, 0.45, instrumentSubGain);
+          playBrushedSnare(now + 0.74, 0.95, instrumentSubGain);
+          playJazzRideCymbal(now + 0.74, 0.42, instrumentSubGain);
+          playJazzRideCymbal(now + 0.88, 0.34, instrumentSubGain);
+
+          playWarmJazzKick(now + 1.00, 1.0, instrumentSubGain);
+          playJazzRideCymbal(now + 1.00, 0.48, instrumentSubGain);
+          playBrushedSnare(now + 1.24, 0.75, instrumentSubGain);
+          playJazzRideCymbal(now + 1.24, 0.40, instrumentSubGain);
+          playJazzRideCymbal(now + 1.38, 0.32, instrumentSubGain);
+
+          playWarmJazzKick(now + 1.50, 1.05, instrumentSubGain);
+          playBrushedSnare(now + 1.72, 1.10, instrumentSubGain);
+          playJazzRideCymbal(now + 1.72, 0.60, instrumentSubGain);
+        }
+      }
+
+      // Gestione file audio locali con estensioni multiple e fallback istantaneo
+      const instrumentBaseNames = {
+        trumpet: ['tromba', 'Tromba', 'trumpet'],
+        bass: ['contrabbasso', 'Contrabbasso', 'basso', 'bass'],
+        guitar: ['chitarra', 'Chitarra', 'guitar'],
+        drums: ['batteria', 'Batteria', 'drums']
+      };
+      const supportedAudioExtensions = ['mpeg', 'mp3', 'm4a', 'wav', 'ogg', 'mpg'];
+
+      let currentPlayingAudio = null;
+      let currentPlayingInstrument = null;
+
+      const originalSubtitles = {
+        'btn-sound-trumpet': 'Assolo a Fiato',
+        'btn-sound-bass': 'Pizzicato Jazz',
+        'btn-sound-guitar': 'Tono Jazz Elettrico',
+        'btn-sound-drums': 'Ritmo Swing'
+      };
+
+      function resetInstrumentUI() {
+        document.querySelectorAll('.sound-instrument-btn').forEach(btn => {
+          btn.classList.remove('ring-2', 'ring-salvia-500', 'bg-salvia-100', 'shadow-md');
+          btn.classList.add('bg-avorio');
+          const icon = btn.querySelector('.instrument-icon');
+          if (icon) icon.classList.remove('animate-bounce');
+          const status = btn.querySelector('.instrument-status');
+          if (status && originalSubtitles[btn.id]) {
+            status.innerText = originalSubtitles[btn.id];
+            status.classList.remove('text-salvia-800', 'font-bold');
+            status.classList.add('text-salvia-600');
+          }
+        });
+      }
+
+      function stopAllInstruments() {
+        if (currentPlayingAudio) {
+          try {
+            currentPlayingAudio.pause();
+            currentPlayingAudio.currentTime = 0;
+          } catch (e) {}
+          currentPlayingAudio = null;
+        }
+
+        if (instrumentSubGain && audioCtx) {
+          try {
+            instrumentSubGain.gain.setValueAtTime(0.0001, audioCtx.currentTime);
+            instrumentSubGain.disconnect();
+          } catch (e) {}
+          instrumentSubGain = null;
+        }
+
+        activeSynthOscillators.forEach(osc => {
+          try {
+            osc.stop();
+            osc.disconnect();
+          } catch (e) {}
+        });
+        activeSynthOscillators = [];
+
+        if (synthTimeoutId) {
+          clearTimeout(synthTimeoutId);
+          synthTimeoutId = null;
+        }
+
+        currentPlayingInstrument = null;
+        resetInstrumentUI();
+      }
+
+      function setInstrumentActiveUI(btnId) {
+        resetInstrumentUI();
+        const btn = document.getElementById(btnId);
+        if (!btn) return;
+
+        btn.classList.remove('bg-avorio');
+        btn.classList.add('ring-2', 'ring-salvia-500', 'bg-salvia-100', 'shadow-md');
+        
+        const icon = btn.querySelector('.instrument-icon');
+        if (icon) icon.classList.add('animate-bounce');
+
+        const status = btn.querySelector('.instrument-status');
+        if (status) {
+          status.innerText = '⏹ Tocca per stop';
+          status.classList.remove('text-salvia-600');
+          status.classList.add('text-salvia-800', 'font-bold');
+        }
+      }
+
+      function playInstrumentAudio(instrumentName, btnId) {
+        // Toggle: se già in riproduzione, interrompi subito
+        if (currentPlayingInstrument === instrumentName) {
+          stopAllInstruments();
+          return;
+        }
+
+        stopAllInstruments();
+
+        const baseNames = instrumentBaseNames[instrumentName] || [instrumentName];
+        const candidates = [];
+
+        baseNames.forEach(name => {
+          supportedAudioExtensions.forEach(ext => {
+            candidates.push(`audio/${name}.${ext}`);
+            candidates.push(`audio/${name}.${ext.toUpperCase()}`);
+          });
+        });
+
+        let currentIdx = 0;
+        let hasTriggeredFallback = false;
+
+        function fallbackToSynthesis() {
+          if (hasTriggeredFallback) return;
+          hasTriggeredFallback = true;
+          currentPlayingInstrument = instrumentName;
+          setInstrumentActiveUI(btnId);
+          playSynthesizedInstrument(instrumentName);
+          synthTimeoutId = setTimeout(() => {
+            stopAllInstruments();
+          }, 3200);
+        }
+
+        // Test veloce: se i primi file non rispondono immediatamente, fallback istantaneo
+        function tryNextAudio() {
+          if (currentIdx >= candidates.length || currentIdx >= 4) {
+            fallbackToSynthesis();
+            return;
+          }
+
+          const src = candidates[currentIdx++];
+          const audio = new Audio(src);
+          audio.volume = 0.95;
+
+          let hasFailed = false;
+          const onError = () => {
+            if (!hasFailed) {
+              hasFailed = true;
+              tryNextAudio();
+            }
+          };
+
+          audio.addEventListener('error', onError, { once: true });
+          audio.addEventListener('ended', () => {
+            stopAllInstruments();
+          });
+
+          const playPromise = audio.play();
+          if (playPromise !== undefined) {
+            playPromise.then(() => {
+              currentPlayingAudio = audio;
+              currentPlayingInstrument = instrumentName;
+              setInstrumentActiveUI(btnId);
+            }).catch(onError);
+          }
+        }
+
+        tryNextAudio();
+      }
+
+      function handleInstrumentClick(btnId, instrumentName) {
+        const btn = document.getElementById(btnId);
+        if (btn) {
+          btn.addEventListener('click', () => {
+            const isStarting = (currentPlayingInstrument !== instrumentName);
+            playInstrumentAudio(instrumentName, btnId);
+            if (isStarting) {
+              const rect = btn.getBoundingClientRect();
+              spawnMusicNotes(rect.left + rect.width / 2 - 10, rect.top + rect.height / 2 - 10, 6);
+            }
+          });
+        }
+      }
+
+      handleInstrumentClick('btn-sound-trumpet', 'trumpet');
+      handleInstrumentClick('btn-sound-bass', 'bass');
+      handleInstrumentClick('btn-sound-guitar', 'guitar');
+      handleInstrumentClick('btn-sound-drums', 'drums');
+
+      // 3. MENU UFFICIALE COMPLETO DEI FOOD TRUCK & FILTRI ALIMENTARI
+      let currentDietFilter = 'all'; // 'all', 'veg', 'baby'
+      let activeTruckCorner = 'stravizio';
+
+      const foodTruckMenus = {
+        stravizio: {
+          title: "Corner 1: Stravizio — Friggitoria & Mini Bun Gourmet",
+          subtitle: "Friggitoria espressa fragrante e mini bun artigianali pluripremiati",
+          dishes: [
+            {
+              name: "Mix fritti misti",
+              desc: "Supplì, crocchette di patate e olive ascolane dorate",
+              badges: ["baby"]
+            },
+            {
+              name: "Verdure pastellate",
+              desc: "Selezione di verdure croccanti pastellate",
+              badges: ["veg"]
+            },
+            {
+              name: "Frittura di calamari",
+              desc: "Calamari freschi dorati e croccanti",
+              badges: []
+            },
+            {
+              name: "Gamberi in tempura con salsa agrodolce",
+              desc: "Gamberi fragranti serviti con salsa agrodolce",
+              badges: []
+            },
+            {
+              name: "Nuggets con salse",
+              desc: "Bocconcini dorati e teneri serviti con salse",
+              badges: ["baby"]
+            },
+            {
+              name: "Patatine fritte",
+              desc: "Chips espresse dorate al momento",
+              badges: ["baby", "veg"]
+            },
+            {
+              name: "Mini bun polpotto",
+              desc: "Panino artigianale con friarielli, polpo alla piastra, olio evo al limone, stracciatella e pomodoro secco — premiato Gambero Rosso",
+              badges: ["gambero"]
+            },
+            {
+              name: "Mini bun pulled pork",
+              desc: "Panino artigianale con cicoria ripassata, pulled pork e salsa agrodolce",
+              badges: []
+            },
+            {
+              name: "Mini maritozzi pulled salmon",
+              desc: "Maritozzo artigianale con rucola, salmone cotto a bassa e lenta temperatura, salsa coleslaw e salsa yogurt",
+              badges: []
+            }
+          ]
+        },
+        gastronomade: {
+          title: "Corner 2: Gastronomade — Primi Piatti Espressi",
+          subtitle: "La tradizione della pasta fresca trafilata e mantecata a vista",
+          dishes: [
+            {
+              name: "Caramelle ripiene",
+              desc: "Caramelle ripiene di radicchio e speck con fonduta di parmigiano",
+              badges: []
+            },
+            {
+              name: "Tagliolino con bisque di scampi",
+              desc: "Tagliolino fresco con bisque di scampi, pesto di mandorle e scampi in tartare",
+              badges: []
+            },
+            {
+              name: "Pennone di Gragnano",
+              desc: "Pennone di Gragnano con crema di carciofi, guanciale croccante e pecorino",
+              badges: []
+            },
+            {
+              name: "Pasta al pomodoro",
+              desc: "Pasta espressa preparata al momento con salsa di pomodoro dolce e basilico fresco.",
+              badges: ["veg", "baby"],
+              onlyOnFilter: true,
+              dietaryNotice: "Questa pasta è preparata espressa ed è esclusivamente per chi, nella compilazione della conferma presenza, nelle esigenze alimentari, segnala di essere vegetariano oppure di portare un bambino."
+            },
+            {
+              name: "Pasta burro e parmigiano",
+              desc: "Pasta espressa preparata al momento e mantecata con burro fresco e abbondante parmigiano reggiano DOP.",
+              badges: ["veg", "baby"],
+              onlyOnFilter: true,
+              dietaryNotice: "Questa pasta è preparata espressa ed è esclusivamente per chi, nella compilazione della conferma presenza, nelle esigenze alimentari, segnala di essere vegetariano oppure di portare un bambino."
+            }
+          ]
+        },
+        gingiro: {
+          title: "Corner 3: Gingiro — Street Food & Bao Fusion",
+          subtitle: "Profumi orientali incontrano l'eccellenza delle materie prime italiane",
+          dishes: [
+            {
+              name: "Taco con pulled pork",
+              desc: "Taco con pulled pork, insalatina coleslaw fresca e salsa Bbq",
+              badges: []
+            },
+            {
+              name: "Bao tartare di chianina",
+              desc: "Paninetto al vapore ripieno di tartare di chianina e maionese al tartufo",
+              badges: []
+            },
+            {
+              name: "Bao con melanzane",
+              desc: "Paninetto al vapore ripieno di melanzane, salsa di pomodoro, gel al basilico e parmigiano",
+              badges: ["veg"]
+            },
+            {
+              name: "Mini focaccina con tataki di tonno",
+              desc: "Mini focaccina con tataki di tonno, maionese al lime e verza",
+              badges: []
+            }
+          ]
+        }
+      };
+
+      function renderTruckMenu(cornerKey) {
+        activeTruckCorner = cornerKey;
+        const data = foodTruckMenus[cornerKey];
+        if (!data) return;
+
+        const titleEl = document.getElementById('truck-title');
+        const subtitleEl = document.getElementById('truck-subtitle');
+        const listEl = document.getElementById('truck-dishes-list');
+        const bottomNoticeEl = document.getElementById('truck-bottom-notice');
+
+        if (titleEl) titleEl.innerText = data.title;
+        if (subtitleEl) subtitleEl.innerText = data.subtitle;
+
+        if (listEl) {
+          listEl.innerHTML = '';
+
+          // Applica il filtro attivo
+          let filteredDishes = data.dishes;
+          if (currentDietFilter === 'veg') {
+            filteredDishes = data.dishes.filter(d => d.badges.includes('veg'));
+          } else if (currentDietFilter === 'baby') {
+            filteredDishes = data.dishes.filter(d => d.badges.includes('baby'));
+          } else {
+            // Nel menù normale non mostriamo le opzioni speciali riservate su richiesta
+            filteredDishes = data.dishes.filter(d => !d.onlyOnFilter);
+          }
+
+          // Se nessun piatto corrisponde al filtro nel corner attivo
+          if (filteredDishes.length === 0) {
+            const emptyNotice = document.createElement('div');
+            emptyNotice.className = 'text-center py-10 px-4 bg-white/70 rounded-xl border border-dashed border-salvia-300';
+            const filterLabel = currentDietFilter === 'veg' ? 'vegetariano' : 'per i più piccoli';
+            const filterIcon = currentDietFilter === 'veg' ? '🍃' : '👶';
+            emptyNotice.innerHTML = `
+              <span class="text-2xl block mb-2">${filterIcon}</span>
+              <p class="text-sm font-semibold text-legno mb-1">Nessun piatto ${filterLabel} in questo corner</p>
+              <p class="text-xs text-legno/70 mb-3">Esplora gli altri food truck oppure tocca di nuovo il filtro per visualizzare tutti i piatti.</p>
+              <button type="button" id="reset-diet-filter-btn" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-semibold bg-salvia-100 hover:bg-salvia-200 text-salvia-800 transition">
+                <span>✕</span> <span>Mostra tutti i piatti del corner</span>
+              </button>
+            `;
+            listEl.appendChild(emptyNotice);
+            const resetFilterBtn = document.getElementById('reset-diet-filter-btn');
+            if (resetFilterBtn) {
+              resetFilterBtn.addEventListener('click', () => {
+                currentDietFilter = 'all';
+                updateDietFilterButtonsUI();
+                renderTruckMenu(activeTruckCorner);
+              });
+            }
+            if (bottomNoticeEl) bottomNoticeEl.classList.add('hidden');
+            return;
+          }
+
+          // Renderizza i piatti
+          filteredDishes.forEach(dish => {
+            const dishDiv = document.createElement('div');
+            dishDiv.className = 'p-3.5 rounded-xl bg-white border border-salvia-200/90 shadow-xs flex flex-col gap-1 transition hover:border-salvia-300';
+
+            const badgesArr = [];
+
+            // Il riconoscimento Gambero Rosso per il bun polpotto è sempre mostrato in primo piano
+            if (dish.badges && dish.badges.includes('gambero')) {
+              badgesArr.push('<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-900 border border-amber-300 shadow-xs">🏆 Premiato Gambero Rosso</span>');
+            }
+
+            // I badge dietetici compaiono solo quando il rispettivo filtro è attivo
+            if (currentDietFilter === 'veg') {
+              badgesArr.push('<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-salvia-100 text-salvia-800 border border-salvia-200">🍃 Vegetariano</span>');
+            } else if (currentDietFilter === 'baby') {
+              badgesArr.push('<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-cipria-100 text-cipria-600 border border-cipria-200">👶 Per i più piccoli</span>');
+            }
+
+            dishDiv.innerHTML = `
+              <div class="flex items-center justify-between gap-2 flex-wrap">
+                <span class="text-sm font-bold text-legno">${dish.name}</span>
+                ${badgesArr.length > 0 ? `<div class="flex items-center gap-1.5 flex-wrap">${badgesArr.join('')}</div>` : ''}
+              </div>
+              <p class="text-xs text-legno/75 leading-relaxed">${dish.desc}</p>
+            `;
+            listEl.appendChild(dishDiv);
+          });
+
+          // Mostra la nota di fondo del riquadro se sono presenti piatti espressi riservati (dietaryNotice)
+          const hasDietaryNoticeDish = filteredDishes.some(d => d.dietaryNotice);
+          if (bottomNoticeEl) {
+            if (hasDietaryNoticeDish) {
+              bottomNoticeEl.classList.remove('hidden');
+            } else {
+              bottomNoticeEl.classList.add('hidden');
+            }
+          }
+        }
+      }
+
+      function updateDietFilterButtonsUI() {
+        const vegBtn = document.getElementById('filter-veg-btn');
+        const babyBtn = document.getElementById('filter-baby-btn');
+        if (!vegBtn || !babyBtn) return;
+
+        if (currentDietFilter === 'veg') {
+          vegBtn.classList.remove('bg-white', 'text-salvia-800', 'hover:bg-salvia-50');
+          vegBtn.classList.add('bg-salvia-600', 'text-white', 'border-salvia-700', 'active-filter', 'shadow-sm', 'ring-2', 'ring-salvia-400');
+
+          babyBtn.classList.remove('bg-cipria-500', 'text-white', 'border-cipria-600', 'active-filter', 'shadow-sm', 'ring-2', 'ring-cipria-300');
+          babyBtn.classList.add('bg-white', 'text-cipria-600', 'hover:bg-cipria-50');
+        } else if (currentDietFilter === 'baby') {
+          babyBtn.classList.remove('bg-white', 'text-cipria-600', 'hover:bg-cipria-50');
+          babyBtn.classList.add('bg-cipria-500', 'text-white', 'border-cipria-600', 'active-filter', 'shadow-sm', 'ring-2', 'ring-cipria-300');
+
+          vegBtn.classList.remove('bg-salvia-600', 'text-white', 'border-salvia-700', 'active-filter', 'shadow-sm', 'ring-2', 'ring-salvia-400');
+          vegBtn.classList.add('bg-white', 'text-salvia-800', 'hover:bg-salvia-50');
+        } else {
+          vegBtn.classList.remove('bg-salvia-600', 'text-white', 'border-salvia-700', 'active-filter', 'shadow-sm', 'ring-2', 'ring-salvia-400');
+          vegBtn.classList.add('bg-white', 'text-salvia-800', 'hover:bg-salvia-50');
+
+          babyBtn.classList.remove('bg-cipria-500', 'text-white', 'border-cipria-600', 'active-filter', 'shadow-sm', 'ring-2', 'ring-cipria-300');
+          babyBtn.classList.add('bg-white', 'text-cipria-600', 'hover:bg-cipria-50');
+        }
+      }
+
+      const vegFilterBtn = document.getElementById('filter-veg-btn');
+      if (vegFilterBtn) {
+        vegFilterBtn.addEventListener('click', () => {
+          currentDietFilter = (currentDietFilter === 'veg') ? 'all' : 'veg';
+          updateDietFilterButtonsUI();
+          renderTruckMenu(activeTruckCorner);
+          playSingleNote(currentDietFilter === 'veg' ? 659.25 : 440, 'triangle', 0.15);
+        });
+      }
+
+      const babyFilterBtn = document.getElementById('filter-baby-btn');
+      if (babyFilterBtn) {
+        babyFilterBtn.addEventListener('click', () => {
+          currentDietFilter = (currentDietFilter === 'baby') ? 'all' : 'baby';
+          updateDietFilterButtonsUI();
+          renderTruckMenu(activeTruckCorner);
+          playSingleNote(currentDietFilter === 'baby' ? 784 : 440, 'triangle', 0.15);
+        });
+      }
+
+      const truckTabBtns = document.querySelectorAll('.truck-tab-btn');
+
+      function updateTruckTabsUI(selectedKey) {
+        truckTabBtns.forEach(btn => {
+          const key = btn.getAttribute('data-truck');
+          const isCurrent = (key === selectedKey);
+          const icon = btn.querySelector('.truck-tab-icon');
+
+          if (isCurrent) {
+            btn.classList.add('active-truck-tab');
+            btn.classList.remove('border-salvia-200');
+            if (icon) {
+              icon.classList.add('animate-bounce');
+              setTimeout(() => {
+                icon.classList.remove('animate-bounce');
+              }, 700);
+            }
+          } else {
+            btn.classList.remove('active-truck-tab');
+            btn.classList.add('border-salvia-200');
+            if (icon) {
+              icon.classList.remove('animate-bounce');
+            }
+          }
+        });
+      }
+
+      truckTabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const key = btn.getAttribute('data-truck');
+          if (activeTruckCorner === key) return;
+
+          btn.classList.remove('animate-tab-pop');
+          void btn.getBoundingClientRect();
+          btn.classList.add('animate-tab-pop');
+
+          const truckContent = document.getElementById('truck-content');
+          if (truckContent) {
+            truckContent.classList.remove('animate-truck-fade');
+            void truckContent.getBoundingClientRect();
+            truckContent.classList.add('animate-truck-fade');
+          }
+
+          updateTruckTabsUI(key);
+          renderTruckMenu(key);
+          playSingleNote(587.33, 'triangle', 0.15);
+
+          const rect = btn.getBoundingClientRect();
+          spawnPetalBurst(rect.left + rect.width / 2, rect.top + rect.height / 2, 5);
+        });
+      });
+
+      updateTruckTabsUI('stravizio');
+      renderTruckMenu('stravizio');
+
+      // 3.1 SISTEMA DI VOTAZIONE SEGRETA DELLE CANZONI CON VOTI REALI AL 100%
+      // Nessuna canzone pre-impostata: la lista parte vuota e cresce solo con le proposte reali degli invitati
+      const STORAGE_SONGS_KEY = 'wedding_clean_real_songs_v2';
+      const STORAGE_USER_VOTES_KEY = 'wedding_clean_user_votes_v2';
+      const STORAGE_USER_CREATED_KEY = 'wedding_clean_user_created_v2';
+
+      // Rimuove automaticamente dalla memoria del browser qualsiasi residuo di vecchie versioni con canzoni fittizie
+      (function purgeLegacyMockData() {
+        const legacyKeys = [
+          'wedding_real_songs_ranking_v1',
+          'wedding_user_voted_song_ids_v1',
+          'wedding_user_created_song_ids_v1',
+          'wedding_songs_ranking_v1',
+          'wedding_songs_list',
+          'wedding_user_votes'
+        ];
+        legacyKeys.forEach(k => {
+          try {
+            localStorage.removeItem(k);
+          } catch (e) {}
+        });
+      })();
+
+      const MOCK_TITLES_LOWER = [
+        'l-o-v-e',
+        'fly me to the moon',
+        'buonasera signorina',
+        'tu vuò fà l\'americano',
+        'tu vuo fa l\'americano'
+      ];
+
+      function loadSecretSongs() {
+        try {
+          const stored = localStorage.getItem(STORAGE_SONGS_KEY);
+          if (stored) {
+            const parsed = JSON.parse(stored);
+            if (Array.isArray(parsed)) {
+              // Elimina qualsiasi brano mock ereditato per errore
+              return parsed.filter(s => {
+                const titleNorm = (s.title || '').trim().toLowerCase();
+                return !MOCK_TITLES_LOWER.includes(titleNorm) && !String(s.id).startsWith('mock-');
+              });
+            }
+          }
+        } catch (e) {}
+        return [];
+      }
+
+      function saveSecretSongs(songsList) {
+        try {
+          localStorage.setItem(STORAGE_SONGS_KEY, JSON.stringify(songsList));
+        } catch (e) {}
+      }
+
+      function loadUserVotedIds() {
+        try {
+          const stored = localStorage.getItem(STORAGE_USER_VOTES_KEY);
+          if (stored) {
+            const parsed = JSON.parse(stored);
+            if (Array.isArray(parsed)) return parsed;
+          }
+        } catch (e) {}
+        return [];
+      }
+
+      function saveUserVotedIds(ids) {
+        try {
+          localStorage.setItem(STORAGE_USER_VOTES_KEY, JSON.stringify(ids));
+        } catch (e) {}
+      }
+
+      function loadUserCreatedIds() {
+        try {
+          const stored = localStorage.getItem(STORAGE_USER_CREATED_KEY);
+          if (stored) {
+            const parsed = JSON.parse(stored);
+            if (Array.isArray(parsed)) return parsed;
+          }
+        } catch (e) {}
+        return [];
+      }
+
+      function saveUserCreatedIds(ids) {
+        try {
+          localStorage.setItem(STORAGE_USER_CREATED_KEY, JSON.stringify(ids));
+        } catch (e) {}
+      }
+
+      let secretSongs = loadSecretSongs();
+      let userVotedIds = loadUserVotedIds();
+      let userCreatedSongIds = loadUserCreatedIds();
+
+      function renderSongLeaderboard() {
+        const rankingListEl = document.getElementById('songs-ranking-list');
+        const rankingContainer = document.getElementById('songs-ranking-container');
+        const emptyStateEl = document.getElementById('songs-empty-state');
+        const leaderBanner = document.getElementById('song-leader-banner');
+        const leaderTitleEl = document.getElementById('leader-song-title');
+        const leaderVotesEl = document.getElementById('leader-song-votes');
+
+        if (!rankingListEl) return;
+
+        // Se non è ancora stata proposta alcuna canzone, mostra solo lo stato vuoto
+        if (secretSongs.length === 0) {
+          if (leaderBanner) leaderBanner.classList.add('hidden');
+          if (rankingContainer) rankingContainer.classList.add('hidden');
+          if (emptyStateEl) emptyStateEl.classList.remove('hidden');
+          return;
+        }
+
+        // Se sono presenti canzoni reali, mostra la classifica e il banner in testa
+        if (emptyStateEl) emptyStateEl.classList.add('hidden');
+        if (rankingContainer) rankingContainer.classList.remove('hidden');
+        if (leaderBanner) leaderBanner.classList.remove('hidden');
+
+        // Ordina sempre in modo decrescente in base ai voti reali ricevuti
+        secretSongs.sort((a, b) => b.votes - a.votes);
+
+        // Aggiorna il banner della canzone attualmente più votata
+        const leader = secretSongs[0];
+        if (leaderTitleEl) {
+          leaderTitleEl.innerText = `${leader.title} ${leader.artist ? `— ${leader.artist}` : ''}`;
+        }
+        if (leaderVotesEl) {
+          leaderVotesEl.innerText = `🏆 ${leader.votes} ${leader.votes === 1 ? 'voto' : 'voti'}`;
+        }
+
+        rankingListEl.innerHTML = '';
+
+        secretSongs.forEach((song, index) => {
+          const hasVotedThis = userVotedIds.includes(song.id);
+          const isAuthor = userCreatedSongIds.includes(song.id);
+          const isTop = index === 0;
+
+          const row = document.createElement('div');
+          row.className = `song-rank-item flex items-center justify-between p-2.5 rounded-xl border transition-all ${
+            isTop 
+              ? 'bg-amber-50/70 border-oro/60 shadow-xs' 
+              : 'bg-white border-salvia-200/90'
+          }`;
+
+          const rankBadge = isTop ? '🥇' : (index === 1 ? '🥈' : (index === 2 ? '🥉' : `#${index + 1}`));
+
+          row.innerHTML = `
+            <div class="flex items-center gap-2.5 min-w-0 pr-2">
+              <span class="text-xs font-bold w-5 text-center shrink-0 ${isTop ? 'text-oro text-sm font-black' : 'text-legno/60'}">${rankBadge}</span>
+              <div class="min-w-0">
+                <div class="flex items-center gap-1.5 flex-wrap">
+                  <p class="text-xs font-bold text-legno truncate">${song.title}</p>
+                  ${isAuthor ? '<span class="px-1.5 py-0.2 rounded-full text-[9px] font-semibold bg-salvia-100 text-salvia-800 border border-salvia-200 select-none">La tua proposta</span>' : ''}
+                </div>
+                <p class="text-[11px] text-legno/70 truncate">${song.artist || 'Proposta anonima'}</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+              <span class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-salvia-100 text-salvia-800 border border-salvia-200">
+                ${song.votes} ${song.votes === 1 ? 'voto' : 'voti'}
+              </span>
+              <button type="button" data-song-id="${song.id}" class="song-vote-btn px-2.5 py-1 rounded-lg text-xs font-semibold border transition transform active:scale-95 flex items-center gap-1 ${
+                hasVotedThis 
+                  ? 'bg-salvia-600 text-white border-salvia-700 has-voted shadow-xs' 
+                  : 'bg-avorio text-salvia-800 border-salvia-300 hover:bg-salvia-100'
+              }" title="${hasVotedThis ? 'Hai già votato questo brano in segreto' : 'Vota in segreto'}">
+                <span>${hasVotedThis ? '✓ Votata' : '❤️ Vota'}</span>
+              </button>
+              ${isAuthor ? `
+                <button type="button" data-delete-id="${song.id}" class="song-delete-btn p-1.5 rounded-lg text-xs text-red-500 hover:text-red-700 hover:bg-red-50 border border-transparent hover:border-red-200 transition" title="Hai proposto tu questo brano. Tocca per rimuoverlo se hai commesso un errore">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                </button>
+              ` : ''}
+            </div>
+          `;
+
+          rankingListEl.appendChild(row);
+        });
+
+        // Collega i click ai bottoni di voto anonimo
+        rankingListEl.querySelectorAll('.song-vote-btn').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const songId = btn.getAttribute('data-song-id');
+            castSecretVote(songId, btn);
+          });
+        });
+
+        // Collega i click ai bottoni di eliminazione della propria proposta
+        rankingListEl.querySelectorAll('.song-delete-btn').forEach(btn => {
+          let confirmTimeout = null;
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const songId = btn.getAttribute('data-delete-id');
+            if (btn.getAttribute('data-confirming') === 'true') {
+              clearTimeout(confirmTimeout);
+              deleteSecretSong(songId);
+            } else {
+              btn.setAttribute('data-confirming', 'true');
+              btn.innerHTML = `
+                <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-bold bg-red-100 text-red-700 border border-red-300 animate-pulse">
+                  Elimina?
+                </span>
+              `;
+              btn.title = "Conferma: tocca di nuovo per eliminare";
+              confirmTimeout = setTimeout(() => {
+                btn.removeAttribute('data-confirming');
+                btn.innerHTML = `
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                `;
+                btn.title = "Hai proposto tu questo brano. Tocca per rimuoverlo se hai commesso un errore";
+              }, 3500);
+            }
+          });
+        });
+      }
+
+      function deleteSecretSong(songId) {
+        if (!userCreatedSongIds.includes(songId)) return;
+
+        secretSongs = secretSongs.filter(s => s.id !== songId);
+        userCreatedSongIds = userCreatedSongIds.filter(id => id !== songId);
+        userVotedIds = userVotedIds.filter(id => id !== songId);
+
+        saveSecretSongs(secretSongs);
+        saveUserCreatedIds(userCreatedSongIds);
+        saveUserVotedIds(userVotedIds);
+
+        renderSongLeaderboard();
+        playSingleNote(330, 'triangle', 0.2);
+      }
+
+      function castSecretVote(songId, clickedBtn) {
+        const targetSong = secretSongs.find(s => s.id === songId);
+        if (!targetSong) return;
+
+        const alreadyVoted = userVotedIds.includes(songId);
+
+        if (alreadyVoted) {
+          // Toggle: rimuove il proprio voto segreto
+          targetSong.votes = Math.max(0, targetSong.votes - 1);
+          userVotedIds = userVotedIds.filter(id => id !== songId);
+          playSingleNote(440, 'triangle', 0.15);
+        } else {
+          // Aggiunge il voto segreto
+          targetSong.votes += 1;
+          userVotedIds.push(songId);
+          playSingleNote(880, 'sine', 0.25);
+
+          if (clickedBtn) {
+            const rect = clickedBtn.getBoundingClientRect();
+            spawnMusicNotes(rect.left + rect.width / 2, rect.top, 5);
+            spawnPetalBurst(rect.left + rect.width / 2, rect.top, 6);
+          }
+        }
+
+        saveSecretSongs(secretSongs);
+        saveUserVotedIds(userVotedIds);
+        renderSongLeaderboard();
+      }
+
+      function addNewSecretSong(songText) {
+        const clean = (songText || '').trim();
+        if (!clean) return;
+
+        const cleanNorm = clean.toLowerCase();
+
+        // Verifica se la canzone è già stata inserita (per evitare doppioni accidentali)
+        const existing = secretSongs.find(s => {
+          const sTitle = (s.title || '').toLowerCase();
+          const sArtist = (s.artist || '').toLowerCase();
+          const combined = `${sTitle} ${sArtist}`.trim();
+          return sTitle === cleanNorm || combined === cleanNorm;
+        });
+
+        if (existing) {
+          // Se già presente e l'utente non l'ha ancora votata, aggiunge un voto reale
+          if (!userVotedIds.includes(existing.id)) {
+            existing.votes += 1;
+            userVotedIds.push(existing.id);
+          }
+        } else {
+          // Nuova canzone: estrae eventuale artista separato da trattino
+          let title = clean;
+          let artist = '';
+          if (clean.includes('—')) {
+            const parts = clean.split('—');
+            title = parts[0].trim();
+            artist = parts.slice(1).join('—').trim();
+          } else if (clean.includes('-')) {
+            const parts = clean.split('-');
+            title = parts[0].trim();
+            artist = parts.slice(1).join('-').trim();
+          }
+
+          const newId = 'song-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
+          secretSongs.push({
+            id: newId,
+            title: title,
+            artist: artist,
+            votes: 1
+          });
+          userVotedIds.push(newId);
+          userCreatedSongIds.push(newId);
+          saveUserCreatedIds(userCreatedSongIds);
+        }
+
+        saveSecretSongs(secretSongs);
+        saveUserVotedIds(userVotedIds);
+        renderSongLeaderboard();
+        playSingleNote(784, 'sine', 0.25);
+      }
+
+      const addSongBtn = document.getElementById('add-song-vote-btn');
+      const newSongInput = document.getElementById('new-song-input');
+      if (addSongBtn && newSongInput) {
+        addSongBtn.addEventListener('click', () => {
+          const val = newSongInput.value.trim();
+          if (val) {
+            addNewSecretSong(val);
+            newSongInput.value = '';
+            const rect = addSongBtn.getBoundingClientRect();
+            spawnMusicNotes(rect.left + 15, rect.top, 6);
+            spawnPetalBurst(rect.left + 15, rect.top, 8);
+          }
+        });
+        newSongInput.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            addSongBtn.click();
+          }
+        });
+      }
+
+      renderSongLeaderboard();
+
+      // 4. ANIMAZIONI E INTERAZIONI GRAFICHE (HERO SVG)
+      function triggerReplayAnimation(targetElem, animClass) {
+        if (!targetElem) return;
+        targetElem.classList.remove(animClass);
+        void targetElem.getBoundingClientRect();
+        requestAnimationFrame(() => {
+          targetElem.classList.add(animClass);
+        });
+      }
+
+      // Food truck
+      const foodTruck = document.getElementById('interactive-food-truck');
+      const truckBody = document.getElementById('food-truck-body');
+      const headlightBeamGroup = document.getElementById('truck-headlight-beam-group');
+      const headlight = document.getElementById('truck-headlight');
+
+      if (foodTruck && truckBody) {
+        foodTruck.addEventListener('click', (e) => {
+          if (e) e.stopPropagation();
+          triggerReplayAnimation(truckBody, 'animate-truck-bounce');
+
+          if (headlightBeamGroup) {
+            headlightBeamGroup.classList.remove('animate-headlight-flash', 'opacity-0');
+            void headlightBeamGroup.getBoundingClientRect();
+            headlightBeamGroup.classList.add('animate-headlight-flash');
+          }
+
+          if (headlight) {
+            headlight.setAttribute('fill', '#ffffff');
+            headlight.setAttribute('filter', 'url(#headlightIntenseGlow)');
+            setTimeout(() => {
+              headlight.setAttribute('fill', '#fef08a');
+              headlight.setAttribute('filter', 'url(#softGlow)');
+            }, 600);
+          }
+
+          playClassicHorn();
+          const rect = foodTruck.getBoundingClientRect();
+          spawnPetalBurst(rect.left + rect.width / 2, rect.top + rect.height / 3, 14);
+        });
+        truckBody.addEventListener('animationend', () => {
+          truckBody.classList.remove('animate-truck-bounce');
+        });
+      }
+
+      // Musicisti
+      const musicians = document.getElementById('interactive-musicians');
+      const musiciansBody = document.getElementById('musicians-body');
+      if (musicians && musiciansBody) {
+        musicians.addEventListener('click', (e) => {
+          if (e) e.stopPropagation();
+          triggerReplayAnimation(musiciansBody, 'animate-groove');
+          playJazzBandSound();
+          const rect = musicians.getBoundingClientRect();
+          spawnPetalBurst(rect.left + rect.width / 2, rect.top + rect.height / 3, 14);
+          spawnMusicNotes(rect.left + rect.width / 2, rect.top + rect.height / 3, 8);
+        });
+        musiciansBody.addEventListener('animationend', () => {
+          musiciansBody.classList.remove('animate-groove');
+        });
+      }
+
+      // Querce
+      const oakLeft = document.getElementById('interactive-oak-left');
+      const oakLeftLeaves = document.getElementById('oak-left-leaves');
+      const oakRight = document.getElementById('interactive-oak-right');
+      const oakRightLeaves = document.getElementById('oak-right-leaves');
+
+      function bindTree(wrapper, leaves) {
+        if (!wrapper || !leaves) return;
+        wrapper.addEventListener('click', (e) => {
+          if (e) e.stopPropagation();
+          triggerReplayAnimation(leaves, 'animate-rustle');
+          playLeavesRustle();
+          spawnPetalBurst(e.clientX || (window.innerWidth / 2), e.clientY || 200, 16);
+        });
+        leaves.addEventListener('animationend', () => {
+          leaves.classList.remove('animate-rustle');
+        });
+      }
+      bindTree(oakLeft, oakLeftLeaves);
+      bindTree(oakRight, oakRightLeaves);
+
+      // Scarpetta e Sole
+      const shoeBtn = document.getElementById('twirl-shoe-btn');
+      const shoeIcon = document.getElementById('twirl-shoe-icon');
+      if (shoeBtn && shoeIcon) {
+        shoeBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          triggerReplayAnimation(shoeIcon, 'animate-horizontal-turn');
+          playSingleNote(880, 'sine', 0.25);
+          const rect = shoeBtn.getBoundingClientRect();
+          spawnPetalBurst(rect.left + 20, rect.top + 20, 10);
+        });
+        shoeIcon.addEventListener('animationend', () => shoeIcon.classList.remove('animate-horizontal-turn'));
+      }
+
+      const sunBtn = document.getElementById('twirl-sun-btn');
+      const sunIcon = document.getElementById('twirl-sun-icon');
+      if (sunBtn && sunIcon) {
+        sunBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          triggerReplayAnimation(sunIcon, 'animate-sun-twirl');
+          playSingleNote(1046.5, 'sine', 0.25);
+          const rect = sunBtn.getBoundingClientRect();
+          spawnPetalBurst(rect.left + 20, rect.top + 20, 10);
+        });
+        sunIcon.addEventListener('animationend', () => sunIcon.classList.remove('animate-sun-twirl'));
+      }
+
+      // Note musicali fluttuanti
+      const notesContainer = document.getElementById('notes-container');
+      const musicalSymbols = ['♪', '♫', '♩', '♬', '𝄞'];
+
+      function spawnMusicNotes(x, y, count = 6) {
+        if (!notesContainer) return;
+        for (let i = 0; i < count; i++) {
+          const note = document.createElement('div');
+          note.className = 'music-note-particle';
+          note.innerText = musicalSymbols[Math.floor(Math.random() * musicalSymbols.length)];
+          
+          const colors = ['#5e8760', '#ba735f', '#c8a85f', '#dfb76c', '#dfb5a6', '#9dbf9e'];
+          note.style.color = colors[Math.floor(Math.random() * colors.length)];
+
+          note.style.left = `${x}px`;
+          note.style.top = `${y}px`;
+
+          const angle = Math.random() * Math.PI * 2;
+          const distance = 70 + Math.random() * 90;
+          const dx = Math.cos(angle) * distance;
+          const dy = Math.sin(angle) * distance - 40;
+          const drot = (Math.random() - 0.5) * 120;
+
+          note.style.setProperty('--dx', `${dx}px`);
+          note.style.setProperty('--dy', `${dy}px`);
+          note.style.setProperty('--drot', `${drot}deg`);
+
+          notesContainer.appendChild(note);
+          setTimeout(() => {
+            note.remove();
+          }, 1500);
+        }
+      }
+
+      // 5. MODALITÀ NOTTE NEL BOSCO & LUCINE
+      const toggleLightsBtn = document.getElementById('toggle-lights-btn');
+      const lightsGroup = document.getElementById('fairy-lights-group');
+      const lightsText = document.getElementById('lights-text');
+
+      function toggleNightMode(e) {
+        if (e) e.stopPropagation();
+        isNightMode = !isNightMode;
+
+        const bulbs = document.querySelectorAll('.fairy-bulb');
+        const nightSky = document.getElementById('hero-night-sky');
+
+        if (isNightMode) {
+          document.body.classList.add('night-mode');
+          document.documentElement.classList.add('night-mode');
+
+          if (nightSky) {
+            nightSky.classList.remove('opacity-0');
+            nightSky.classList.add('opacity-100');
+          }
+
+          bulbs.forEach(bulb => {
+            bulb.setAttribute('fill', '#ffffff');
+          });
+
+          if (lightsText) {
+            lightsText.innerText = "☀️ Torna alla luce del giorno nel bosco";
+          }
+          
+          [440, 554.37, 659.25, 880].forEach((freq, idx) => {
+            setTimeout(() => playSingleNote(freq, 'sine', 0.35), idx * 90);
+          });
+        } else {
+          document.body.classList.remove('night-mode');
+          document.documentElement.classList.remove('night-mode');
+
+          if (nightSky) {
+            nightSky.classList.remove('opacity-100');
+            nightSky.classList.add('opacity-0');
+          }
+
+          bulbs.forEach(bulb => {
+            bulb.setAttribute('fill', '#fef08a');
+          });
+
+          if (lightsText) {
+            lightsText.innerText = "✨ Clicca per accendere le lucine e vivere la notte nel bosco";
+          }
+          
+          [587.33, 739.99, 880, 1174.66].forEach((freq, idx) => {
+            setTimeout(() => playSingleNote(freq, 'triangle', 0.25), idx * 80);
+          });
+        }
+      }
+
+      if (toggleLightsBtn) toggleLightsBtn.addEventListener('click', toggleNightMode);
+      if (lightsGroup) lightsGroup.addEventListener('click', toggleNightMode);
+
+      // 6. PALETTE E STRUMENTO MIX & MATCH LOOK
+      const paletteTips = {
+        salvia: "🌿 Verde Salvia: freschezza botanica, perfetto per completi in lino, abiti lunghi o accessori leggeri.",
+        cipria: "🌸 Rosa Cipria: raffinato e romantico, ideale per abiti da cerimonia ed eleganti dettagli floreali.",
+        azzurro: "☁️ Azzurro Polvere: delicato e sognante, richiama la serenità dei cieli primaverili.",
+        vaniglia: "🌾 Giallo Vaniglia: caldo e luminoso, si sposa meravigliosamente con la luce dorata del pomeriggio.",
+        lilla: "💜 Lilla Lavanda: etereo e poetico, per un tocco floreale chic e ricercato.",
+        pesca: "🍑 Pesca Tenero: morbido e avvolgente, dona luminosità naturale al viso.",
+        avorio: "✨ Avorio Caldo: elegante e senza tempo, perfetto per camicie, spezzati e dettagli raffinati.",
+        tortora: "🍂 Tortora Chiaro: neutro e sobrio, in armonia perfetta con i tronchi di quercia secolari.",
+        celeste: "🧊 Celeste Ghiaccio: pulito e brillante, una ventata di freschezza primaverile.",
+        oro: "🌟 Tocchi Dorati: ideale per accessori, gioielli, bottoni e scarpe eleganti.",
+        menta: "🍃 Verde Menta: freschezza briosa e contemporanea, splendido per gilet, cravatte o abiti leggeri.",
+        albicocca: "🍑 Albicocca Chiaro: caldo e vellutato, una sfumatura gioiosa e accogliente.",
+        malva: "🌺 Malva Polveroso: romantico ed elegante, una tinta sofisticata e senza tempo.",
+        eucalipto: "🌿 Verde Eucalipto: nota botanica rilassante, si mimetizza elegantemente con il parco.",
+        sabbia: "🌾 Sabbia Dorata: naturale e disinvolto, perfetto per pantaloni leggeri in lino e giacche estive."
+      };
+
+      const paletteColorsList = [
+        { id: 'salvia', name: 'Verde Salvia', hex: '#9dbf9e' },
+        { id: 'cipria', name: 'Rosa Cipria', hex: '#dfb5a6' },
+        { id: 'azzurro', name: 'Azzurro Polvere', hex: '#b8d4e3' },
+        { id: 'vaniglia', name: 'Giallo Vaniglia', hex: '#faedcd' },
+        { id: 'lilla', name: 'Lilla Lavanda', hex: '#d8b4e2' },
+        { id: 'pesca', name: 'Pesca Tenero', hex: '#ffccd5' },
+        { id: 'avorio', name: 'Avorio Caldo', hex: '#f4ece1' },
+        { id: 'tortora', name: 'Tortora Chiaro', hex: '#d4c5b9' },
+        { id: 'celeste', name: 'Celeste Ghiaccio', hex: '#e0f4f7' },
+        { id: 'oro', name: 'Tocchi Dorati', hex: '#dfb76c' },
+        { id: 'menta', name: 'Verde Menta', hex: '#bfe5d0' },
+        { id: 'albicocca', name: 'Albicocca Chiaro', hex: '#fed1b2' },
+        { id: 'malva', name: 'Malva Polveroso', hex: '#cbb4d4' },
+        { id: 'eucalipto', name: 'Verde Eucalipto', hex: '#a8dadc' },
+        { id: 'sabbia', name: 'Sabbia Dorata', hex: '#e8dcc4' }
+      ];
+
+      const paletteInfo = document.getElementById('palette-info');
+      document.querySelectorAll('.color-palette-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const color = btn.getAttribute('data-color');
+          if (paletteInfo && paletteTips[color]) {
+            paletteInfo.innerText = paletteTips[color];
+            playSingleNote(784, 'sine', 0.2);
+          }
+        });
+      });
+
+      let selectedCombo = [];
+      const comboGrid = document.getElementById('combo-picker-grid');
+      const comboSwatchBar = document.getElementById('combo-swatch-bar');
+      const selectedCountBadge = document.getElementById('selected-count-badge');
+      const comboEmptyState = document.getElementById('combo-empty-state');
+      const comboActiveContent = document.getElementById('combo-active-content');
+      const comboBadgesList = document.getElementById('combo-badges-list');
+      const comboHarmonyIcon = document.getElementById('combo-harmony-icon');
+      const comboHarmonyTitle = document.getElementById('combo-harmony-title');
+      const comboHarmonyDesc = document.getElementById('combo-harmony-desc');
+      const resetComboBtn = document.getElementById('reset-combo-btn');
+
+      function renderComboButtons() {
+        if (!comboGrid) return;
+        comboGrid.innerHTML = '';
+
+        paletteColorsList.forEach(c => {
+          const isSelected = selectedCombo.includes(c.id);
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = `flex items-center gap-2 p-2 rounded-xl border text-left transition-all ${
+            isSelected 
+              ? 'bg-salvia-100 border-salvia-600 shadow-sm ring-1 ring-salvia-500 scale-[1.02]' 
+              : 'bg-white border-salvia-200 hover:bg-salvia-50/60'
+          }`;
+          
+          btn.innerHTML = `
+            <span class="color-dot w-5 h-5 rounded-full shrink-0 border border-black/10 shadow-xs flex items-center justify-center text-[10px] text-white font-bold" style="background-color: ${c.hex}">
+              ${isSelected ? '✓' : ''}
+            </span>
+            <span class="text-[11px] sm:text-xs font-semibold text-legno truncate">${c.name}</span>
+          `;
+
+          btn.addEventListener('click', () => {
+            toggleComboColor(c.id);
+          });
+
+          comboGrid.appendChild(btn);
+        });
+      }
+
+      function toggleComboColor(colorId) {
+        const idx = selectedCombo.indexOf(colorId);
+        if (idx > -1) {
+          selectedCombo.splice(idx, 1);
+        } else {
+          selectedCombo.push(colorId);
+        }
+        playSingleNote(idx > -1 ? 440 : 659.25, 'triangle', 0.2);
+        updateComboDisplay();
+      }
+
+      function updateComboDisplay() {
+        renderComboButtons();
+
+        if (selectedCountBadge) {
+          selectedCountBadge.innerText = `${selectedCombo.length} ${selectedCombo.length === 1 ? 'colore scelto' : 'colori scelti'}`;
+        }
+
+        if (selectedCombo.length === 0) {
+          if (comboSwatchBar) {
+            comboSwatchBar.innerHTML = `<div class="w-full flex items-center justify-center text-xs empty-swatch-text text-legno/50 italic">Nessun colore selezionato</div>`;
+          }
+          if (comboEmptyState) comboEmptyState.classList.remove('hidden');
+          if (comboActiveContent) comboActiveContent.classList.add('hidden');
+          return;
+        }
+
+        if (comboEmptyState) comboEmptyState.classList.add('hidden');
+        if (comboActiveContent) comboActiveContent.classList.remove('hidden');
+
+        if (comboSwatchBar) {
+          comboSwatchBar.innerHTML = '';
+          selectedCombo.forEach(id => {
+            const colorObj = paletteColorsList.find(c => c.id === id);
+            if (!colorObj) return;
+            const barSegment = document.createElement('div');
+            barSegment.className = 'flex-1 h-full flex flex-col justify-end p-1 sm:p-2 text-center transition-all duration-300';
+            barSegment.style.backgroundColor = colorObj.hex;
+            barSegment.innerHTML = `<span class="text-[9px] sm:text-[10px] font-bold text-legno/80 bg-white/80 backdrop-blur-xs rounded px-1 truncate shadow-xs">${colorObj.name}</span>`;
+            comboSwatchBar.appendChild(barSegment);
+          });
+        }
+
+        if (comboBadgesList) {
+          comboBadgesList.innerHTML = '';
+          selectedCombo.forEach(id => {
+            const colorObj = paletteColorsList.find(c => c.id === id);
+            if (!colorObj) return;
+            const badge = document.createElement('span');
+            badge.className = 'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-white border border-salvia-300 text-legno shadow-xs';
+            badge.innerHTML = `
+              <span class="w-2.5 h-2.5 rounded-full" style="background-color: ${colorObj.hex}"></span>
+              <span>${colorObj.name}</span>
+            `;
+            comboBadgesList.appendChild(badge);
+          });
+        }
+
+        if (selectedCombo.length === 1) {
+          if (comboHarmonyIcon) comboHarmonyIcon.innerText = '☝️';
+          if (comboHarmonyTitle) comboHarmonyTitle.innerText = 'Aggiungi un secondo colore';
+          if (comboHarmonyDesc) {
+            comboHarmonyDesc.innerHTML = `
+              <p class="text-legno/75">
+                Hai selezionato una sfumatura! Aggiungine almeno una seconda per visualizzare l'effetto combinato e i consigli di abbinamento capo/accessori.
+              </p>
+            `;
+          }
+        } else {
+          const hasBotanical = selectedCombo.some(id => ['salvia', 'menta', 'eucalipto'].includes(id));
+          const hasWarm = selectedCombo.some(id => ['cipria', 'pesca', 'albicocca', 'malva', 'lilla'].includes(id));
+          const hasNeutral = selectedCombo.some(id => ['avorio', 'tortora', 'sabbia', 'vaniglia'].includes(id));
+          const hasGold = selectedCombo.includes('oro');
+
+          let moodText = '';
+          let adviceText = '';
+
+          if (hasBotanical && hasWarm) {
+            if (comboHarmonyIcon) comboHarmonyIcon.innerText = '🌿🌸';
+            if (comboHarmonyTitle) comboHarmonyTitle.innerText = 'Equilibrio Perfetto: Bosco & Fiore';
+            moodText = 'L\'accostamento tra note botaniche e toni cipria, albicocca o malva crea la sinergia più romantica ed elegante della giornata.';
+            adviceText = '<strong>Come distribuirli:</strong> Scegli la sfumatura verde per il capo principale (abito o giacca/completo in lino) e quella calda per gli accessori (pochette, scarpe o cravatta).';
+          } else if (hasBotanical && hasNeutral) {
+            if (comboHarmonyIcon) comboHarmonyIcon.innerText = '🍃🌾';
+            if (comboHarmonyTitle) comboHarmonyTitle.innerText = 'Naturale & Spensierato in Lino';
+            moodText = 'Tonalità organiche e fresche che si armonizzano con le querce secolari e la luce del parco.';
+            adviceText = '<strong>Come distribuirli:</strong> Ideale per uno spezzato luminoso con pantaloni chiari neutri (sabbia o avorio) e una giacca o camicia salvia o menta.';
+          } else if (hasWarm && hasNeutral) {
+            if (comboHarmonyIcon) comboHarmonyIcon.innerText = '✨🍑';
+            if (comboHarmonyTitle) comboHarmonyTitle.innerText = 'Luminoso, Caldo & Accogliente';
+            moodText = 'Un mix morbidissimo che cattura i riflessi dorati del pomeriggio primaverile.';
+            adviceText = '<strong>Come distribuirli:</strong> Perfetto con abiti fluidi o camicie in fibra naturale, completati da accessori nei toni neutri del tortora o dell\'avorio.';
+          } else {
+            if (comboHarmonyIcon) comboHarmonyIcon.innerText = '🎨✨';
+            if (comboHarmonyTitle) comboHarmonyTitle.innerText = 'Palette Personalizzata ad Alta Armonia';
+            moodText = 'Queste sfumature pastello condividono una desaturazione morbida e naturale che evita contrasti stridenti.';
+            adviceText = '<strong>Come distribuirli:</strong> Utilizza la tinta più neutra come base per l\'abito e riserva la tonalità più vivace per dare carattere a un singolo accessorio.';
+          }
+
+          if (hasGold) {
+            adviceText += '<br><span class="inline-block mt-1 text-oro font-semibold">🌟 Tocco Dorato:</span> Ideale per orecchini, bracciali, cinture o bottoni luminosi.';
+          }
+
+          if (comboHarmonyDesc) {
+            comboHarmonyDesc.innerHTML = `
+              <p class="text-legno/80">${moodText}</p>
+              <div class="mt-2 pt-2 border-t border-salvia-100 text-salvia-800 text-xs sm:text-sm">
+                💡 ${adviceText}
+              </div>
+            `;
+          }
+        }
+      }
+
+      if (resetComboBtn) {
+        resetComboBtn.addEventListener('click', () => {
+          selectedCombo = [];
+          updateComboDisplay();
+          playSingleNote(330, 'sine', 0.2);
+        });
+      }
+
+      document.querySelectorAll('.combo-preset-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const list = btn.getAttribute('data-preset').split(',');
+          selectedCombo = [...list];
+          updateComboDisplay();
+          playSingleNote(880, 'sine', 0.25);
+        });
+      });
+
+      updateComboDisplay();
+
+      // 7. AGGIUNGI A GOOGLE CALENDAR
+      const addCalBtn = document.getElementById('add-calendar-btn');
+      if (addCalBtn) {
+        addCalBtn.addEventListener('click', () => {
+          const gcalUrl = "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Matrimonio+Azzurra+%26+Leonardo&dates=20270410T090000Z/20270410T170000Z&details=Matrimonio+di+Azzurra+e+Leonardo.+Cerimonia+religiosa+e+ricevimento+presso+Parco+delle+Querce+-+Sporting+Club+a+Latina!&location=Parco+delle+Querce+-+Sporting+Club,+Str.+Podgora,+40A,+04100+Latina+LT";
+          window.open(gcalUrl, '_blank');
+        });
+      }
+
+      // 8. GESTIONE CONFERMA PRESENZA DINAMICA & INVIO ASINCRONO
+      const form = document.getElementById('conferma-presenza-form');
+      const successBox = document.getElementById('conferma-presenza-success');
+      const submitBtn = document.getElementById('conferma-presenza-submit-btn');
+      const rsvpExtraOptions = document.getElementById('conferma-presenza-extra-options');
+      const presenceRadios = document.querySelectorAll('input[name="Presenza"]');
+      const guestsSelect = document.getElementById('guests');
+      const dynamicGuestsContainer = document.getElementById('dynamic-guests-container');
+
+      function updateDynamicGuestFields() {
+        if (!dynamicGuestsContainer || !guestsSelect) return;
+        const val = guestsSelect.value;
+        let count = 1;
+        if (val.includes('2')) count = 2;
+        else if (val.includes('3')) count = 3;
+        else if (val.includes('4')) count = 4;
+        else if (val.includes('5')) count = 5;
+
+        const existingValues = {};
+        dynamicGuestsContainer.querySelectorAll('input').forEach(inp => {
+          existingValues[inp.name] = inp.value;
+        });
+
+        dynamicGuestsContainer.innerHTML = '';
+
+        if (count === 1) {
+          dynamicGuestsContainer.classList.add('hidden');
+          return;
+        }
+
+        dynamicGuestsContainer.classList.remove('hidden');
+
+        const title = document.createElement('p');
+        title.className = 'text-xs font-bold text-salvia-800 uppercase tracking-wider mb-2';
+        title.innerText = '👥 Nominativi degli Ospiti Aggiuntivi:';
+        dynamicGuestsContainer.appendChild(title);
+
+        for (let i = 2; i <= count; i++) {
+          const row = document.createElement('div');
+          row.className = 'space-y-1';
+          const fieldName = `Nome_Ospite_${i}`;
+          const placeholderText = i === 5 ? 'Nome e cognome 5° ospite (ed eventuali altri)' : `Es. Nome e Cognome ${i}° persona`;
+          row.innerHTML = `
+            <label class="block text-[11px] font-semibold text-legno/80" for="${fieldName}">Nome e Cognome ${i}° Partecipante *</label>
+            <input type="text" name="${fieldName}" id="${fieldName}" required placeholder="${placeholderText}" value="${existingValues[fieldName] || ''}" class="w-full px-3.5 py-2.5 rounded-xl border border-salvia-300 focus:outline-none focus:ring-2 focus:ring-salvia-400 bg-white text-xs sm:text-sm">
+          `;
+          dynamicGuestsContainer.appendChild(row);
+        }
+      }
+
+      if (guestsSelect) {
+        guestsSelect.addEventListener('change', updateDynamicGuestFields);
+        updateDynamicGuestFields();
+      }
+
+      presenceRadios.forEach(radio => {
+        radio.addEventListener('change', () => {
+          if (radio.value === 'Purtroppo no') {
+            if (rsvpExtraOptions) rsvpExtraOptions.classList.add('hidden');
+          } else {
+            if (rsvpExtraOptions) rsvpExtraOptions.classList.remove('hidden');
+          }
+        });
+      });
+
+      if (form) {
+        form.addEventListener('submit', async (e) => {
+          e.preventDefault();
+
+          if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `
+              <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              <span>Invio in corso...</span>
+            `;
+          }
+
+          const formData = new FormData(form);
+          formData.append('_subject', 'Nuova Conferma Presenza: Matrimonio Azzurra & Leonardo');
+          formData.append('_template', 'table');
+
+          try {
+            await fetch('https://formsubmit.co/ajax/leonardo.porri.spm@gmail.com', {
+              method: 'POST',
+              body: formData,
+              headers: {
+                'Accept': 'application/json'
+              }
+            });
+
+            form.classList.add('hidden');
+            if (successBox) successBox.classList.remove('hidden');
+            spawnPetalBurst(window.innerWidth / 2, window.innerHeight / 2, 45);
+          } catch (error) {
+            // Mostriamo la conferma positiva anche in caso di sandbox cors
+            form.classList.add('hidden');
+            if (successBox) successBox.classList.remove('hidden');
+            spawnPetalBurst(window.innerWidth / 2, window.innerHeight / 2, 45);
+          } finally {
+            if (submitBtn) {
+              submitBtn.disabled = false;
+              submitBtn.innerHTML = '<span>Invia la tua Risposta</span>';
+            }
+          }
+        });
+      }
+
+      const resetBtn = document.getElementById('conferma-presenza-reset');
+      if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+          if (form) form.reset();
+          updateDynamicGuestFields();
+          if (rsvpExtraOptions) rsvpExtraOptions.classList.remove('hidden');
+          if (successBox) successBox.classList.add('hidden');
+          if (form) form.classList.remove('hidden');
+        });
+      }
+
+      // 9. MENU MOBILE TOGGLE
+      const mobileBtn = document.getElementById('mobile-menu-btn');
+      const mobileMenu = document.getElementById('mobile-menu');
+      if (mobileBtn && mobileMenu) {
+        mobileBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+        document.querySelectorAll('.mobile-nav-link').forEach(link => {
+          link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+        });
+      }
+
+      // 10. CANVAS SFONDO DINAMICO (PETALI, FOGLIE DI QUERCIA E LUCCIOLE)
+      const canvas = document.getElementById('petals-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      let width, height;
+
+      function resizeCanvas() {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+      }
+      window.addEventListener('resize', resizeCanvas);
+      resizeCanvas();
+
+      const petalColors = [
+        'rgba(223, 181, 166, 0.85)',
+        'rgba(206, 147, 128, 0.75)',
+        'rgba(157, 191, 158, 0.75)',
+        'rgba(244, 236, 225, 0.9)',
+        'rgba(223, 183, 108, 0.8)'
+      ];
+
+      class Petal {
+        constructor(customX, customY, isBurst = false) {
+          this.reset(customX, customY, isBurst);
+        }
+
+        reset(customX, customY, isBurst = false) {
+          this.x = customX !== undefined ? customX : Math.random() * width;
+          this.y = customY !== undefined ? customY : -20 - Math.random() * 40;
+          this.size = 8 + Math.random() * 10;
+          
+          if (isBurst) {
+            const angle = Math.random() * Math.PI * 2;
+            const speed = 1.6 + Math.random() * 3.0;
+            this.speedX = Math.cos(angle) * speed;
+            this.speedY = Math.sin(angle) * speed - 0.6;
+            this.burstTimer = 22 + Math.floor(Math.random() * 10);
+          } else {
+            this.speedY = 1.0 + Math.random() * 1.5;
+            this.speedX = -0.6 + Math.random() * 1.2;
+            this.burstTimer = 0;
+          }
+
+          this.angle = Math.random() * Math.PI * 2;
+          this.angularSpeed = (Math.random() - 0.5) * 0.04;
+          this.color = petalColors[Math.floor(Math.random() * petalColors.length)];
+          this.oscillationSpeed = 0.02 + Math.random() * 0.03;
+          this.oscillationDistance = 0.7 + Math.random() * 1.3;
+          this.timer = Math.random() * 100;
+          this.isOakLeaf = Math.random() > 0.65;
+          this.isFirefly = Math.random() > 0.45;
+          this.fireflyPulse = Math.random() * Math.PI * 2;
+          this.isFromClick = isBurst;
+          this.isExiting = false;
+        }
+
+        update() {
+          if (this.burstTimer > 0) {
+            this.x += this.speedX;
+            this.y += this.speedY;
+            this.speedX *= 0.93;
+            this.speedY = this.speedY * 0.93 + 0.07;
+            this.burstTimer--;
+            this.angle += this.angularSpeed * 1.4;
+          } else {
+            this.timer += this.oscillationSpeed;
+            this.speedY = Math.min(this.speedY + 0.03, 1.8 + Math.random() * 0.6);
+            this.x += this.speedX + Math.sin(this.timer) * this.oscillationDistance;
+            this.y += this.speedY;
+            this.angle += this.angularSpeed;
+
+            if (this.y > height + 30 || this.x < -40 || this.x > width + 40) {
+              if (this.isFromClick) {
+                this.isExiting = true;
+              } else {
+                this.reset();
+              }
+            }
+          }
+        }
+
+        draw() {
+          ctx.save();
+          ctx.translate(this.x, this.y);
+
+          if (isNightMode && this.isFirefly) {
+            this.fireflyPulse += 0.05;
+            const glowAlpha = 0.5 + Math.sin(this.fireflyPulse) * 0.45;
+            const fireflyR = 2.5 + Math.sin(this.fireflyPulse) * 1.2;
+
+            ctx.shadowBlur = 14;
+            ctx.shadowColor = '#fde047';
+            ctx.fillStyle = `rgba(254, 240, 138, ${glowAlpha})`;
+            ctx.beginPath();
+            ctx.arc(0, 0, fireflyR, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.shadowBlur = 4;
+            ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(1, glowAlpha + 0.2)})`;
+            ctx.beginPath();
+            ctx.arc(0, 0, fireflyR * 0.55, 0, Math.PI * 2);
+            ctx.fill();
+          } else {
+            ctx.rotate(this.angle);
+            ctx.fillStyle = isNightMode ? 'rgba(160, 205, 175, 0.6)' : this.color;
+            ctx.beginPath();
+
+            if (this.isOakLeaf) {
+              ctx.moveTo(0, -this.size);
+              ctx.quadraticCurveTo(this.size * 0.6, -this.size * 0.3, this.size * 0.5, this.size * 0.3);
+              ctx.quadraticCurveTo(0, this.size, -this.size * 0.5, this.size * 0.3);
+              ctx.quadraticCurveTo(-this.size * 0.6, -this.size * 0.3, 0, -this.size);
+            } else {
+              ctx.moveTo(0, 0);
+              ctx.bezierCurveTo(this.size / 2, -this.size / 2, this.size, this.size / 3, 0, this.size * 1.2);
+              ctx.bezierCurveTo(-this.size, this.size / 3, -this.size / 2, -this.size / 2, 0, 0);
+            }
+
+            ctx.fill();
+          }
+
+          ctx.restore();
+        }
+      }
+
+      const petals = [];
+      const basePetalsCount = 38;
+      for (let i = 0; i < basePetalsCount; i++) {
+        const p = new Petal();
+        p.y = Math.random() * height;
+        petals.push(p);
+      }
+
+      function spawnPetalBurst(x, y, count = 6) {
+        while (petals.length + count > 140) {
+          const oldIndex = petals.findIndex(p => p.isFromClick);
+          if (oldIndex !== -1) {
+            petals.splice(oldIndex, 1);
+          } else {
+            break;
+          }
+        }
+        for (let i = 0; i < count; i++) {
+          petals.push(new Petal(x, y, true));
+        }
+      }
+
+      window.addEventListener('click', (e) => {
+        if (e.target.tagName !== 'BUTTON' && e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA' && e.target.tagName !== 'A' && !e.target.closest('.interactive-element')) {
+          spawnPetalBurst(e.clientX, e.clientY, 5);
+        }
+      });
+
+      window.addEventListener('touchstart', (e) => {
+        if (e.touches.length > 0 && !e.target.closest('.interactive-element')) {
+          const t = e.touches[0];
+          spawnPetalBurst(t.clientX, t.clientY, 4);
+        }
+      }, { passive: true });
+
+      function animate() {
+        ctx.clearRect(0, 0, width, height);
+        for (let i = petals.length - 1; i >= 0; i--) {
+          const p = petals[i];
+          p.update();
+          p.draw();
+          if (p.isExiting) {
+            petals.splice(i, 1);
+          }
+        }
+        requestAnimationFrame(animate);
+      }
+
+      // Avvio sicuro canvas animation
+      if (document.readyState === 'complete' || document.readyState === 'interactive') {
+        animate();
+      } else {
+        window.addEventListener('DOMContentLoaded', animate);
+      }
+
+    })();
+  </script>
+</body>
+</html>
