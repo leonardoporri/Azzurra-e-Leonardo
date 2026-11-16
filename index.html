@@ -1289,8 +1289,14 @@
         </p>
       </div>
 
-      <!-- Form con invio mail -->
-      <form id="rsvp-form" class="relative z-10 space-y-5">
+      <!-- Form: le risposte vanno in un foglio Google tramite Apps Script (vedi FOGLIO-GOOGLE.md) -->
+      <form id="rsvp-form" class="relative z-10 space-y-5" novalidate>
+
+        <!-- Campo trappola per i robot: nascosto alle persone, deve restare vuoto -->
+        <div aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;">
+          <label for="rsvp-gotcha">Non compilare</label>
+          <input type="text" name="_gotcha" id="rsvp-gotcha" tabindex="-1" autocomplete="off">
+        </div>
         
         <div>
           <label class="block text-xs font-semibold text-legno uppercase tracking-wider mb-1.5" for="name">Nome e Cognome *</label>
@@ -1350,6 +1356,9 @@
           <label class="block text-xs font-semibold text-legno uppercase tracking-wider mb-1.5" for="message">Un pensiero o messaggio per gli sposi</label>
           <textarea name="Messaggio_per_gli_sposi" id="message" rows="3" placeholder="Scrivi qui il tuo augurio o nota..." class="w-full px-4 py-3 rounded-xl border border-salvia-300 focus:outline-none focus:ring-2 focus:ring-salvia-400 bg-avorio/50 text-sm"></textarea>
         </div>
+
+        <!-- Messaggio di errore: compare solo se l'invio non va a buon fine -->
+        <div id="rsvp-error" role="alert" class="hidden p-4 rounded-xl border border-cipria-400 bg-cipria-100 text-sm text-legno leading-relaxed"></div>
 
         <button type="submit" id="rsvp-submit-btn" class="w-full py-4 bg-salvia-500 hover:bg-salvia-600 text-white font-semibold rounded-xl shadow-ambient transition duration-300 transform hover:-translate-y-0.5 flex items-center justify-center gap-2">
           <span>Invia la tua Risposta</span>
@@ -3062,6 +3071,10 @@
     });
 
     // 8. MODULO CONFERMA PRESENZA
+    // Indirizzo della "App web" Apps Script (finisce con /exec).
+    // Come ottenerlo: vedi FOGLIO-GOOGLE.md. Finché è vuoto, il modulo
+    // avvisa che non è ancora attivo invece di fingere di aver inviato.
+    const FOGLIO_GOOGLE_URL = '';
     const form = document.getElementById('rsvp-form');
     const successBox = document.getElementById('rsvp-success');
     const submitBtn = document.getElementById('rsvp-submit-btn');
@@ -3116,18 +3129,47 @@
       updateDynamicGuestFields();
     }
 
+    // Se l'invitato non viene, nascondiamo e DISATTIVIAMO i campi extra:
+    // così i nomi degli ospiti (obbligatori) non bloccano l'invio.
+    function setExtraOptionsVisible(visible) {
+      rsvpExtraOptions.classList.toggle('hidden', !visible);
+      rsvpExtraOptions.querySelectorAll('input, select, textarea').forEach(el => {
+        el.disabled = !visible;
+      });
+    }
+
     presenceRadios.forEach(radio => {
       radio.addEventListener('change', () => {
-        if (radio.value === 'Purtroppo no') {
-          rsvpExtraOptions.classList.add('hidden');
-        } else {
-          rsvpExtraOptions.classList.remove('hidden');
-        }
+        setExtraOptionsVisible(radio.value !== 'Purtroppo no');
       });
     });
 
+    const rsvpErrorBox = document.getElementById('rsvp-error');
+
+    function showRsvpError(text) {
+      rsvpErrorBox.textContent = text;
+      rsvpErrorBox.classList.remove('hidden');
+      rsvpErrorBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function hideRsvpError() {
+      rsvpErrorBox.classList.add('hidden');
+    }
+
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
+      hideRsvpError();
+
+      // Controllo dei campi obbligatori con i messaggi del browser
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+
+      if (!FOGLIO_GOOGLE_URL) {
+        showRsvpError('Il modulo non è ancora attivo. Per ora conferma la tua presenza scrivendo direttamente agli sposi. Grazie!');
+        return;
+      }
 
       submitBtn.disabled = true;
       const originalBtnHtml = submitBtn.innerHTML;
@@ -3139,27 +3181,34 @@
         <span>Invio in corso...</span>
       `;
 
-      const formData = new FormData(form);
-      formData.append('_subject', 'Nuova Conferma Presenza: Matrimonio Azzurra & Leonardo');
-      formData.append('_template', 'table');
+      // I campi disattivati (es. ospiti quando non si viene) sono esclusi
+      const payload = Object.fromEntries(new FormData(form).entries());
+
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 20000);
 
       try {
-        await fetch('https://formsubmit.co/ajax/leonardo.porri.spm@gmail.com', {
+        // Corpo in testo semplice: evita il controllo CORS preventivo che Apps Script non supporta
+        const res = await fetch(FOGLIO_GOOGLE_URL, {
           method: 'POST',
-          body: formData,
-          headers: {
-            'Accept': 'application/json'
-          }
+          body: JSON.stringify(payload),
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          signal: controller.signal
         });
+        const result = await res.json().catch(() => null);
+        if (!res.ok || !result || result.ok !== true) {
+          throw new Error((result && result.errore) || ('HTTP ' + res.status));
+        }
 
+        // Solo qui siamo sicuri che la risposta è salvata nel foglio
         form.classList.add('hidden');
         successBox.classList.remove('hidden');
         spawnPetalBurst(window.innerWidth / 2, window.innerHeight / 2, 40);
       } catch (error) {
-        form.classList.add('hidden');
-        successBox.classList.remove('hidden');
-        spawnPetalBurst(window.innerWidth / 2, window.innerHeight / 2, 40);
+        console.error('Conferma presenza non inviata:', error);
+        showRsvpError('Ops, la tua risposta non è stata inviata. Controlla la connessione e premi di nuovo "Invia". I dati che hai scritto sono ancora qui. Se il problema continua, scrivi direttamente agli sposi.');
       } finally {
+        clearTimeout(timeoutId);
         submitBtn.disabled = false;
         submitBtn.innerHTML = originalBtnHtml;
       }
@@ -3168,7 +3217,8 @@
     document.getElementById('rsvp-reset').addEventListener('click', () => {
       form.reset();
       updateDynamicGuestFields();
-      rsvpExtraOptions.classList.remove('hidden');
+      setExtraOptionsVisible(true);
+      hideRsvpError();
       successBox.classList.add('hidden');
       form.classList.remove('hidden');
     });
