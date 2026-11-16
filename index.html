@@ -127,7 +127,7 @@
       color: #ffffff !important;
     }
     body.night-mode .active-truck-tab {
-      background-color: #5e8760 !important;
+      background-color: #557b57 !important;
       border-color: #92d998 !important;
       color: #ffffff !important;
       box-shadow: 0 0 16px rgba(146, 217, 152, 0.4) !important;
@@ -243,6 +243,45 @@
     body.night-mode .song-entry-card:hover {
       border-color: #92d998 !important;
       background-color: rgba(22, 48, 32, 0.95) !important;
+    }
+
+    /* LEGGIBILITA' (contrasti almeno WCAG AA, 4,5:1)
+       Stessi colori del sito, solo un filo piu' intensi dove il testo era
+       troppo chiaro. Vale per la modalita' giorno; la notte ha le sue regole. */
+    body:not(.night-mode) .text-legno\/50,
+    body:not(.night-mode) .text-legno\/60,
+    body:not(.night-mode) .text-legno\/65 {
+      color: rgba(74, 59, 44, 0.78);
+    }
+    body:not(.night-mode) .text-legno\/70,
+    body:not(.night-mode) .text-legno\/75 {
+      color: rgba(74, 59, 44, 0.82);
+    }
+    body:not(.night-mode) .text-legno\/50:hover,
+    body:not(.night-mode) .text-legno\/60:hover {
+      color: #3d583e;
+    }
+    body:not(.night-mode) .text-cipria-500 {
+      color: #9c5744;
+    }
+    /* Pulsanti verdi con scritta bianca: verde un tono piu' scuro */
+    .bg-salvia-500.text-white {
+      background-color: #557b57;
+    }
+    /* Al passaggio (o dopo il tocco sul telefono) resta verde, piu' scuro */
+    .bg-salvia-500.text-white:hover {
+      background-color: #4c6f4e;
+    }
+    footer .text-salvia-300\/80 {
+      color: #9dbf9e;
+    }
+    /* Notte: due testi rimasti scuri su fondo scuro */
+    body.night-mode .text-legno\/90 {
+      color: #d1e2d5 !important;
+    }
+    body.night-mode #selected-count-badge {
+      background-color: rgba(36, 75, 48, 0.9) !important;
+      color: #d9f5dc !important;
     }
 
     #petals-canvas {
@@ -3170,6 +3209,15 @@
       if (!comboGrid) return;
       comboGrid.innerHTML = '';
 
+      // Spunta scura sui colori chiari, bianca su quelli scuri: si legge sempre
+      function checkColor(hex) {
+        const n = parseInt(String(hex).replace('#', ''), 16);
+        if (isNaN(n)) return '#ffffff';
+        const lin = v => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); };
+        const L = 0.2126 * lin((n >> 16) & 255) + 0.7152 * lin((n >> 8) & 255) + 0.0722 * lin(n & 255);
+        return L > 0.18 ? '#2b2118' : '#ffffff';
+      }
+
       paletteColorsList.forEach(c => {
         const isSelected = selectedCombo.includes(c.id);
         const btn = document.createElement('button');
@@ -3181,7 +3229,7 @@
         }`;
         
         btn.innerHTML = `
-          <span class="color-dot w-5 h-5 rounded-full shrink-0 border border-black/10 shadow-xs flex items-center justify-center text-[10px] text-white font-bold" style="background-color: ${c.hex}">
+          <span class="color-dot w-5 h-5 rounded-full shrink-0 border border-black/10 shadow-xs flex items-center justify-center text-[10px] font-bold" style="background-color: ${c.hex}; color: ${checkColor(c.hex)}">
             ${isSelected ? '✓' : ''}
           </span>
           <span class="text-[11px] sm:text-xs font-semibold text-legno truncate">${c.name}</span>
