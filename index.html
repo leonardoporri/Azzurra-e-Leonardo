@@ -558,11 +558,13 @@
         <!-- CIELO NOTTURNO CON LUNA PIENA E STELLE BRILLANTI -->
         <g id="hero-night-sky" class="opacity-0 pointer-events-none transition-opacity duration-700">
           <rect width="1440" height="950" fill="#06130b" fill-opacity="0.95"/>
-          <circle cx="720" cy="170" r="54" fill="#fef9c3" opacity="0.9" filter="url(#softGlow)"/>
-          <circle cx="720" cy="170" r="42" fill="#fffde7"/>
-          <circle cx="740" cy="158" r="8" fill="#fde047" opacity="0.25"/>
-          <circle cx="706" cy="184" r="6" fill="#fde047" opacity="0.2"/>
-          <circle cx="732" cy="188" r="4" fill="#fde047" opacity="0.25"/>
+          <g id="hero-moon">
+            <circle cx="720" cy="170" r="54" fill="#fef9c3" opacity="0.9" filter="url(#softGlow)"/>
+            <circle cx="720" cy="170" r="42" fill="#fffde7"/>
+            <circle cx="740" cy="158" r="8" fill="#fde047" opacity="0.25"/>
+            <circle cx="706" cy="184" r="6" fill="#fde047" opacity="0.2"/>
+            <circle cx="732" cy="188" r="4" fill="#fde047" opacity="0.25"/>
+          </g>
 
           <circle cx="160" cy="90" r="2.5" fill="#ffffff" opacity="0.85"/>
           <circle cx="280" cy="140" r="2" fill="#ffffff" opacity="0.75"/>
@@ -754,7 +756,7 @@
     <div class="relative z-10 max-w-4xl mx-auto text-center px-2">
       
       <!-- Badge Data & Luogo -->
-      <div class="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-white/90 backdrop-blur border border-salvia-300 text-salvia-800 text-xs font-semibold tracking-widest uppercase shadow-sm mb-5">
+      <div id="hero-date-badge" class="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-white/90 backdrop-blur border border-salvia-300 text-salvia-800 text-xs font-semibold tracking-widest uppercase shadow-sm mb-5">
         <span>10 Aprile 2027</span>
         <span class="text-cipria-400">•</span>
         <span>Latina</span>
@@ -1558,7 +1560,25 @@
     const heroOriginalTransforms = heroTruck && heroBand
       ? [heroTruck.getAttribute('transform'), heroBand.getAttribute('transform')] : null;
 
+    // Luna: sempre dietro il riquadro "10 Aprile 2027 · Latina", a ogni
+    // larghezza (prima sul computer finiva nascosta dietro la barra in alto).
+    function placeHeroMoon() {
+      const moon = document.getElementById('hero-moon');
+      const badge = document.getElementById('hero-date-badge');
+      if (!heroArtSvg || !moon || !badge || !heroArtSvg.getScreenCTM) return;
+      const ctm = heroArtSvg.getScreenCTM();
+      if (!ctm) return;
+      const r = badge.getBoundingClientRect();
+      if (!r.width) return;
+      const pt = heroArtSvg.createSVGPoint();
+      pt.x = r.left + r.width / 2;
+      pt.y = r.top + r.height / 2;
+      const p = pt.matrixTransform(ctm.inverse());
+      moon.setAttribute('transform', `translate(${(p.x - 720).toFixed(1)}, ${(p.y - 170).toFixed(1)})`);
+    }
+
     function layoutHeroArt() {
+      placeHeroMoon();
       if (!heroArtSvg || !heroOriginalTransforms) return;
       const W = heroArtSvg.clientWidth, H = heroArtSvg.clientHeight;
       if (!W || !H) return;
@@ -1592,6 +1612,9 @@
 
     layoutHeroArt();
     window.addEventListener('resize', layoutHeroArt);
+    // i caratteri arrivano dopo e possono spostare il riquadro della data
+    window.addEventListener('load', placeHeroMoon);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(placeHeroMoon);
     window.addEventListener('orientationchange', () => setTimeout(layoutHeroArt, 200));
 
     // 1. COUNTDOWN MATRIMONIO (10 Aprile 2027, Ore 11:00 CEST)
@@ -1772,9 +1795,25 @@
       });
     }
 
+    // Registrazioni di Azzurra e Leonardo: hanno la precedenza sui pulsanti
+    // degli strumenti. Se una non si scarica, resta il suono di prima.
+    const RECORDINGS = {
+      trumpet: 'audio/band/registrazioni/tromba.mp3',
+      bass: 'audio/band/registrazioni/contrabbasso.mp3',
+      guitar: 'audio/band/registrazioni/chitarra.mp3',
+      drums: 'audio/band/registrazioni/batteria.mp3'
+    };
+
     function preloadInstrumentSamples() {
       if (samplesRequested) return;
       samplesRequested = true;
+      Object.entries(RECORDINGS).forEach(([instrument, url]) => {
+        fetch(url)
+          .then(r => { if (!r.ok) throw new Error(r.status); return r.arrayBuffer(); })
+          .then(decodeSample)
+          .then(buf => { sampleBuffers['reg-' + instrument] = buf; })
+          .catch(() => {}); // se manca, si usano i suoni di scorta
+      });
       Object.values(SAMPLE_MAP).forEach(group => {
         Object.keys(group).forEach(name => {
           fetch(SAMPLE_BASE + name + '.mp3')
@@ -1786,7 +1825,8 @@
       });
     }
 
-    // Scarica i suoni in sottofondo appena la pagina è pronta (circa 0,5 MB in tutto)
+    // Scarica i suoni in sottofondo appena la pagina è pronta (circa 1,5 MB in tutto:
+    // prima le vostre registrazioni, poi i suoni di scorta)
     if (document.readyState === 'complete') {
       setTimeout(preloadInstrumentSamples, 800);
     } else {
@@ -2622,6 +2662,18 @@
       // esistono: ogni tocco aspettava tanti errori prima di suonare.
       currentPlayingInstrument = instrumentName;
       setInstrumentActiveUI(btnId);
+
+      // 1) la vostra registrazione, se e' gia' scaricata
+      const rec = sampleBuffers['reg-' + instrumentName];
+      if (rec) {
+        const ctx = getAudioContext();
+        if (playSampleBuffer('reg-' + instrumentName, ctx.currentTime + 0.02, { gain: 0.9, reverb: false })) {
+          synthTimeoutId = setTimeout(() => { stopAllInstruments(); }, Math.ceil(rec.duration * 1000) + 300);
+          return;
+        }
+      }
+
+      // 2) altrimenti i suoni di scorta di prima
       playInstrumentJingle(instrumentName);
       synthTimeoutId = setTimeout(() => {
         stopAllInstruments();
