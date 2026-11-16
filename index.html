@@ -391,6 +391,11 @@
     .animate-tab-pop {
       animation: tabPop 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
     }
+
+    /* Telefono in verticale: spazio in fondo alla copertina per food truck e band */
+    @media (orientation: portrait) and (max-width: 1023px) {
+      #hero { padding-bottom: 11rem; }
+    }
   </style>
 </head>
 <body class="font-sans antialiased bg-forest-texture relative selection:bg-salvia-200 selection:text-salvia-800">
@@ -400,6 +405,16 @@
 
   <!-- Canvas Petali, Foglie e Lucciole Notturne -->
   <canvas id="petals-canvas"></canvas>
+
+  <!-- Aeroplanino di carta: vola ogni tanto sullo schermo, non blocca i tocchi -->
+  <div id="paper-plane" aria-hidden="true" style="position:fixed;left:-24px;top:-16px;width:48px;height:32px;z-index:45;pointer-events:none;opacity:0;transition:opacity .4s ease;will-change:transform;">
+    <svg viewBox="0 0 48 32" width="48" height="32" xmlns="http://www.w3.org/2000/svg">
+      <path d="M46 16 L2 2 L14 16 Z" fill="#fcfaf5" stroke="#5e8760" stroke-width="1.4" stroke-linejoin="round"/>
+      <path d="M46 16 L14 16 L2 30 Z" fill="#edd5cc" stroke="#5e8760" stroke-width="1.4" stroke-linejoin="round"/>
+      <path d="M46 16 L14 16 L18 22 Z" fill="#dfb5a6" stroke="#5e8760" stroke-width="1" stroke-linejoin="round"/>
+    </svg>
+  </div>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><path id="paper-plane-path" d="M0 0"/></svg>
 
   <header class="fixed top-3 sm:top-4 inset-x-0 z-40 max-w-4xl mx-auto px-3 sm:px-4">
     <nav class="bg-white/90 backdrop-blur-md rounded-full px-4 sm:px-6 py-2 sm:py-2.5 border border-salvia-200/80 shadow-soft flex items-center justify-between transition-all duration-300">
@@ -1472,6 +1487,53 @@
   <script>
     let isNightMode = false;
 
+    // 0. COPERTINA SUL TELEFONO: food truck e band sempre visibili
+    // Il disegno di sfondo è largo (1440x950). Sugli schermi stretti i bordi
+    // vengono tagliati, e con loro food truck e band. Qui calcoliamo la parte
+    // visibile del disegno e, se serve, li spostiamo e rimpiccioliamo in basso
+    // ai lati, così si vedono e si possono ancora toccare.
+    const heroArtSvg = document.querySelector('#hero svg');
+    const heroTruck = document.getElementById('interactive-food-truck');
+    const heroBand = document.getElementById('interactive-musicians');
+    const heroOriginalTransforms = heroTruck && heroBand
+      ? [heroTruck.getAttribute('transform'), heroBand.getAttribute('transform')] : null;
+
+    function layoutHeroArt() {
+      if (!heroArtSvg || !heroOriginalTransforms) return;
+      const W = heroArtSvg.clientWidth, H = heroArtSvg.clientHeight;
+      if (!W || !H) return;
+      const scale = Math.max(W / 1440, H / 950);
+      const visW = W / scale, visH = H / scale;
+      const x0 = (1440 - visW) / 2, x1 = x0 + visW;
+      const yBottom = (950 + visH) / 2;
+
+      // Se il disegno originale è già tutto visibile, lasciamo com'era
+      if (x0 <= 60 && x1 >= 1420) {
+        heroTruck.setAttribute('transform', heroOriginalTransforms[0]);
+        heroBand.setAttribute('transform', heroOriginalTransforms[1]);
+        return;
+      }
+
+      const margin = visW * 0.03;
+      // Food truck: circa metà della larghezza visibile, in basso a sinistra
+      const tb = heroTruck.getBBox();
+      const kT = Math.min(0.96, (visW * 0.52) / tb.width);
+      const tX = x0 + margin - tb.x * kT;
+      const tY = yBottom - margin - (tb.y + tb.height) * kT;
+      heroTruck.setAttribute('transform', `translate(${tX.toFixed(1)}, ${tY.toFixed(1)}) scale(${kT.toFixed(3)})`);
+
+      // Band: un po' più di un terzo della larghezza, in basso a destra
+      const bb = heroBand.getBBox();
+      const kB = Math.min(0.95, (visW * 0.38) / bb.width);
+      const bX = x1 - margin - (bb.x + bb.width) * kB;
+      const bY = yBottom - margin - (bb.y + bb.height) * kB;
+      heroBand.setAttribute('transform', `translate(${bX.toFixed(1)}, ${bY.toFixed(1)}) scale(${kB.toFixed(3)})`);
+    }
+
+    layoutHeroArt();
+    window.addEventListener('resize', layoutHeroArt);
+    window.addEventListener('orientationchange', () => setTimeout(layoutHeroArt, 200));
+
     // 1. COUNTDOWN MATRIMONIO (10 Aprile 2027, Ore 11:00 CEST)
     const targetDate = new Date('2027-04-10T11:00:00+02:00').getTime();
 
@@ -1540,7 +1602,7 @@
         compressor.release.setValueAtTime(0.18, audioCtx.currentTime);
 
         masterGain = audioCtx.createGain();
-        masterGain.gain.setValueAtTime(0.9, audioCtx.currentTime);
+        masterGain.gain.setValueAtTime(0.8, audioCtx.currentTime);
 
         try {
           reverbNode = audioCtx.createConvolver();
@@ -1613,7 +1675,150 @@
       return tubeDistortionCurve;
     }
 
+    // 3b. SUONI VERI DEGLI STRUMENTI (campioni registrati, licenza CC0)
+    // File in audio/band/ (fonti e licenze in audio/band/FONTI.md).
+    // Si scaricano in sottofondo subito dopo l'apertura della pagina, così
+    // al primo tocco sono già pronti. Ogni nota usa il campione più vicino,
+    // intonato alla nota giusta. Se un campione non è ancora pronto, si usa
+    // il suono sintetico di prima: niente silenzi.
+    const SAMPLE_BASE = 'audio/band/';
+    // Frequenza reale misurata di ogni campione (Hz)
+    const SAMPLE_MAP = {
+      trumpet: { 'tromba-as4': 469.1, 'tromba-d5': 595.9, 'tromba-f5': 689.1, 'tromba-a5': 882.0 },
+      bass: {
+        'contrabbasso-e1': 41.1, 'contrabbasso-g1': 49.0, 'contrabbasso-as1': 58.5, 'contrabbasso-c2': 65.4,
+        'contrabbasso-d2': 73.7, 'contrabbasso-e2': 82.3, 'contrabbasso-fs2': 94.2, 'contrabbasso-gs2': 105.5,
+        'contrabbasso-cs3': 138.7
+      },
+      guitar: {
+        'chitarra-e2': 82.9, 'chitarra-g2': 98.9, 'chitarra-b2': 123.9, 'chitarra-d3': 147.0, 'chitarra-e3': 165.8,
+        'chitarra-fs3': 185.3, 'chitarra-g3': 196.9, 'chitarra-a3': 220.5, 'chitarra-b3': 247.8, 'chitarra-c4': 262.5,
+        'chitarra-e4': 329.1
+      },
+      drums: { 'batteria-cassa': 0, 'batteria-rullante': 0, 'batteria-rullante-spazzola': 0, 'batteria-piatto': 0 }
+    };
+    const sampleBuffers = {};
+    let samplesRequested = false;
+
+    function decodeSample(arrayBuffer) {
+      // Decodifica senza dover aspettare il primo tocco (OfflineAudioContext)
+      const Offline = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+      return new Promise((resolve, reject) => {
+        try {
+          const ctx = audioCtx || new Offline(1, 1, 44100);
+          const p = ctx.decodeAudioData(arrayBuffer, resolve, reject);
+          if (p && p.then) p.then(resolve, reject);
+        } catch (e) { reject(e); }
+      });
+    }
+
+    function preloadInstrumentSamples() {
+      if (samplesRequested) return;
+      samplesRequested = true;
+      Object.values(SAMPLE_MAP).forEach(group => {
+        Object.keys(group).forEach(name => {
+          fetch(SAMPLE_BASE + name + '.mp3')
+            .then(r => { if (!r.ok) throw new Error(r.status); return r.arrayBuffer(); })
+            .then(decodeSample)
+            .then(buf => { sampleBuffers[name] = buf; })
+            .catch(() => {}); // se manca, resta il suono sintetico
+        });
+      });
+    }
+
+    // Scarica i suoni in sottofondo appena la pagina è pronta (circa 0,5 MB in tutto)
+    if (document.readyState === 'complete') {
+      setTimeout(preloadInstrumentSamples, 800);
+    } else {
+      window.addEventListener('load', () => setTimeout(preloadInstrumentSamples, 800), { once: true });
+    }
+
+    // Trova il campione più vicino alla nota richiesta
+    function nearestSample(group, freq) {
+      let best = null, bestDist = Infinity;
+      Object.entries(SAMPLE_MAP[group]).forEach(([name, root]) => {
+        if (!sampleBuffers[name]) return;
+        const dist = Math.abs(12 * Math.log2(freq / root));
+        if (dist < bestDist) { best = { name, root }; bestDist = dist; }
+      });
+      return best && bestDist <= 7 ? best : null;
+    }
+
+    // Suona un campione: rate = intonazione, release = sfumatura finale
+    function playSampleBuffer(name, startTime, { rate = 1, gain = 1, duration = null, release = 0.12, reverb = true } = {}) {
+      const ctx = getAudioContext();
+      const buf = sampleBuffers[name];
+      if (!buf) return false;
+      const src = ctx.createBufferSource();
+      src.buffer = buf;
+      src.playbackRate.setValueAtTime(rate, startTime);
+      const g = ctx.createGain();
+      g.gain.setValueAtTime(0.0001, startTime);
+      g.gain.linearRampToValueAtTime(gain, startTime + 0.008);
+      const natural = buf.duration / rate;
+      const end = duration ? Math.min(natural, duration + release) : natural;
+      if (duration && duration < natural) {
+        g.gain.setValueAtTime(gain, startTime + duration);
+        g.gain.exponentialRampToValueAtTime(0.0001, startTime + duration + release);
+      }
+      src.connect(g);
+      g.connect(masterGain);
+      if (reverb && reverbNode) g.connect(reverbNode);
+      src.start(startTime);
+      src.stop(startTime + end + 0.02);
+      activeSampleSources.push(src);
+      src.onended = () => {
+        const i = activeSampleSources.indexOf(src);
+        if (i > -1) activeSampleSources.splice(i, 1);
+      };
+      return true;
+    }
+
+    // Per poter fermare subito i suoni quando si ritocca lo strumento
+    const activeSampleSources = [];
+    function stopAllSamples() {
+      activeSampleSources.splice(0).forEach(src => { try { src.stop(); } catch (e) {} });
+    }
+
+    function playPitchedSample(group, freq, startTime, opts) {
+      const s = nearestSample(group, freq);
+      if (!s) return false;
+      return playSampleBuffer(s.name, startTime, Object.assign({}, opts, { rate: freq / s.root }));
+    }
+
     function playAcousticTrumpet(freq, startTime, duration = 0.65, addVibrato = true) {
+      if (playPitchedSample('trumpet', freq, startTime, { gain: 1.0, duration, release: addVibrato ? 0.35 : 0.1 })) return;
+      playAcousticTrumpetSynth(freq, startTime, duration, addVibrato);
+    }
+
+    function playKarplusStrongBass(freq, startTime, duration = 0.95, gainLevel = 1.0) {
+      if (playPitchedSample('bass', freq, startTime, { gain: 0.6 * gainLevel, duration, release: 0.15, reverb: false })) return;
+      playKarplusStrongBassSynth(freq, startTime, duration, gainLevel);
+    }
+
+    function playElectricGuitar(freq, startTime, duration = 2.2, gainLevel = 0.5, addVibrato = false) {
+      if (playPitchedSample('guitar', freq, startTime, { gain: 0.75 * gainLevel, duration, release: 0.4 })) return;
+      playElectricGuitarSynth(freq, startTime, duration, gainLevel, addVibrato);
+    }
+
+    function playWarmJazzKick(startTime, volume = 0.85) {
+      if (playSampleBuffer('batteria-cassa', startTime, { gain: 0.8 * volume, reverb: false })) return;
+      playWarmJazzKickSynth(startTime, volume);
+    }
+
+    function playBrushedSnare(startTime, volume = 0.65) {
+      const name = volume > 0.9 ? 'batteria-rullante' : 'batteria-rullante-spazzola';
+      if (playSampleBuffer(name, startTime, { gain: 0.6 * volume })) return;
+      playBrushedSnareSynth(startTime, volume);
+    }
+
+    function playJazzRideCymbal(startTime, volume = 0.45) {
+      if (playSampleBuffer('batteria-piatto', startTime, { gain: 0.5 * volume, duration: 0.6, release: 0.5 })) return;
+      playJazzRideCymbalSynth(startTime, volume);
+    }
+
+    // Suoni sintetici di riserva (usati solo se i campioni non sono pronti)
+    function playAcousticTrumpetSynth(freq, startTime, duration = 0.65, addVibrato = true) {
       try {
         const ctx = getAudioContext();
         const t0 = Math.max(ctx.currentTime, startTime);
@@ -1700,7 +1905,7 @@
       } catch (e) {}
     }
 
-    function playKarplusStrongBass(freq, startTime, duration = 0.95, gainLevel = 1.0) {
+    function playKarplusStrongBassSynth(freq, startTime, duration = 0.95, gainLevel = 1.0) {
       try {
         const ctx = getAudioContext();
         const t0 = Math.max(ctx.currentTime, startTime);
@@ -1777,7 +1982,7 @@
       } catch (e) {}
     }
 
-    function playElectricGuitar(freq, startTime, duration = 2.2, gainLevel = 0.5, addVibrato = false) {
+    function playElectricGuitarSynth(freq, startTime, duration = 2.2, gainLevel = 0.5, addVibrato = false) {
       try {
         const ctx = getAudioContext();
         const t0 = Math.max(ctx.currentTime, startTime);
@@ -1864,7 +2069,7 @@
       } catch (e) {}
     }
 
-    function playWarmJazzKick(startTime, volume = 0.85) {
+    function playWarmJazzKickSynth(startTime, volume = 0.85) {
       try {
         const ctx = getAudioContext();
         const t0 = Math.max(ctx.currentTime, startTime);
@@ -1882,7 +2087,7 @@
       } catch (e) {}
     }
 
-    function playBrushedSnare(startTime, volume = 0.65) {
+    function playBrushedSnareSynth(startTime, volume = 0.65) {
       try {
         const ctx = getAudioContext();
         const t0 = Math.max(ctx.currentTime, startTime);
@@ -1923,7 +2128,7 @@
       } catch (e) {}
     }
 
-    function playJazzRideCymbal(startTime, volume = 0.45) {
+    function playJazzRideCymbalSynth(startTime, volume = 0.45) {
       try {
         const ctx = getAudioContext();
         const t0 = Math.max(ctx.currentTime, startTime);
@@ -2281,14 +2486,6 @@
       } catch (e) {}
     }
 
-    const instrumentBaseNames = {
-      trumpet: ['tromba', 'Tromba', 'trumpet'],
-      bass: ['contrabbasso', 'Contrabbasso', 'basso', 'bass'],
-      guitar: ['chitarra', 'Chitarra', 'guitar'],
-      drums: ['batteria', 'Batteria', 'drums']
-    };
-
-    const supportedAudioExtensions = ['mpeg', 'mp3', 'm4a', 'wav', 'ogg', 'mpg'];
 
     let currentPlayingAudio = null;
     let currentPlayingInstrument = null;
@@ -2317,6 +2514,7 @@
     }
 
     function stopAllInstruments() {
+      stopAllSamples();
       if (currentPlayingAudio) {
         try {
           currentPlayingAudio.pause();
@@ -2359,56 +2557,15 @@
 
       stopAllInstruments();
 
-      const baseNames = instrumentBaseNames[instrumentName] || [instrumentName];
-      const candidates = [];
-
-      baseNames.forEach(name => {
-        supportedAudioExtensions.forEach(ext => {
-          candidates.push(`audio/${name}.${ext}`);
-          candidates.push(`audio/${name}.${ext.toUpperCase()}`);
-        });
-      });
-
-      let currentIdx = 0;
-      function tryNextAudio() {
-        if (currentIdx >= candidates.length) {
-          currentPlayingInstrument = instrumentName;
-          setInstrumentActiveUI(btnId);
-          playInstrumentJingle(instrumentName);
-          synthTimeoutId = setTimeout(() => {
-            stopAllInstruments();
-          }, 3200);
-          return;
-        }
-
-        const src = candidates[currentIdx++];
-        const audio = new Audio(src);
-        audio.volume = 0.95;
-
-        let hasFailed = false;
-        const onError = () => {
-          if (!hasFailed) {
-            hasFailed = true;
-            tryNextAudio();
-          }
-        };
-
-        audio.addEventListener('error', onError, { once: true });
-        audio.addEventListener('ended', () => {
-          stopAllInstruments();
-        });
-
-        const playPromise = audio.play();
-        if (playPromise !== undefined) {
-          playPromise.then(() => {
-            currentPlayingAudio = audio;
-            currentPlayingInstrument = instrumentName;
-            setInstrumentActiveUI(btnId);
-          }).catch(onError);
-        }
-      }
-
-      tryNextAudio();
+      // Suona subito con i campioni veri (già scaricati in sottofondo).
+      // Prima qui si provavano decine di file audio/tromba.mp3 ecc. che non
+      // esistono: ogni tocco aspettava tanti errori prima di suonare.
+      currentPlayingInstrument = instrumentName;
+      setInstrumentActiveUI(btnId);
+      playInstrumentJingle(instrumentName);
+      synthTimeoutId = setTimeout(() => {
+        stopAllInstruments();
+      }, 3200);
     }
 
     function handleInstrumentClick(btnId, instrumentName) {
@@ -3517,6 +3674,107 @@
     } else {
       window.addEventListener('DOMContentLoaded', animate);
     }
+
+    // 10. AEROPLANINO DI CARTA
+    // Ogni 6-10 secondi attraversa lo schermo con un volo sempre diverso:
+    // curve, giri della morte, avvitamenti, zig-zag. Non blocca i tocchi
+    // (pointer-events: none) e non parte se il telefono chiede "riduci movimento".
+    (function paperPlane() {
+      const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduceMotion) return;
+
+      const plane = document.getElementById('paper-plane');
+      const trailPath = document.getElementById('paper-plane-path');
+      if (!plane || !trailPath) return;
+
+      const rnd = (a, b) => a + Math.random() * (b - a);
+      const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+      let flying = false;
+
+      // Costruisce un percorso SVG casuale da un lato all'altro dello schermo
+      function buildFlight() {
+        const W = window.innerWidth, H = window.innerHeight;
+        const fromLeft = Math.random() < 0.5;
+        const x0 = fromLeft ? -70 : W + 70;
+        const x3 = fromLeft ? W + 70 : -70;
+        const y0 = rnd(H * 0.12, H * 0.8);
+        const y3 = rnd(H * 0.1, H * 0.85);
+        const dir = fromLeft ? 1 : -1;
+        const tricks = [];
+
+        // Punto a metà strada dove eventualmente fare l'acrobazia
+        const xm = W * rnd(0.35, 0.65);
+        const ym = rnd(H * 0.2, H * 0.7);
+        const c1x = x0 + dir * rnd(W * 0.1, W * 0.3), c1y = y0 + rnd(-H * 0.3, H * 0.3);
+        const c2x = xm - dir * rnd(W * 0.1, W * 0.2), c2y = ym + rnd(-H * 0.25, H * 0.25);
+        let d = `M ${x0} ${y0} C ${c1x} ${c1y}, ${c2x} ${c2y}, ${xm} ${ym}`;
+
+        const trick = pick(['giro', 'giro', 'zigzag', 'nessuno', 'doppio-giro', 'tuffo']);
+        const r = Math.min(W, H) * rnd(0.07, 0.12);
+        if (trick === 'giro' || trick === 'doppio-giro') {
+          // Giro della morte: un cerchio completo verso l'alto
+          const sweep = dir > 0 ? 0 : 1;
+          const loop = `a ${r} ${r} 0 1 ${sweep} 0 ${-2 * r} a ${r} ${r} 0 1 ${sweep} 0 ${2 * r}`;
+          d += ' ' + loop + (trick === 'doppio-giro' ? ' ' + loop : '');
+          tricks.push('giro');
+        } else if (trick === 'zigzag') {
+          let x = xm, y = ym;
+          for (let i = 0; i < 3; i++) {
+            const nx = x + dir * W * 0.07, ny = y + (i % 2 ? 1 : -1) * H * 0.07;
+            d += ` Q ${x + dir * W * 0.035} ${ny} ${nx} ${y}`;
+            x = nx;
+          }
+        } else if (trick === 'tuffo') {
+          d += ` q ${dir * W * 0.08} ${H * 0.18} ${dir * W * 0.16} 0`;
+        }
+
+        // Ultimo tratto fino all'altro bordo
+        d += ` S ${x3 - dir * rnd(W * 0.1, W * 0.25)} ${y3 + rnd(-H * 0.2, H * 0.2)}, ${x3} ${y3}`;
+
+        // Avvitamento (barrel roll) in un punto a caso del volo
+        const roll = Math.random() < 0.45 ? rnd(0.25, 0.75) : -1;
+        return { d, dir, roll, duration: rnd(4200, 6500) };
+      }
+
+      function fly() {
+        if (document.hidden || flying) return schedule();
+        const f = buildFlight();
+        trailPath.setAttribute('d', f.d);
+        const len = trailPath.getTotalLength();
+        const start = performance.now();
+        flying = true;
+        plane.style.opacity = '1';
+
+        function frame(now) {
+          const t = Math.min(1, (now - start) / f.duration);
+          // Leggera accelerazione/decelerazione
+          const e = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+          const p = trailPath.getPointAtLength(e * len);
+          const q = trailPath.getPointAtLength(Math.min(len, e * len + 2));
+          const angle = Math.atan2(q.y - p.y, q.x - p.x) * 180 / Math.PI;
+          // Avvitamento: il piano "si gira" su sé stesso per un attimo
+          let flip = f.dir < 0 ? -1 : 1; // da destra a sinistra: resta dritto
+          if (f.roll > 0 && Math.abs(t - f.roll) < 0.06) flip *= -Math.cos(((t - f.roll) / 0.06 + 1) * Math.PI);
+          const bob = Math.sin(now / 180) * 3;
+          plane.style.transform = `translate(${p.x}px, ${p.y + bob}px) rotate(${angle}deg) scaleY(${flip.toFixed(3)})`;
+          if (t < 1) {
+            requestAnimationFrame(frame);
+          } else {
+            flying = false;
+            plane.style.opacity = '0';
+            schedule();
+          }
+        }
+        requestAnimationFrame(frame);
+      }
+
+      function schedule() {
+        setTimeout(fly, rnd(6000, 10000));
+      }
+
+      schedule();
+    })();
+
   </script>
 </body>
 </html>
