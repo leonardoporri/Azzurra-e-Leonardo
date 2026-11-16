@@ -30,7 +30,7 @@ finge di salvare.
 
 1. In alto a destra: **Esegui il deployment → Nuovo deployment**.
 2. Rotellina accanto a "Seleziona tipo" → **App web**.
-3. **Esegui come:** Io. **Chi ha accesso:** Chiunque.
+3. **Esegui come:** Io. **Chi ha accesso:** Chiunque (proprio "Chiunque", **non** "Chiunque con un account Google": altrimenti il sito non riesce a salvare).
 4. Premi **Esegui il deployment** e poi **Autorizza accesso**.
 5. Google mostrerà l'avviso "Google non ha verificato questa app".
    È normale: l'app sei tu. Premi **Avanzate → Vai a … (non sicuro)** → **Consenti**.

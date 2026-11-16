@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Iconcina del sito: cuore cipria su tondo verde salvia, con una fogliolina -->
+  <circle cx="32" cy="32" r="31" fill="#5e8760"/>
+  <circle cx="32" cy="32" r="27" fill="none" stroke="#dfb76c" stroke-width="1.5"/>
+  <path d="M32 48 C18 38 14 31 14 25 a9 9 0 0 1 18-3 a9 9 0 0 1 18 3 c0 6-4 13-18 23z" fill="#edd5cc"/>
+  <path d="M40 14 c6 0 10 3 11 8 c-6 1-10-1-11-8z" fill="#c5d8c5"/>
+</svg>
