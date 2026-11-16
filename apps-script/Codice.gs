@@ -9,10 +9,11 @@
  * 1. CONFERMA PRESENZA: scrive ogni risposta come nuova riga nella scheda
  *    "Risposte" e dice al sito {"ok": true} solo se la riga e' salvata davvero.
  * 2. VOTO CANZONI (anonimo): scrive i voti nella scheda "Voti canzoni", una
- *    riga per telefono. Ogni telefono ha un codice casuale, che non dice chi
- *    e' la persona. Se lo stesso telefono vota di nuovo, la sua riga viene
- *    aggiornata, non duplicata. La classifica si calcola contando le righe:
- *    se cancelli una riga (es. un voto spazzatura), sparisce dalla classifica.
+ *    riga per ogni canzone votata. Ogni telefono ha un codice casuale, che non
+ *    dice chi e' la persona, e puo' votare fino a 3 canzoni diverse (una riga
+ *    ciascuna). Puo' anche togliere un suo voto. La classifica si calcola
+ *    contando le righe: se cancelli una riga (es. un voto spazzatura),
+ *    sparisce dalla classifica. I voti gia' presenti restano validi.
  */
 
 // Metti true se vuoi anche un'email per ogni conferma presenza (all'indirizzo
@@ -38,6 +39,12 @@ var INTESTAZIONI_VOTI = ['Data e ora', 'Codice votante', 'Canzone'];
 // Quante canzoni mostrare al massimo nella classifica sul sito.
 var MAX_CANZONI_CLASSIFICA = 30;
 
+// Quante canzoni diverse puo' votare ogni telefono.
+var MAX_VOTI_PER_TELEFONO = 3;
+
+// Il sito controlla questo numero per sapere se lo script e' aggiornato.
+var VERSIONE_SCRIPT = 2;
+
 function doPost(e) {
   var lock = LockService.getScriptLock();
   try {
@@ -53,6 +60,9 @@ function doPost(e) {
     if (dati.tipo === 'voto') {
       return salvaVoto_(dati);
     }
+    if (dati.tipo === 'togli') {
+      return togliVoto_(dati);
+    }
     return salvaConferma_(dati);
   } catch (err) {
     return risposta_({ ok: false, errore: String(err) });
@@ -66,7 +76,13 @@ function doPost(e) {
 function doGet(e) {
   var azione = e && e.parameter && e.parameter.azione;
   if (azione === 'classifica') {
-    return risposta_({ ok: true, classifica: classifica_() });
+    var out = { ok: true, versione: VERSIONE_SCRIPT, max: MAX_VOTI_PER_TELEFONO, classifica: classifica_() };
+    var votante = pulisci_(e.parameter.votante).slice(0, 80);
+    if (votante.length >= 6) {
+      var sh = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(FOGLIO_VOTI);
+      out.mie = sh ? righeDelVotante_(sh, votante).map(function (r) { return r.canzone; }) : [];
+    }
+    return risposta_(out);
   }
   return risposta_({ ok: true, messaggio: 'Collegamento attivo' });
 }
@@ -127,16 +143,20 @@ function salvaVoto_(dati) {
   }
 
   var sh = foglio_(FOGLIO_VOTI, INTESTAZIONI_VOTI);
-  var chiaveNome = chiave_(votante);
+  var mie = righeDelVotante_(sh, votante);
+  var k = chiave_(canzone);
 
-  // Se questo telefono ha gia' votato, aggiorniamo la sua riga.
-  var ultima = sh.getLastRow();
-  var rigaEsistente = 0;
-  if (ultima > 1) {
-    var nomi = sh.getRange(2, 2, ultima - 1, 1).getValues();
-    for (var i = 0; i < nomi.length; i++) {
-      if (chiave_(nomi[i][0]) === chiaveNome) { rigaEsistente = i + 2; break; }
+  // Canzone gia' votata da questo telefono: niente doppioni.
+  for (var i = 0; i < mie.length; i++) {
+    if (chiave_(mie[i].canzone) === k) {
+      return rispostaVoto_(sh, votante, { canzone: mie[i].canzone, giaVotata: true });
     }
+  }
+
+  // Limite di canzoni per telefono raggiunto.
+  if (mie.length >= MAX_VOTI_PER_TELEFONO) {
+    return rispostaVoto_(sh, votante, { ok: false, limite: true,
+      errore: 'Hai gia\' votato ' + MAX_VOTI_PER_TELEFONO + ' canzoni' });
   }
 
   // Se la canzone e' gia' in classifica, usiamo la stessa scrittura,
@@ -144,14 +164,52 @@ function salvaVoto_(dati) {
   var canzoneEsistente = scritturaEsistente_(sh, canzone);
   if (canzoneEsistente) canzone = canzoneEsistente;
 
-  var valori = [[new Date(), votante, comeTesto_(canzone)]];
-  if (rigaEsistente) {
-    sh.getRange(rigaEsistente, 1, 1, 3).setValues(valori);
-  } else {
-    sh.appendRow(valori[0]);
-  }
+  sh.appendRow([new Date(), votante, comeTesto_(canzone)]);
+  return rispostaVoto_(sh, votante, { canzone: testo_(canzone) });
+}
 
-  return risposta_({ ok: true, canzone: testo_(canzone), classifica: classifica_() });
+// Toglie il voto di questo telefono a una canzone.
+function togliVoto_(dati) {
+  var votante = pulisci_(dati.votante).slice(0, 80);
+  var canzone = pulisci_(dati.canzone).slice(0, 120);
+  if (votante.length < 6 || !canzone) {
+    return risposta_({ ok: false, errore: 'Richiesta incompleta' });
+  }
+  var sh = foglio_(FOGLIO_VOTI, INTESTAZIONI_VOTI);
+  var k = chiave_(canzone);
+  var mie = righeDelVotante_(sh, votante);
+  // Dal basso verso l'alto, cosi' i numeri di riga restano giusti.
+  for (var i = mie.length - 1; i >= 0; i--) {
+    if (chiave_(mie[i].canzone) === k) sh.deleteRow(mie[i].riga);
+  }
+  return rispostaVoto_(sh, votante, {});
+}
+
+// Le righe (numero e canzone) votate da questo telefono.
+function righeDelVotante_(sh, votante) {
+  var ultima = sh.getLastRow();
+  if (ultima < 2) return [];
+  var chiaveVotante = chiave_(votante);
+  var valori = sh.getRange(2, 2, ultima - 1, 2).getValues();
+  var out = [];
+  for (var i = 0; i < valori.length; i++) {
+    if (chiave_(valori[i][0]) === chiaveVotante && testo_(valori[i][1])) {
+      out.push({ riga: i + 2, canzone: testo_(valori[i][1]) });
+    }
+  }
+  return out;
+}
+
+function rispostaVoto_(sh, votante, extra) {
+  var out = {
+    ok: true,
+    versione: VERSIONE_SCRIPT,
+    max: MAX_VOTI_PER_TELEFONO,
+    classifica: classifica_(),
+    mie: righeDelVotante_(sh, votante).map(function (r) { return r.canzone; })
+  };
+  for (var x in extra) out[x] = extra[x];
+  return risposta_(out);
 }
 
 function classifica_() {
