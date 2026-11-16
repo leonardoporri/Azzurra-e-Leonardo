@@ -982,52 +982,55 @@
               </button>
             </div>
 
-            <!-- Box Votazione Canzone Segreta per la Live Band -->
+            <!-- Box Votazione Canzone per la Live Band (voti anonimi salvati nel foglio Google) -->
             <div class="bg-cipria-50/80 p-5 rounded-2xl border border-cipria-200">
               <div class="flex items-center justify-between gap-2 mb-2">
                 <h4 class="font-serif text-lg text-legno font-bold flex items-center gap-1.5">
                   <span>🎶</span> Scegli la Canzone della Festa
                 </h4>
-                <span class="text-[10px] font-semibold text-salvia-700 bg-salvia-100 px-2 py-0.5 rounded-full">
-                  🔒 Voto 100% Segreto &amp; Anonimo
+                <span class="text-[10px] font-semibold text-salvia-700 bg-salvia-100 px-2 py-0.5 rounded-full whitespace-nowrap">
+                  🔒 Voto anonimo
                 </span>
               </div>
               <p class="text-xs text-legno/75 mb-3 leading-relaxed">
-                La canzone che risulterà <strong>la più votata</strong> sarà richiesta alla band per essere suonata dal vivo durante il ricevimento! Nessuno saprà chi ha votato cosa: vedrai solo il contatore aggiornato.
+                La canzone che risulterà <strong>la più votata</strong> sarà richiesta alla band per essere suonata dal vivo durante il ricevimento! Non chiediamo il nome: si vedono solo i conteggi. Un voto per telefono: se voti di nuovo, cambi il tuo voto.
               </p>
 
-              <!-- Banner 1° Posto in Tempo Reale -->
-              <div id="leader-song-banner" class="hidden mb-3 p-3 bg-gradient-to-r from-salvia-100 to-amber-50 rounded-xl border border-oro/50 flex items-center justify-between shadow-xs transition-all">
-                <div class="flex items-center gap-2.5">
+              <!-- Banner 1° Posto -->
+              <div id="leader-song-banner" class="hidden mb-3 p-3 bg-gradient-to-r from-salvia-100 to-amber-50 rounded-xl border border-oro/50 flex items-center justify-between gap-2 shadow-xs transition-all">
+                <div class="flex items-center gap-2.5 min-w-0">
                   <span class="text-2xl">👑</span>
-                  <div>
+                  <div class="min-w-0">
                     <span class="text-[10px] uppercase font-bold tracking-wider text-salvia-800 block">Attualmente al 1° Posto</span>
-                    <span id="leader-song-title" class="text-xs sm:text-sm font-serif font-bold text-legno"></span>
+                    <span id="leader-song-title" class="text-xs sm:text-sm font-serif font-bold text-legno block truncate"></span>
                   </div>
                 </div>
-                <span id="leader-song-votes" class="px-2.5 py-1 rounded-full bg-white text-xs font-bold text-salvia-800 border border-salvia-300 shadow-xs">
+                <span id="leader-song-votes" class="shrink-0 px-2.5 py-1 rounded-full bg-white text-xs font-bold text-salvia-800 border border-salvia-300 shadow-xs">
                   🏆 0 voti
                 </span>
               </div>
 
-              <!-- Lista Canzoni Votabili con Contatori Reali -->
-              <div id="songs-ranking-container" class="space-y-2 mb-3 max-h-48 overflow-y-auto pr-1"></div>
+              <!-- Lista Canzoni con i conteggi presi dal foglio -->
+              <div id="songs-ranking-container" class="space-y-2 mb-3 max-h-60 overflow-y-auto pr-1"></div>
 
-              <!-- Form Proposta Nuova Canzone -->
+              <!-- Il tuo voto attuale (ricordato da questo telefono) -->
+              <p id="song-my-vote-note" class="hidden text-[11px] text-salvia-800 mb-3 italic"></p>
+
+              <!-- Proposta Nuova Canzone -->
               <div class="pt-2 border-t border-cipria-200/80">
                 <label class="block text-[11px] font-semibold text-legno/80 mb-1" for="new-song-input">
-                  Non trovi la tua canzone preferita? Proponila in segreto:
+                  Non trovi la tua canzone preferita? Proponila:
                 </label>
                 <div class="flex gap-2">
-                  <input type="text" id="new-song-input" placeholder="Es. Volare — Domenico Modugno" class="flex-1 px-3 py-2 rounded-xl border border-salvia-300 bg-white text-xs focus:outline-none focus:ring-2 focus:ring-salvia-400">
-                  <button id="add-song-btn" class="px-4 py-2 bg-salvia-500 hover:bg-salvia-600 text-white text-xs font-bold rounded-xl transition shadow-xs whitespace-nowrap">
+                  <input type="text" id="new-song-input" maxlength="120" placeholder="Es. Volare — Domenico Modugno" class="flex-1 min-w-0 px-3 py-2 rounded-xl border border-salvia-300 bg-white text-xs focus:outline-none focus:ring-2 focus:ring-salvia-400">
+                  <button type="button" id="add-song-btn" class="px-4 py-2 bg-salvia-500 hover:bg-salvia-600 text-white text-xs font-bold rounded-xl transition shadow-xs whitespace-nowrap disabled:opacity-50">
                     + Vota
                   </button>
                 </div>
-                <p class="text-[10px] text-legno/60 mt-1.5 italic">
-                  Verrà aggiunta subito alla lista con il tuo voto segreto conteggiato. Se commetti un errore di battitura, potrai eliminarla direttamente dalla lista tramite l'icona 🗑️ visibile solo a te.
-                </p>
               </div>
+
+              <!-- Messaggi (voto salvato, errori) -->
+              <p id="song-status" role="status" class="hidden"></p>
             </div>
           </div>
 
@@ -1289,8 +1292,14 @@
         </p>
       </div>
 
-      <!-- Form con invio mail -->
-      <form id="rsvp-form" class="relative z-10 space-y-5">
+      <!-- Form: le risposte vanno in un foglio Google tramite Apps Script (vedi FOGLIO-GOOGLE.md) -->
+      <form id="rsvp-form" class="relative z-10 space-y-5" novalidate>
+
+        <!-- Campo trappola per i robot: nascosto alle persone, deve restare vuoto -->
+        <div aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;">
+          <label for="rsvp-gotcha">Non compilare</label>
+          <input type="text" name="_gotcha" id="rsvp-gotcha" tabindex="-1" autocomplete="off">
+        </div>
         
         <div>
           <label class="block text-xs font-semibold text-legno uppercase tracking-wider mb-1.5" for="name">Nome e Cognome *</label>
@@ -1350,6 +1359,9 @@
           <label class="block text-xs font-semibold text-legno uppercase tracking-wider mb-1.5" for="message">Un pensiero o messaggio per gli sposi</label>
           <textarea name="Messaggio_per_gli_sposi" id="message" rows="3" placeholder="Scrivi qui il tuo augurio o nota..." class="w-full px-4 py-3 rounded-xl border border-salvia-300 focus:outline-none focus:ring-2 focus:ring-salvia-400 bg-avorio/50 text-sm"></textarea>
         </div>
+
+        <!-- Messaggio di errore: compare solo se l'invio non va a buon fine -->
+        <div id="rsvp-error" role="alert" class="hidden p-4 rounded-xl border border-cipria-400 bg-cipria-100 text-sm text-legno leading-relaxed"></div>
 
         <button type="submit" id="rsvp-submit-btn" class="w-full py-4 bg-salvia-500 hover:bg-salvia-600 text-white font-semibold rounded-xl shadow-ambient transition duration-300 transform hover:-translate-y-0.5 flex items-center justify-center gap-2">
           <span>Invia la tua Risposta</span>
@@ -2595,70 +2607,59 @@
 
     renderTruckMenu();
 
-    // 5. CLASSIFICA CANZONI REALE E VOTAZIONE SEGRETA
-    const STORAGE_KEY_SONGS = 'wedding_real_songs_ranking_v2';
-    const STORAGE_KEY_VOTES = 'wedding_user_secret_votes_v2';
-    const STORAGE_KEY_CREATIONS = 'wedding_user_created_songs_v2';
+    // 5. CLASSIFICA CANZONI (voti veri, salvati nel foglio Google)
+    // Indirizzo della "App web" Apps Script (finisce con /exec), usato anche
+    // dalla conferma presenza. Come ottenerlo: vedi FOGLIO-GOOGLE.md.
+    // Finché è vuoto, voto e conferma avvisano che non sono ancora attivi
+    // invece di fingere di aver salvato.
+    const FOGLIO_GOOGLE_URL = '';
 
-    function purgeLegacyMockData() {
-      try {
-        localStorage.removeItem('wedding_real_songs_ranking_v1');
-        localStorage.removeItem('wedding_user_secret_votes_v1');
-        localStorage.removeItem('wedding_user_created_songs_v1');
-      } catch (e) {}
-    }
-    purgeLegacyMockData();
+    // Voto anonimo: il telefono crea un codice casuale e se lo ricorda.
+    // Un voto per codice: se si vota di nuovo, il voto vecchio viene sostituito.
+    // È un blocco "debole": chi cancella i dati del browser (o usa un altro
+    // telefono) può votare di nuovo. Gli sposi possono cancellare righe dal foglio.
+    // Per passare al voto dentro la conferma presenza basterà usare l'email
+    // dell'invitato al posto di questo codice (vedi salvaVoto_ nello script).
+    const STORAGE_KEY_MY_VOTE = 'matrimonio_mio_voto_canzone_v1';
 
-    function getStoredSongs() {
-      try {
-        const data = localStorage.getItem(STORAGE_KEY_SONGS);
-        if (data) {
-          const parsed = JSON.parse(data);
-          if (Array.isArray(parsed)) {
-            return parsed.filter(s => s && s.id && typeof s.votes === 'number');
-          }
-        }
-      } catch (e) {}
-      return [];
-    }
+    // Pulizia dei vecchi dati finti salvati solo sul telefono
+    try {
+      ['wedding_real_songs_ranking_v1', 'wedding_user_secret_votes_v1', 'wedding_user_created_songs_v1',
+       'wedding_real_songs_ranking_v2', 'wedding_user_secret_votes_v2', 'wedding_user_created_songs_v2']
+        .forEach(k => localStorage.removeItem(k));
+    } catch (e) {}
 
-    function saveStoredSongs(songs) {
+    function getMyVote() {
       try {
-        localStorage.setItem(STORAGE_KEY_SONGS, JSON.stringify(songs));
+        const data = JSON.parse(localStorage.getItem(STORAGE_KEY_MY_VOTE) || 'null');
+        if (data && data.votante) return data;
       } catch (e) {}
+      return null;
     }
 
-    function getUserVotes() {
+    function saveMyVote(votante, canzone) {
       try {
-        const data = localStorage.getItem(STORAGE_KEY_VOTES);
-        return data ? JSON.parse(data) : [];
-      } catch (e) {}
-      return [];
-    }
-
-    function saveUserVotes(votes) {
-      try {
-        localStorage.setItem(STORAGE_KEY_VOTES, JSON.stringify(votes));
+        localStorage.setItem(STORAGE_KEY_MY_VOTE, JSON.stringify({ votante, canzone }));
       } catch (e) {}
     }
 
-    function getUserCreatedSongIds() {
-      try {
-        const data = localStorage.getItem(STORAGE_KEY_CREATIONS);
-        return data ? JSON.parse(data) : [];
-      } catch (e) {}
-      return [];
+    function newVoterCode() {
+      const rnd = (window.crypto && crypto.randomUUID) ? crypto.randomUUID()
+        : Date.now().toString(36) + Math.random().toString(36).slice(2);
+      return 'tel-' + rnd.replace(/-/g, '').slice(0, 16);
     }
 
-    function saveUserCreatedSongIds(ids) {
-      try {
-        localStorage.setItem(STORAGE_KEY_CREATIONS, JSON.stringify(ids));
-      } catch (e) {}
+    // Il codice si genera una volta e si tiene, anche prima del primo voto
+    let voterCode = (getMyVote() || {}).votante || null;
+
+    // Stesso confronto "largo" dello script: maiuscole, spazi e trattini non contano
+    function songKey(v) {
+      return String(v || '').toLowerCase().replace(/[\s\-–—_.,'"!?]+/g, ' ').trim();
     }
 
-    let realSongs = getStoredSongs();
-    let userVotes = getUserVotes();
-    let userCreatedSongIds = getUserCreatedSongIds();
+    let songRanking = [];
+    let myVote = getMyVote();
+    let songBusy = false;
 
     const songsContainer = document.getElementById('songs-ranking-container');
     const leaderBanner = document.getElementById('leader-song-banner');
@@ -2666,185 +2667,219 @@
     const leaderVotesEl = document.getElementById('leader-song-votes');
     const newSongInput = document.getElementById('new-song-input');
     const addSongBtn = document.getElementById('add-song-btn');
+    const songStatus = document.getElementById('song-status');
+    const voterNote = document.getElementById('song-my-vote-note');
 
-    function renderSongLeaderboard() {
+    function votesLabel(n) {
+      return `${n} ${n === 1 ? 'voto' : 'voti'}`;
+    }
+
+    function showSongStatus(text, kind) {
+      if (!songStatus) return;
+      songStatus.textContent = text;
+      songStatus.className = 'mt-3 p-2.5 rounded-xl text-xs leading-relaxed ' + (
+        kind === 'error'
+          ? 'bg-cipria-100 border border-cipria-400 text-legno'
+          : 'bg-salvia-100 border border-salvia-300 text-salvia-800'
+      );
+    }
+
+    function hideSongStatus() {
+      if (songStatus) songStatus.className = 'hidden';
+    }
+
+    function updateMyVoteNote() {
+      if (!voterNote) return;
+      if (myVote && myVote.canzone) {
+        voterNote.textContent = `Hai votato "${myVote.canzone}". Puoi cambiare idea: il voto vecchio viene sostituito.`;
+        voterNote.classList.remove('hidden');
+      } else {
+        voterNote.classList.add('hidden');
+      }
+    }
+
+    function songMessageBox(emoji, title, subtitle) {
+      const box = document.createElement('div');
+      box.className = 'p-4 bg-white/70 rounded-xl border border-dashed border-salvia-300 text-center';
+      const e = document.createElement('span');
+      e.className = 'text-2xl block mb-1';
+      e.textContent = emoji;
+      const t = document.createElement('p');
+      t.className = 'text-xs text-legno/80 font-medium';
+      t.textContent = title;
+      box.append(e, t);
+      if (subtitle) {
+        const st = document.createElement('p');
+        st.className = 'text-[11px] text-legno/60 mt-0.5';
+        st.textContent = subtitle;
+        box.appendChild(st);
+      }
+      return box;
+    }
+
+    function renderSongLeaderboard(stateMessage) {
       if (!songsContainer) return;
       songsContainer.innerHTML = '';
 
-      if (realSongs.length === 0) {
+      if (stateMessage) {
         leaderBanner.classList.add('hidden');
-        songsContainer.innerHTML = `
-          <div class="p-4 bg-white/70 rounded-xl border border-dashed border-salvia-300 text-center">
-            <span class="text-2xl block mb-1">🎼</span>
-            <p class="text-xs text-legno/80 font-medium">Nessun brano ancora proposto!</p>
-            <p class="text-[11px] text-legno/60 mt-0.5">Sii il primo a suggerire una canzone per la band usando il campo qui sotto.</p>
-          </div>
-        `;
+        songsContainer.appendChild(songMessageBox(stateMessage[0], stateMessage[1], stateMessage[2]));
         return;
       }
 
-      realSongs.sort((a, b) => b.votes - a.votes);
-
-      const topSong = realSongs[0];
-      if (topSong && topSong.votes > 0) {
-        leaderBanner.classList.remove('hidden');
-        leaderTitleEl.innerText = `${topSong.title} — ${topSong.artist}`;
-        leaderVotesEl.innerText = `🏆 ${topSong.votes} ${topSong.votes === 1 ? 'voto' : 'voti'}`;
-      } else {
+      if (songRanking.length === 0) {
         leaderBanner.classList.add('hidden');
+        songsContainer.appendChild(songMessageBox('🎼', 'Nessun brano ancora proposto!',
+          'Sii il primo a suggerire una canzone per la band usando il campo qui sotto.'));
+        return;
       }
 
-      realSongs.forEach((song, index) => {
-        const hasVoted = userVotes.includes(song.id);
-        const isCreator = userCreatedSongIds.includes(song.id);
+      const topSong = songRanking[0];
+      leaderBanner.classList.remove('hidden');
+      leaderTitleEl.textContent = topSong.titolo;
+      leaderVotesEl.textContent = `🏆 ${votesLabel(topSong.voti)}`;
+
+      const myKey = myVote ? songKey(myVote.canzone) : '';
+      const positionBadges = ['🥇', '🥈', '🥉'];
+
+      songRanking.forEach((song, index) => {
+        const isMine = myKey && songKey(song.titolo) === myKey;
 
         const row = document.createElement('div');
         row.className = 'song-entry-card p-2.5 bg-white/80 rounded-xl border border-salvia-200/80 shadow-xs flex items-center justify-between gap-2 transition hover:bg-white';
 
-        const positionBadges = ['🥇', '🥈', '🥉'];
-        const posText = positionBadges[index] || `#${index + 1}`;
-
         const leftDiv = document.createElement('div');
-        leftDiv.className = 'flex items-center gap-2 overflow-hidden';
-        leftDiv.innerHTML = `
-          <span class="text-base font-serif font-bold text-salvia-700 shrink-0 w-6 text-center">${posText}</span>
-          <div class="truncate">
-            <div class="flex items-center gap-1.5">
-              <span class="text-xs font-bold text-legno truncate">${song.title}</span>
-              ${isCreator ? '<span class="text-[9px] bg-salvia-100 text-salvia-800 px-1.5 py-0.2 rounded-full border border-salvia-300">La tua proposta</span>' : ''}
-            </div>
-            <span class="text-[11px] text-legno/65 truncate block">${song.artist}</span>
-          </div>
-        `;
+        leftDiv.className = 'flex items-center gap-2 min-w-0 flex-1';
+        const pos = document.createElement('span');
+        pos.className = 'text-base font-serif font-bold text-salvia-700 shrink-0 w-6 text-center';
+        pos.textContent = positionBadges[index] || `#${index + 1}`;
+        const title = document.createElement('span');
+        title.className = 'text-xs font-bold text-legno break-words min-w-0';
+        title.textContent = song.titolo; // testo scritto dagli invitati: mai come HTML
+        const textBox = document.createElement('div');
+        textBox.className = 'min-w-0 flex flex-col items-start gap-1';
+        textBox.appendChild(title);
+        leftDiv.append(pos, textBox);
 
         const rightDiv = document.createElement('div');
         rightDiv.className = 'flex items-center gap-2 shrink-0';
-
-        const votesCountSpan = document.createElement('span');
-        votesCountSpan.className = 'text-xs font-semibold px-2 py-0.5 rounded-full bg-salvia-100 text-salvia-800';
-        votesCountSpan.innerText = `${song.votes} ${song.votes === 1 ? 'voto' : 'voti'}`;
-        rightDiv.appendChild(votesCountSpan);
+        const count = document.createElement('span');
+        count.className = 'text-[10px] font-semibold px-2 py-0.5 rounded-full bg-salvia-100 text-salvia-800 whitespace-nowrap';
+        count.textContent = votesLabel(song.voti);
 
         const voteBtn = document.createElement('button');
         voteBtn.type = 'button';
+        voteBtn.disabled = isMine || songBusy;
         voteBtn.className = `px-3 py-1 rounded-lg text-xs font-bold transition ${
-          hasVoted 
-            ? 'bg-salvia-600 text-white shadow-xs' 
-            : 'bg-avorio hover:bg-salvia-100 text-salvia-700 border border-salvia-300'
+          isMine
+            ? 'bg-salvia-600 text-white shadow-xs'
+            : 'bg-avorio hover:bg-salvia-100 text-salvia-700 border border-salvia-300 disabled:opacity-50'
         }`;
-        voteBtn.innerHTML = hasVoted ? '✓ Votata' : '❤️ Vota';
-        voteBtn.addEventListener('click', () => toggleSongVote(song.id));
+        voteBtn.textContent = isMine ? '✓ Votata' : '❤️ Vota';
+        if (!isMine) voteBtn.addEventListener('click', () => sendSongVote(song.titolo));
+
+        textBox.appendChild(count);
         rightDiv.appendChild(voteBtn);
-
-        if (isCreator) {
-          const deleteBtn = document.createElement('button');
-          deleteBtn.type = 'button';
-          deleteBtn.className = 'delete-song-btn text-xs text-rose-500 hover:text-rose-700 p-1 rounded-md transition hover:bg-rose-50';
-          deleteBtn.title = 'Elimina la tua proposta';
-          deleteBtn.innerHTML = '🗑️';
-          
-          let confirmTimeout = null;
-          deleteBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            if (deleteBtn.getAttribute('data-confirming') === 'true') {
-              removeSong(song.id);
-            } else {
-              deleteBtn.setAttribute('data-confirming', 'true');
-              deleteBtn.innerText = 'Elimina?';
-              deleteBtn.classList.add('bg-rose-100', 'font-bold', 'px-2');
-              confirmTimeout = setTimeout(() => {
-                deleteBtn.removeAttribute('data-confirming');
-                deleteBtn.innerHTML = '🗑️';
-                deleteBtn.classList.remove('bg-rose-100', 'font-bold', 'px-2');
-              }, 3500);
-            }
-          });
-          rightDiv.appendChild(deleteBtn);
-        }
-
-        row.appendChild(leftDiv);
-        row.appendChild(rightDiv);
+        row.append(leftDiv, rightDiv);
         songsContainer.appendChild(row);
       });
     }
 
-    function toggleSongVote(songId) {
-      const song = realSongs.find(s => s.id === songId);
-      if (!song) return;
-
-      const voteIdx = userVotes.indexOf(songId);
-      if (voteIdx > -1) {
-        userVotes.splice(voteIdx, 1);
-        song.votes = Math.max(0, song.votes - 1);
-      } else {
-        userVotes.push(songId);
-        song.votes++;
-        spawnMusicNotes(window.innerWidth / 2, window.innerHeight / 2, 8);
-        playSingleNote(880, 'triangle', 0.25);
+    async function loadSongRanking() {
+      if (!FOGLIO_GOOGLE_URL) {
+        renderSongLeaderboard(['🎼', 'Il voto delle canzoni sarà attivo a breve.', 'Torna a trovarci tra qualche giorno!']);
+        return;
       }
-
-      saveUserVotes(userVotes);
-      saveStoredSongs(realSongs);
-      renderSongLeaderboard();
+      renderSongLeaderboard(['⏳', 'Caricamento classifica…']);
+      try {
+        const res = await fetch(FOGLIO_GOOGLE_URL + '?azione=classifica');
+        const result = await res.json();
+        if (!result || result.ok !== true) throw new Error('Risposta non valida');
+        songRanking = Array.isArray(result.classifica) ? result.classifica : [];
+        renderSongLeaderboard();
+      } catch (err) {
+        console.error('Classifica non caricata:', err);
+        renderSongLeaderboard(['📶', 'Non riesco a caricare la classifica.', 'Controlla la connessione e ricarica la pagina.']);
+      }
     }
 
-    function removeSong(songId) {
-      realSongs = realSongs.filter(s => s.id !== songId);
-      userCreatedSongIds = userCreatedSongIds.filter(id => id !== songId);
-      userVotes = userVotes.filter(id => id !== songId);
+    async function sendSongVote(songTitle) {
+      hideSongStatus();
+      const canzone = String(songTitle || '').trim();
 
-      saveStoredSongs(realSongs);
-      saveUserCreatedSongIds(userCreatedSongIds);
-      saveUserVotes(userVotes);
+      if (!FOGLIO_GOOGLE_URL) {
+        showSongStatus('Il voto non è ancora attivo. Riprova tra qualche giorno!', 'error');
+        return false;
+      }
+      if (!voterCode) voterCode = newVoterCode();
+      if (!canzone) return false;
+      if (songBusy) return false;
 
-      playSingleNote(330, 'sine', 0.2);
+      songBusy = true;
+      if (addSongBtn) addSongBtn.disabled = true;
       renderSongLeaderboard();
+      showSongStatus('Invio del voto in corso…', 'info');
+
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 20000);
+      try {
+        // Corpo in testo semplice: evita il controllo CORS preventivo che Apps Script non supporta
+        const res = await fetch(FOGLIO_GOOGLE_URL, {
+          method: 'POST',
+          body: JSON.stringify({ tipo: 'voto', votante: voterCode, canzone, _gotcha: '' }),
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          signal: controller.signal
+        });
+        const result = await res.json().catch(() => null);
+        if (!res.ok || !result || result.ok !== true) {
+          throw new Error((result && result.errore) || ('HTTP ' + res.status));
+        }
+
+        // Solo qui siamo sicuri che il voto è salvato nel foglio
+        myVote = { votante: voterCode, canzone: result.canzone || canzone };
+        saveMyVote(myVote.votante, myVote.canzone);
+        songRanking = Array.isArray(result.classifica) ? result.classifica : songRanking;
+        updateMyVoteNote();
+        showSongStatus(`Voto salvato: "${myVote.canzone}". Grazie!`, 'ok');
+        spawnMusicNotes(window.innerWidth / 2, window.innerHeight / 2, 10);
+        playSingleNote(1046.5, 'triangle', 0.3);
+        return true;
+      } catch (err) {
+        console.error('Voto non inviato:', err);
+        showSongStatus('Ops, il voto non è stato salvato. Controlla la connessione e riprova.', 'error');
+        return false;
+      } finally {
+        clearTimeout(timeoutId);
+        songBusy = false;
+        if (addSongBtn) addSongBtn.disabled = false;
+        renderSongLeaderboard();
+      }
     }
 
-    function addNewSongProposal(inputString) {
-      if (!inputString || !inputString.trim()) return;
-      const parts = inputString.split(/—|-|–/);
-      let title = parts[0].trim();
-      let artist = parts[1] ? parts[1].trim() : 'Richiesta dagli invitati';
-
-      if (!title) return;
-
-      const newId = 'song_' + Date.now();
-      const newSong = {
-        id: newId,
-        title: title,
-        artist: artist,
-        votes: 1
-      };
-
-      realSongs.push(newSong);
-      userVotes.push(newId);
-      userCreatedSongIds.push(newId);
-
-      saveStoredSongs(realSongs);
-      saveUserVotes(userVotes);
-      saveUserCreatedSongIds(userCreatedSongIds);
-
-      renderSongLeaderboard();
-      spawnMusicNotes(window.innerWidth / 2, window.innerHeight / 2, 10);
-      playSingleNote(1046.5, 'triangle', 0.3);
+    async function proposeNewSong() {
+      if (!newSongInput) return;
+      const value = newSongInput.value.trim();
+      if (!value) {
+        showSongStatus('Scrivi il titolo della canzone (e, se vuoi, il cantante).', 'error');
+        newSongInput.focus();
+        return;
+      }
+      const ok = await sendSongVote(value);
+      if (ok) newSongInput.value = '';
     }
 
     if (addSongBtn && newSongInput) {
-      addSongBtn.addEventListener('click', () => {
-        addNewSongProposal(newSongInput.value);
-        newSongInput.value = '';
-      });
+      addSongBtn.addEventListener('click', proposeNewSong);
       newSongInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
           e.preventDefault();
-          addNewSongProposal(newSongInput.value);
-          newSongInput.value = '';
+          proposeNewSong();
         }
       });
     }
 
-    renderSongLeaderboard();
+    updateMyVoteNote();
+    loadSongRanking();
 
     // 6. DETTAGLI & DRESS CODE — PALETTE & COMBINATORE
     const paletteInfo = document.getElementById('palette-info');
@@ -3062,6 +3097,7 @@
     });
 
     // 8. MODULO CONFERMA PRESENZA
+    // Usa lo stesso indirizzo FOGLIO_GOOGLE_URL definito al punto 5.
     const form = document.getElementById('rsvp-form');
     const successBox = document.getElementById('rsvp-success');
     const submitBtn = document.getElementById('rsvp-submit-btn');
@@ -3116,18 +3152,47 @@
       updateDynamicGuestFields();
     }
 
+    // Se l'invitato non viene, nascondiamo e DISATTIVIAMO i campi extra:
+    // così i nomi degli ospiti (obbligatori) non bloccano l'invio.
+    function setExtraOptionsVisible(visible) {
+      rsvpExtraOptions.classList.toggle('hidden', !visible);
+      rsvpExtraOptions.querySelectorAll('input, select, textarea').forEach(el => {
+        el.disabled = !visible;
+      });
+    }
+
     presenceRadios.forEach(radio => {
       radio.addEventListener('change', () => {
-        if (radio.value === 'Purtroppo no') {
-          rsvpExtraOptions.classList.add('hidden');
-        } else {
-          rsvpExtraOptions.classList.remove('hidden');
-        }
+        setExtraOptionsVisible(radio.value !== 'Purtroppo no');
       });
     });
 
+    const rsvpErrorBox = document.getElementById('rsvp-error');
+
+    function showRsvpError(text) {
+      rsvpErrorBox.textContent = text;
+      rsvpErrorBox.classList.remove('hidden');
+      rsvpErrorBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function hideRsvpError() {
+      rsvpErrorBox.classList.add('hidden');
+    }
+
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
+      hideRsvpError();
+
+      // Controllo dei campi obbligatori con i messaggi del browser
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+
+      if (!FOGLIO_GOOGLE_URL) {
+        showRsvpError('Il modulo non è ancora attivo. Per ora conferma la tua presenza scrivendo direttamente agli sposi. Grazie!');
+        return;
+      }
 
       submitBtn.disabled = true;
       const originalBtnHtml = submitBtn.innerHTML;
@@ -3139,27 +3204,34 @@
         <span>Invio in corso...</span>
       `;
 
-      const formData = new FormData(form);
-      formData.append('_subject', 'Nuova Conferma Presenza: Matrimonio Azzurra & Leonardo');
-      formData.append('_template', 'table');
+      // I campi disattivati (es. ospiti quando non si viene) sono esclusi
+      const payload = Object.fromEntries(new FormData(form).entries());
+
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 20000);
 
       try {
-        await fetch('https://formsubmit.co/ajax/leonardo.porri.spm@gmail.com', {
+        // Corpo in testo semplice: evita il controllo CORS preventivo che Apps Script non supporta
+        const res = await fetch(FOGLIO_GOOGLE_URL, {
           method: 'POST',
-          body: formData,
-          headers: {
-            'Accept': 'application/json'
-          }
+          body: JSON.stringify(payload),
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          signal: controller.signal
         });
+        const result = await res.json().catch(() => null);
+        if (!res.ok || !result || result.ok !== true) {
+          throw new Error((result && result.errore) || ('HTTP ' + res.status));
+        }
 
+        // Solo qui siamo sicuri che la risposta è salvata nel foglio
         form.classList.add('hidden');
         successBox.classList.remove('hidden');
         spawnPetalBurst(window.innerWidth / 2, window.innerHeight / 2, 40);
       } catch (error) {
-        form.classList.add('hidden');
-        successBox.classList.remove('hidden');
-        spawnPetalBurst(window.innerWidth / 2, window.innerHeight / 2, 40);
+        console.error('Conferma presenza non inviata:', error);
+        showRsvpError('Ops, la tua risposta non è stata inviata. Controlla la connessione e premi di nuovo "Invia". I dati che hai scritto sono ancora qui. Se il problema continua, scrivi direttamente agli sposi.');
       } finally {
+        clearTimeout(timeoutId);
         submitBtn.disabled = false;
         submitBtn.innerHTML = originalBtnHtml;
       }
@@ -3168,7 +3240,8 @@
     document.getElementById('rsvp-reset').addEventListener('click', () => {
       form.reset();
       updateDynamicGuestFields();
-      rsvpExtraOptions.classList.remove('hidden');
+      setExtraOptionsVisible(true);
+      hideRsvpError();
       successBox.classList.add('hidden');
       form.classList.remove('hidden');
     });
