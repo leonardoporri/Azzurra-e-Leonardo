@@ -303,8 +303,10 @@
     .hidden-heart:hover { opacity: 1; transform: scale(1.15); }
     .hidden-heart.found { color: #ba735f; opacity: 0; transform: scale(2.2); pointer-events: none; }
     body.night-mode .hidden-heart { color: #f3b8aa; opacity: 0.6; }
+    #paper-plane { pointer-events: none; }
     #paper-plane.catchable { pointer-events: auto; cursor: pointer; }
-    #paper-plane.catchable::before { content: ""; position: absolute; inset: -16px; }
+    #paper-plane.catchable::before { content: ""; position: absolute; inset: -22px; border-radius: 50%; }
+    @media (pointer: coarse) { #paper-plane.catchable::before { inset: -34px; } }
     #treasure-pill { position: fixed; left: 12px; bottom: 12px; z-index: 44; }
     #treasure-note-backdrop { position: fixed; inset: 0; z-index: 60; }
     body.night-mode #treasure-card { background-color: #0f2418 !important; }
@@ -472,7 +474,7 @@
   <canvas id="petals-canvas"></canvas>
 
   <!-- Aeroplanino di carta: vola ogni tanto sullo schermo, non blocca i tocchi -->
-  <div id="paper-plane" aria-hidden="true" style="position:fixed;left:-24px;top:-16px;width:48px;height:32px;z-index:45;pointer-events:none;opacity:0;transition:opacity .4s ease;will-change:transform;">
+  <div id="paper-plane" aria-hidden="true" style="position:fixed;left:-24px;top:-16px;width:48px;height:32px;z-index:45;opacity:0;transition:opacity .4s ease;will-change:transform;">
     <svg viewBox="0 0 48 32" width="48" height="32" xmlns="http://www.w3.org/2000/svg">
       <path d="M46 16 L2 2 L14 16 Z" fill="#fcfaf5" stroke="#5e8760" stroke-width="1.4" stroke-linejoin="round"/>
       <path d="M46 16 L14 16 L2 30 Z" fill="#edd5cc" stroke="#5e8760" stroke-width="1.4" stroke-linejoin="round"/>
@@ -4117,7 +4119,7 @@
 
         // Avvitamento (barrel roll) in un punto a caso del volo
         const roll = Math.random() < 0.45 ? rnd(0.25, 0.75) : -1;
-        return { d, dir, roll, duration: rnd(4200, 6500) };
+        return { d, dir, roll, duration: rnd(8000, 11000) }; // lento: si deve poter prendere al volo
       }
 
       function fly() {
@@ -4167,7 +4169,7 @@
     // d'oro da prendere; F. l'aeroplanino di carta preso al volo apre un
     // biglietto. Ogni sorpresa finita mostra un indizio su una di quelle
     // che mancano; finite tutte e tre arriva il messaggio finale.
-    // I progressi restano salvati su questo telefono/computer.
+    // I progressi si azzerano ricaricando la pagina.
     //
     // TUTTI I TESTI SONO QUI: modificateli liberamente.
     const TESTI_SORPRESE = {
@@ -4204,12 +4206,10 @@
       const HEARTS_TOTAL = 5, FIREFLIES_TOTAL = 5;
       const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+      // I progressi restano solo finché la pagina è aperta: ricaricando si riparte da zero
       let state = { cuori: [], lucciole: 0, aereo: false, finale: false };
-      try {
-        const saved = JSON.parse(localStorage.getItem(KEY) || 'null');
-        if (saved) state = Object.assign(state, saved);
-      } catch (e) {}
-      const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} };
+      try { localStorage.removeItem(KEY); } catch (e) {} // pulisce i salvataggi della versione precedente
+      const save = () => {};
 
       const done = {
         cuori: () => state.cuori.length >= HEARTS_TOTAL,
@@ -4382,8 +4382,11 @@
       }
       const planeEl = document.getElementById('paper-plane');
       if (planeEl) {
-        planeEl.addEventListener('click', (e) => {
+        // pointerdown e non click: l'aereo si muove, e sul telefono il "click"
+        // arrivava quando l'aereo era già scappato via dal dito
+        planeEl.addEventListener('pointerdown', (e) => {
           if (!planeEl.classList.contains('catchable')) return;
+          e.preventDefault();
           e.stopPropagation();
           planeEl.classList.remove('catchable');
           planeEl.style.opacity = '0';
