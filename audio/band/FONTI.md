@@ -32,7 +32,8 @@ l'intonazione reale di ogni campione è stata misurata ed è scritta in `index.h
 
 ## Registrazioni di Azzurra e Leonardo (`registrazioni/`)
 
-Registrazioni fornite dagli sposi il 16/11/2026 (audio WhatsApp), usate per i
+Registrazioni fornite dagli sposi il 16/11/2026 (audio WhatsApp; abbinamento
+confermato da Leonardo: 8 s chitarra, 15 s tromba, 47 s contrabbasso, 10 s batteria), usate per i
 quattro pulsanti degli strumenti. Convertite in MP3 mono 96 kbps, silenzi
 iniziali/finali tolti e volume uniformato. Se una non si scarica, il sito usa i
 campioni CC0 qui sopra.
