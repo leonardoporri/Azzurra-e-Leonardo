@@ -293,6 +293,23 @@
     body.night-mode #petals-toggle-btn:hover { background-color: rgba(94, 135, 96, 0.25); }
     body.petals-off #petals-canvas { display: none; }
 
+    /* CACCIA AL TESORO */
+    .hidden-heart {
+      position: absolute; z-index: 5;
+      width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
+      color: #dfb5a6; opacity: 0.75; border-radius: 9999px;
+      transition: transform .25s ease, opacity .4s ease;
+    }
+    .hidden-heart:hover { opacity: 1; transform: scale(1.15); }
+    .hidden-heart.found { color: #ba735f; opacity: 0; transform: scale(2.2); pointer-events: none; }
+    body.night-mode .hidden-heart { color: #f3b8aa; opacity: 0.6; }
+    #paper-plane.catchable { pointer-events: auto; cursor: pointer; }
+    #paper-plane.catchable::before { content: ""; position: absolute; inset: -16px; }
+    #treasure-pill { position: fixed; left: 12px; bottom: 12px; z-index: 44; }
+    #treasure-note-backdrop { position: fixed; inset: 0; z-index: 60; }
+    body.night-mode #treasure-card { background-color: #0f2418 !important; }
+    body.night-mode #treasure-note-backdrop { background-color: rgba(0, 0, 0, 0.6); }
+
     #petals-canvas {
       position: fixed;
       top: 0;
@@ -849,6 +866,9 @@
   </section>
 
   <section id="programma" class="py-20 px-4 relative bg-salvia-50/70 border-y border-salvia-200">
+    <button type="button" class="hidden-heart" data-heart="programma" style="top:18px;right:7%" aria-label="Un cuoricino nascosto">
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.1 0 3.6 1.1 4.3 2.4h2c.7-1.3 2.2-2.4 4.3-2.4 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z" fill="currentColor"/></svg>
+    </button>
     <div class="max-w-4xl mx-auto">
       
       <div class="text-center max-w-xl mx-auto mb-16">
@@ -956,6 +976,9 @@
   </section>
 
   <section id="esperienze" class="py-20 px-4 relative">
+    <button type="button" class="hidden-heart" data-heart="esperienze" style="bottom:18px;left:6%" aria-label="Un cuoricino nascosto">
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.1 0 3.6 1.1 4.3 2.4h2c.7-1.3 2.2-2.4 4.3-2.4 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z" fill="currentColor"/></svg>
+    </button>
     <div class="max-w-5xl mx-auto">
       
       <div class="text-center max-w-xl mx-auto mb-14">
@@ -1127,6 +1150,9 @@
   </section>
 
   <section id="luoghi" class="py-20 px-4 relative bg-salvia-50/50">
+    <button type="button" class="hidden-heart" data-heart="luoghi" style="top:18px;left:8%" aria-label="Un cuoricino nascosto">
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.1 0 3.6 1.1 4.3 2.4h2c.7-1.3 2.2-2.4 4.3-2.4 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z" fill="currentColor"/></svg>
+    </button>
     <div class="max-w-5xl mx-auto">
       
       <div class="text-center max-w-xl mx-auto mb-14">
@@ -1197,6 +1223,9 @@
   </section>
 
   <section id="dettagli" class="py-20 px-4 relative">
+    <button type="button" class="hidden-heart" data-heart="dettagli" style="bottom:18px;right:9%" aria-label="Un cuoricino nascosto">
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.1 0 3.6 1.1 4.3 2.4h2c.7-1.3 2.2-2.4 4.3-2.4 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z" fill="currentColor"/></svg>
+    </button>
     <div class="max-w-4xl mx-auto">
       
       <div class="text-center max-w-xl mx-auto mb-12">
@@ -1469,6 +1498,9 @@
 
   <!-- Album foto condiviso (WedShoots): gli invitati caricano le loro foto della giornata -->
   <section id="album" class="py-20 px-4 relative bg-salvia-50/50">
+    <button type="button" class="hidden-heart" data-heart="album" style="top:22px;right:14%" aria-label="Un cuoricino nascosto">
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.1 0 3.6 1.1 4.3 2.4h2c.7-1.3 2.2-2.4 4.3-2.4 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z" fill="currentColor"/></svg>
+    </button>
     <div class="max-w-4xl mx-auto">
 
       <div class="text-center max-w-xl mx-auto mb-12">
@@ -1534,6 +1566,9 @@
       <p data-petal-rain role="button" tabindex="0" aria-label="Azzurra e Leonardo: tocca per una pioggia di petali" class="font-script text-4xl sm:text-5xl text-salvia-200 cursor-pointer select-none">
         Azzurra &amp; Leonardo
       </p>
+      <button type="button" id="static-paper-plane" class="hidden mx-auto w-11 h-11 items-center justify-center rounded-full hover:bg-salvia-700 transition" aria-label="Un aeroplanino di carta con un messaggio">
+        <svg viewBox="0 0 48 32" width="34" height="23" aria-hidden="true"><path d="M46 16 L2 2 L14 16 Z" fill="#fcfaf5" stroke="#9dbf9e" stroke-width="1.4" stroke-linejoin="round"/><path d="M46 16 L14 16 L2 30 Z" fill="#edd5cc" stroke="#9dbf9e" stroke-width="1.4" stroke-linejoin="round"/></svg>
+      </button>
       <p class="font-serif text-xs tracking-widest text-salvia-100/90 uppercase">
         10 Aprile 2027 • Latina
       </p>
@@ -3784,6 +3819,8 @@
         this.timer = Math.random() * 100;
         this.isOakLeaf = Math.random() > 0.65;
         this.isFirefly = Math.random() > 0.45;
+        // Caccia al tesoro: circa 1 lucciola su 8 brilla d'oro (si vede solo di notte)
+        this.isGolden = !isBurst && this.isFirefly && Math.random() < 0.12;
         this.fireflyPulse = Math.random() * Math.PI * 2;
         this.isFromClick = isBurst;
         this.isExiting = false;
@@ -3818,7 +3855,22 @@
         ctx.save();
         ctx.translate(this.x, this.y);
 
-        if (isNightMode && this.isFirefly) {
+        if (isNightMode && this.isFirefly && this.isGolden) {
+          // Lucciola d'oro: piu' grande e calda, da prendere con un tocco
+          this.fireflyPulse += 0.06;
+          const r = 4.2 + Math.sin(this.fireflyPulse) * 1.2;
+          ctx.shadowBlur = 22;
+          ctx.shadowColor = '#f59e0b';
+          ctx.fillStyle = 'rgba(251, 191, 36, 0.95)';
+          ctx.beginPath();
+          ctx.arc(0, 0, r, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.shadowBlur = 6;
+          ctx.fillStyle = 'rgba(255, 251, 235, 1)';
+          ctx.beginPath();
+          ctx.arc(0, 0, r * 0.45, 0, Math.PI * 2);
+          ctx.fill();
+        } else if (isNightMode && this.isFirefly) {
           this.fireflyPulse += 0.05;
           const glowAlpha = 0.5 + Math.sin(this.fireflyPulse) * 0.45;
           const fireflyR = 2.5 + Math.sin(this.fireflyPulse) * 1.2;
@@ -4076,6 +4128,7 @@
         const start = performance.now();
         flying = true;
         plane.style.opacity = '1';
+        plane.classList.add('catchable'); // si puo' prendere al volo (caccia al tesoro)
 
         function frame(now) {
           const t = Math.min(1, (now - start) / f.duration);
@@ -4094,6 +4147,7 @@
           } else {
             flying = false;
             plane.style.opacity = '0';
+            plane.classList.remove('catchable');
             schedule();
           }
         }
@@ -4105,6 +4159,246 @@
       }
 
       schedule();
+    })();
+
+
+    // 11. CACCIA AL TESORO (tre sorprese nascoste)
+    // A. cinque cuoricini nascosti nelle sezioni; E. di notte, cinque lucciole
+    // d'oro da prendere; F. l'aeroplanino di carta preso al volo apre un
+    // biglietto. Ogni sorpresa finita mostra un indizio su una di quelle
+    // che mancano; finite tutte e tre arriva il messaggio finale.
+    // I progressi restano salvati su questo telefono/computer.
+    //
+    // TUTTI I TESTI SONO QUI: modificateli liberamente.
+    const TESTI_SORPRESE = {
+      primoCuore: 'Hai trovato un cuoricino nascosto! Ce ne sono altri 4 sparsi nel sito. 💗',
+      cuori: {
+        titolo: 'Cinque cuori trovati! 💗',
+        testo: 'Hai occhi attenti: nessun angolo del nostro bosco ti sfugge.'
+      },
+      lucciole: {
+        titolo: 'Cinque lucciole d\'oro! ✨',
+        testo: 'Hai catturato la luce più rara del bosco. Ora brilla un po\' anche tu.'
+      },
+      aereo: {
+        titolo: 'Un biglietto per te ✉️',
+        testo: 'Grazie di essere parte della nostra storia. Questo aeroplanino ha volato fin qui solo per dirtelo.'
+      },
+      indizi: {
+        cuori: 'Indizio: nel sito si nascondono 5 piccoli cuori. Guarda bene negli angoli delle sezioni.',
+        lucciole: 'Indizio: quando cala la notte nel bosco (pulsante delle lucine in alto), alcune lucciole brillano d\'oro. Prendine cinque con un tocco.',
+        lucciolePetaliSpenti: 'Indizio: quando cala la notte nel bosco, alcune lucciole brillano d\'oro. Per vederle riaccendi i petali con il pulsante a forma di petalo in alto.',
+        aereo: 'Indizio: ogni tanto un aeroplanino di carta attraversa lo schermo. Prendilo al volo!',
+        aereoFermo: 'Indizio: in fondo alla pagina c\'è un aeroplanino di carta che ti aspetta.'
+      },
+      finale: {
+        titolo: 'Sei un vero esploratore del bosco! 🌳',
+        testo: 'Hai trovato tutte le sorprese. Ci vediamo il 10 aprile, sotto le querce!'
+      },
+      progresso: 'Caccia al tesoro'
+    };
+
+    (function treasureHunt() {
+      const KEY = 'matrimonio_caccia_tesoro_v1';
+      const ORDER = ['cuori', 'aereo', 'lucciole'];
+      const HEARTS_TOTAL = 5, FIREFLIES_TOTAL = 5;
+      const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      let state = { cuori: [], lucciole: 0, aereo: false, finale: false };
+      try {
+        const saved = JSON.parse(localStorage.getItem(KEY) || 'null');
+        if (saved) state = Object.assign(state, saved);
+      } catch (e) {}
+      const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} };
+
+      const done = {
+        cuori: () => state.cuori.length >= HEARTS_TOTAL,
+        lucciole: () => state.lucciole >= FIREFLIES_TOTAL,
+        aereo: () => !!state.aereo
+      };
+      const started = () => state.cuori.length > 0 || state.lucciole > 0 || state.aereo;
+
+      function hintFor(egg) {
+        if (egg === 'lucciole' && !petalsEnabled) return TESTI_SORPRESE.indizi.lucciolePetaliSpenti;
+        if (egg === 'aereo' && reduceMotion) return TESTI_SORPRESE.indizi.aereoFermo;
+        return TESTI_SORPRESE.indizi[egg];
+      }
+      function nextHint() {
+        const missing = ORDER.filter(e => !done[e]());
+        return missing.length ? hintFor(missing[0]) : '';
+      }
+
+      // --- Biglietto (finestrella con il messaggio) ---
+      function showNote(title, text, hint) {
+        const old = document.getElementById('treasure-note-backdrop');
+        if (old) old.remove();
+        const back = document.createElement('div');
+        back.id = 'treasure-note-backdrop';
+        back.className = 'flex items-center justify-center p-4 bg-black/40';
+        const card = document.createElement('div');
+        card.id = 'treasure-card';
+        card.setAttribute('role', 'dialog');
+        card.setAttribute('aria-modal', 'true');
+        card.setAttribute('aria-label', title);
+        card.className = 'relative w-full max-w-sm bg-avorio rounded-3xl border border-cipria-200 shadow-2xl p-6 text-center';
+        const h = document.createElement('h3');
+        h.className = 'font-serif text-2xl text-legno mb-2';
+        h.textContent = title;
+        const t = document.createElement('p');
+        t.className = 'text-sm text-legno/80 leading-relaxed';
+        t.textContent = text;
+        card.append(h, t);
+        if (hint) {
+          const hi = document.createElement('p');
+          hi.className = 'mt-4 p-3 rounded-2xl bg-salvia-100 text-xs text-salvia-800 leading-relaxed';
+          hi.textContent = hint;
+          card.appendChild(hi);
+        }
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'mt-5 px-6 py-2 bg-salvia-500 hover:bg-salvia-600 text-white text-sm font-semibold rounded-full';
+        btn.textContent = 'Chiudi';
+        card.appendChild(btn);
+        back.appendChild(card);
+        const close = () => { back.remove(); document.removeEventListener('keydown', onKey); };
+        const onKey = (e) => { if (e.key === 'Escape') close(); };
+        btn.addEventListener('click', close);
+        // Un tocco appena dopo l'apertura (es. sulla lucciola) non deve chiuderlo subito
+        const openedAt = Date.now();
+        back.addEventListener('click', (e) => { if (e.target === back && Date.now() - openedAt > 500) close(); });
+        document.addEventListener('keydown', onKey);
+        document.body.appendChild(back);
+        btn.focus();
+      }
+
+      function chime() {
+        [783.99, 987.77, 1174.66, 1567.98].forEach((f, i) => setTimeout(() => playSingleNote(f, 'triangle', 0.4), i * 90));
+      }
+
+      // Una sorpresa appena completata: suo messaggio + indizio o finale
+      function completed(egg) {
+        chime();
+        const allDone = ORDER.every(e => done[e]());
+        const msg = TESTI_SORPRESE[egg];
+        if (allDone && !state.finale) {
+          state.finale = true;
+          save();
+          showNote(msg.titolo, msg.testo, '');
+          // il finale arriva appena si chiude il primo biglietto
+          const wait = setInterval(() => {
+            if (!document.getElementById('treasure-note-backdrop')) {
+              clearInterval(wait);
+              showNote(TESTI_SORPRESE.finale.titolo, TESTI_SORPRESE.finale.testo, '');
+              if (typeof petalRain === 'function') petalRain(null);
+            }
+          }, 300);
+        } else {
+          showNote(msg.titolo, msg.testo, nextHint());
+        }
+        renderPill();
+      }
+
+      // --- Contatore discreto (compare dopo la prima scoperta) ---
+      const pill = document.createElement('button');
+      pill.type = 'button';
+      pill.id = 'treasure-pill';
+      pill.className = 'hidden items-center gap-2 px-3 py-1.5 rounded-full bg-white/90 backdrop-blur border border-salvia-200 shadow-soft text-[11px] font-semibold text-legno';
+      pill.setAttribute('aria-label', TESTI_SORPRESE.progresso);
+      document.body.appendChild(pill);
+      function renderPill() {
+        if (!started()) return;
+        pill.classList.remove('hidden');
+        pill.classList.add('flex');
+        const c = `💗 ${Math.min(state.cuori.length, HEARTS_TOTAL)}/${HEARTS_TOTAL}`;
+        const l = `✨ ${Math.min(state.lucciole, FIREFLIES_TOTAL)}/${FIREFLIES_TOTAL}`;
+        const a = `✉️ ${state.aereo ? '1' : '0'}/1`;
+        pill.textContent = state.finale ? `🌳 ${c} · ${l} · ${a}` : `${c} · ${l} · ${a}`;
+      }
+      pill.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (state.finale) {
+          showNote(TESTI_SORPRESE.finale.titolo, TESTI_SORPRESE.finale.testo, '');
+        } else {
+          showNote(TESTI_SORPRESE.progresso, pill.textContent, nextHint());
+        }
+      });
+
+      // --- A. Cuori nascosti ---
+      document.querySelectorAll('.hidden-heart').forEach(btn => {
+        const id = btn.dataset.heart;
+        if (state.cuori.includes(id)) { btn.remove(); return; }
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (state.cuori.includes(id)) return;
+          state.cuori.push(id);
+          save();
+          btn.classList.add('found');
+          const r = btn.getBoundingClientRect();
+          spawnPetalBurst(r.left + r.width / 2, r.top + r.height / 2, 10);
+          setTimeout(() => btn.remove(), 450);
+          if (done.cuori()) {
+            completed('cuori');
+          } else {
+            playSingleNote(880 + state.cuori.length * 110, 'triangle', 0.35);
+            renderPill();
+            if (state.cuori.length === 1) showNote('💗', TESTI_SORPRESE.primoCuore, '');
+          }
+        });
+      });
+
+      // --- E. Lucciole d'oro (di notte, con i petali accesi) ---
+      window.addEventListener('pointerdown', (e) => {
+        if (!isNightMode || !petalsEnabled || done.lucciole()) return;
+        const hitR = e.pointerType === 'touch' ? 38 : 28;
+        let hit = null, best = hitR * hitR;
+        for (const p of petals) {
+          if (!p.isGolden) continue;
+          const dx = p.x - e.clientX, dy = p.y - e.clientY, d = dx * dx + dy * dy;
+          if (d < best) { best = d; hit = p; }
+        }
+        if (!hit) return;
+        hit.isGolden = false;
+        hit.isFirefly = false;
+        spawnPetalBurst(hit.x, hit.y, 8);
+        state.lucciole++;
+        save();
+        if (done.lucciole()) {
+          completed('lucciole');
+        } else {
+          playSingleNote(1046.5 + state.lucciole * 80, 'sine', 0.3);
+          renderPill();
+        }
+      });
+
+      // --- F. Aeroplanino ---
+      function planeCaught() {
+        if (!state.aereo) {
+          state.aereo = true;
+          save();
+          completed('aereo');
+        } else {
+          showNote(TESTI_SORPRESE.aereo.titolo, TESTI_SORPRESE.aereo.testo, nextHint());
+        }
+      }
+      const planeEl = document.getElementById('paper-plane');
+      if (planeEl) {
+        planeEl.addEventListener('click', (e) => {
+          if (!planeEl.classList.contains('catchable')) return;
+          e.stopPropagation();
+          planeEl.classList.remove('catchable');
+          planeEl.style.opacity = '0';
+          planeCaught();
+        });
+      }
+      // Con "riduci movimento" l'aeroplanino non vola: aspetta fermo in fondo alla pagina
+      const staticPlane = document.getElementById('static-paper-plane');
+      if (staticPlane && reduceMotion) {
+        staticPlane.classList.remove('hidden');
+        staticPlane.classList.add('flex');
+        staticPlane.addEventListener('click', (e) => { e.stopPropagation(); planeCaught(); });
+      }
+
+      renderPill();
     })();
 
   </script>
