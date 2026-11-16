@@ -740,7 +740,7 @@
       </div>
 
       <!-- Titolo Principale -->
-      <h1 class="font-serif text-3xl sm:text-5xl md:text-7xl lg:text-8xl text-legno font-normal tracking-tight mb-3 whitespace-nowrap flex items-center justify-center gap-1.5 sm:gap-3">
+      <h1 id="hero-names" data-petal-rain role="button" tabindex="0" aria-label="Azzurra e Leonardo: tocca per una pioggia di petali" class="font-serif text-3xl sm:text-5xl md:text-7xl lg:text-8xl text-legno font-normal tracking-tight mb-3 whitespace-nowrap flex items-center justify-center gap-1.5 sm:gap-3 cursor-pointer select-none">
         <span>Azzurra</span>
         <span class="font-script text-salvia-600 text-4xl sm:text-6xl md:text-8xl lg:text-9xl font-normal">&amp;</span>
         <span>Leonardo</span>
@@ -790,7 +790,7 @@
       </div>
 
       <p class="text-xs text-legno/60 mt-4 italic">
-        💡 Suggerimento: tocca i disegni nello sfondo (food truck, musicisti, querce) per interagire con loro!
+        💡 Suggerimento: tocca i disegni nello sfondo (food truck, musicisti, querce) per interagire con loro, e i nostri nomi per una sorpresa!
       </p>
 
     </div>
@@ -1510,7 +1510,7 @@
 
   <footer class="py-12 px-4 bg-salvia-800 text-white text-center relative overflow-hidden">
     <div class="max-w-4xl mx-auto relative z-10 space-y-4">
-      <p class="font-script text-4xl sm:text-5xl text-salvia-200">
+      <p data-petal-rain role="button" tabindex="0" aria-label="Azzurra e Leonardo: tocca per una pioggia di petali" class="font-script text-4xl sm:text-5xl text-salvia-200 cursor-pointer select-none">
         Azzurra &amp; Leonardo
       </p>
       <p class="font-serif text-xs tracking-widest text-salvia-100/90 uppercase">
@@ -3703,6 +3703,54 @@
         spawnPetalBurst(t.clientX, t.clientY, 4);
       }
     }, { passive: true });
+
+    // 9b. PIOGGIA DI PETALI SUI NOMI
+    // Toccando "Azzurra & Leonardo" (in copertina o in fondo alla pagina)
+    // parte un'esplosione di petali dai nomi, una pioggia dall'alto su tutto
+    // lo schermo e un piccolo arpeggio. Dopo qualche secondo i petali in piu'
+    // spariscono da soli.
+    let lastPetalRain = 0;
+    function petalRain(fromEl) {
+      const now = Date.now();
+      if (now - lastPetalRain < 1500) return; // niente raffiche se si tocca di continuo
+      lastPetalRain = now;
+
+      // Prima si tolgono i petali di vecchi tocchi, per non appesantire il telefono
+      for (let i = petals.length - 1; i >= 0; i--) {
+        if (petals[i].isFromClick && petals.length > 120) petals.splice(i, 1);
+      }
+
+      if (fromEl) {
+        const r = fromEl.getBoundingClientRect();
+        spawnPetalBurst(r.left + r.width * 0.25, r.top + r.height / 2, 10);
+        spawnPetalBurst(r.left + r.width * 0.5, r.top + r.height / 2, 10);
+        spawnPetalBurst(r.left + r.width * 0.75, r.top + r.height / 2, 10);
+      }
+
+      const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const rainCount = reduceMotion ? 0 : (width < 640 ? 45 : 70);
+      for (let i = 0; i < rainCount; i++) {
+        setTimeout(() => {
+          const p = new Petal(Math.random() * width, -20 - Math.random() * 30, false);
+          p.isFromClick = true; // esce dallo schermo invece di ricominciare
+          p.speedY = 1.6 + Math.random() * 1.8;
+          petals.push(p);
+        }, Math.random() * 1400);
+      }
+
+      // Arpeggio allegro (do-mi-sol-do)
+      [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => {
+        setTimeout(() => playSingleNote(f, 'triangle', 0.5), i * 110);
+      });
+      if (navigator.vibrate) { try { navigator.vibrate(30); } catch (e) {} }
+    }
+
+    document.querySelectorAll('[data-petal-rain]').forEach(el => {
+      el.addEventListener('click', () => petalRain(el));
+      el.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); petalRain(el); }
+      });
+    });
 
     function animate() {
       ctx.clearRect(0, 0, width, height);
