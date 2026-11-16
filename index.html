@@ -3669,8 +3669,14 @@
       }
     }
 
+    // Sul telefono un po' meno petali (circa un terzo in meno), per non coprire
+    // i testi; sul computer resta tutto come prima.
+    const isPhoneScreen = window.matchMedia('(max-width: 767px)').matches;
+    const PETAL_FACTOR = isPhoneScreen ? 0.65 : 1;
+    const MAX_PETALS = isPhoneScreen ? 90 : 140;
+
     const petals = [];
-    const basePetalsCount = 38;
+    const basePetalsCount = isPhoneScreen ? 26 : 38;
     for (let i = 0; i < basePetalsCount; i++) {
       const p = new Petal();
       p.y = Math.random() * height;
@@ -3678,7 +3684,8 @@
     }
 
     function spawnPetalBurst(x, y, count = 6) {
-      while (petals.length + count > 140) {
+      count = Math.max(2, Math.round(count * PETAL_FACTOR));
+      while (petals.length + count > MAX_PETALS) {
         const oldIndex = petals.findIndex(p => p.isFromClick);
         if (oldIndex !== -1) {
           petals.splice(oldIndex, 1);
@@ -3693,13 +3700,19 @@
 
     window.addEventListener('click', (e) => {
       if (e.target.tagName !== 'BUTTON' && e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA' && e.target.tagName !== 'A' && !e.target.closest('.interactive-element')) {
+        // Sul telefono un tocco fa scattare sia "touchstart" sia "click":
+        // i petali li ha gia' creati il touchstart, non li raddoppiamo.
+        if (Date.now() - lastTouchBurst < 800) return;
         spawnPetalBurst(e.clientX, e.clientY, 5);
       }
     });
 
+    let lastTouchBurst = 0;
+
     window.addEventListener('touchstart', (e) => {
       if (e.touches.length > 0 && !e.target.closest('.interactive-element')) {
         const t = e.touches[0];
+        lastTouchBurst = Date.now();
         spawnPetalBurst(t.clientX, t.clientY, 4);
       }
     }, { passive: true });
@@ -3717,7 +3730,7 @@
 
       // Prima si tolgono i petali di vecchi tocchi, per non appesantire il telefono
       for (let i = petals.length - 1; i >= 0; i--) {
-        if (petals[i].isFromClick && petals.length > 120) petals.splice(i, 1);
+        if (petals[i].isFromClick && petals.length > MAX_PETALS - 20) petals.splice(i, 1);
       }
 
       if (fromEl) {
@@ -3728,7 +3741,7 @@
       }
 
       const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      const rainCount = reduceMotion ? 0 : (width < 640 ? 45 : 70);
+      const rainCount = reduceMotion ? 0 : (isPhoneScreen ? 30 : 70);
       for (let i = 0; i < rainCount; i++) {
         setTimeout(() => {
           const p = new Petal(Math.random() * width, -20 - Math.random() * 30, false);
