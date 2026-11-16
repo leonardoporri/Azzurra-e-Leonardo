@@ -92,7 +92,7 @@ function salvaConferma_(dati) {
     new Date(),
     nome,
     email,
-    pulisci_(dati.Telefono),
+    comeTesto_(pulisci_(dati.Telefono)), // testo: non perde lo 0 iniziale
     presenza,
     viene ? pulisci_(dati.Numero_Ospiti) : '0',
     viene ? altri.join(', ') : '',
@@ -144,7 +144,7 @@ function salvaVoto_(dati) {
   var canzoneEsistente = scritturaEsistente_(sh, canzone);
   if (canzoneEsistente) canzone = canzoneEsistente;
 
-  var valori = [[new Date(), votante, canzone]];
+  var valori = [[new Date(), votante, comeTesto_(canzone)]];
   if (rigaEsistente) {
     sh.getRange(rigaEsistente, 1, 1, 3).setValues(valori);
   } else {
@@ -207,6 +207,12 @@ function chiave_(v) {
 // Toglie l'apostrofo aggiunto da pulisci_ per mostrare il testo sul sito.
 function testo_(v) {
   return String(v == null ? '' : v).replace(/^'/, '').trim();
+}
+
+// Forza il foglio a tenere il valore come testo (es. telefono 0333...
+// o canzone "1999"): l'apostrofo iniziale non si vede nella cella.
+function comeTesto_(s) {
+  return s && s.charAt(0) !== "'" ? "'" + s : s;
 }
 
 function pulisci_(v) {
