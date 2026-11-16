@@ -1075,7 +1075,7 @@
                 </span>
               </div>
               <p class="text-xs text-legno/75 mb-3 leading-relaxed">
-                La canzone che risulterà <strong>la più votata</strong> sarà richiesta alla band per essere suonata dal vivo durante il ricevimento! Non chiediamo il nome: si vedono solo i conteggi. Un voto per telefono: se voti di nuovo, cambi il tuo voto.
+                La canzone che risulterà <strong>la più votata</strong> sarà richiesta alla band per essere suonata dal vivo durante il ricevimento! Non chiediamo il nome: si vedono solo i conteggi. Puoi votare <strong>fino a 3 canzoni</strong> da ogni telefono e togliere un voto quando vuoi.
               </p>
 
               <!-- Banner 1° Posto -->
@@ -1095,8 +1095,8 @@
               <!-- Lista Canzoni con i conteggi presi dal foglio -->
               <div id="songs-ranking-container" class="space-y-2 mb-3 max-h-60 overflow-y-auto pr-1"></div>
 
-              <!-- Il tuo voto attuale (ricordato da questo telefono) -->
-              <p id="song-my-vote-note" class="hidden text-[11px] text-salvia-800 mb-3 italic"></p>
+              <!-- Le tue canzoni votate (fino a 3), con la x per togliere un voto -->
+              <div id="song-my-vote-note" class="hidden mb-3"></div>
 
               <!-- Proposta Nuova Canzone -->
               <div class="pt-2 border-t border-cipria-200/80">
@@ -2951,7 +2951,7 @@
     const FOGLIO_GOOGLE_URL = 'https://script.google.com/macros/s/AKfycbzB_FPtEm5jp0jBxHO1NXkU-WDybXBuMyx-hSZ4Q2t0vSNZHDlMMhDqQ5saAeOgK-NO/exec';
 
     // Voto anonimo: il telefono crea un codice casuale e se lo ricorda.
-    // Un voto per codice: se si vota di nuovo, il voto vecchio viene sostituito.
+    // Ogni codice puo' votare fino a 3 canzoni diverse e togliere un suo voto.
     // È un blocco "debole": chi cancella i dati del browser (o usa un altro
     // telefono) può votare di nuovo. Gli sposi possono cancellare righe dal foglio.
     // Per passare al voto dentro la conferma presenza basterà usare l'email
@@ -2965,17 +2965,22 @@
         .forEach(k => localStorage.removeItem(k));
     } catch (e) {}
 
+    // Cosa ricorda il telefono: il suo codice e le sue canzoni votate.
+    // (Prima c'era una sola canzone: la trasformiamo in un elenco.)
     function getMyVote() {
       try {
         const data = JSON.parse(localStorage.getItem(STORAGE_KEY_MY_VOTE) || 'null');
-        if (data && data.votante) return data;
+        if (data && data.votante) {
+          let canzoni = Array.isArray(data.canzoni) ? data.canzoni : (data.canzone ? [data.canzone] : []);
+          return { votante: data.votante, canzoni: canzoni.filter(Boolean).map(String) };
+        }
       } catch (e) {}
       return null;
     }
 
-    function saveMyVote(votante, canzone) {
+    function saveMyVote(votante, canzoni) {
       try {
-        localStorage.setItem(STORAGE_KEY_MY_VOTE, JSON.stringify({ votante, canzone }));
+        localStorage.setItem(STORAGE_KEY_MY_VOTE, JSON.stringify({ votante, canzoni }));
       } catch (e) {}
     }
 
@@ -2994,8 +2999,28 @@
     }
 
     let songRanking = [];
-    let myVote = getMyVote();
+    let mySongs = (getMyVote() || {}).canzoni || [];
+    let maxSongs = 3;
     let songBusy = false;
+
+    function isMySong(title) {
+      const k = songKey(title);
+      return mySongs.some(c => songKey(c) === k);
+    }
+
+    // Aggiorna l'elenco "le mie canzoni" con quello che dice il foglio.
+    // Se lo script del foglio non e' ancora aggiornato (versione vecchia,
+    // un solo voto per telefono) teniamo solo l'ultima canzone votata.
+    function applyServerVotes(result, fallbackSong) {
+      if (result && result.versione >= 2 && Array.isArray(result.mie)) {
+        mySongs = result.mie.map(String);
+        if (result.max) maxSongs = result.max;
+      } else if (fallbackSong) {
+        mySongs = [fallbackSong];
+        maxSongs = 1;
+      }
+      if (voterCode) saveMyVote(voterCode, mySongs);
+    }
 
     const songsContainer = document.getElementById('songs-ranking-container');
     const leaderBanner = document.getElementById('leader-song-banner');
@@ -3026,11 +3051,40 @@
 
     function updateMyVoteNote() {
       if (!voterNote) return;
-      if (myVote && myVote.canzone) {
-        voterNote.textContent = `Hai votato "${myVote.canzone}". Puoi cambiare idea: il voto vecchio viene sostituito.`;
-        voterNote.classList.remove('hidden');
-      } else {
+      voterNote.innerHTML = '';
+      if (!mySongs.length) {
         voterNote.classList.add('hidden');
+        return;
+      }
+      voterNote.classList.remove('hidden');
+      const head = document.createElement('p');
+      head.className = 'text-[11px] font-semibold text-salvia-800 mb-1.5';
+      head.textContent = `Le tue canzoni (${mySongs.length} di ${maxSongs}):`;
+      const list = document.createElement('div');
+      list.className = 'flex flex-wrap gap-1.5';
+      mySongs.forEach(title => {
+        const chip = document.createElement('span');
+        chip.className = 'inline-flex items-center gap-1 max-w-full pl-2.5 pr-1 py-0.5 rounded-full bg-white border border-salvia-300 text-[11px] text-legno shadow-xs';
+        const t = document.createElement('span');
+        t.className = 'truncate';
+        t.textContent = title; // testo scritto dagli invitati: mai come HTML
+        const x = document.createElement('button');
+        x.type = 'button';
+        x.className = 'shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-cipria-500 hover:bg-cipria-100 font-bold text-sm leading-none disabled:opacity-40';
+        x.textContent = '×';
+        x.disabled = songBusy;
+        x.setAttribute('aria-label', `Togli il tuo voto a ${title}`);
+        x.title = 'Togli il voto';
+        x.addEventListener('click', () => removeSongVote(title));
+        if (maxSongs > 1) chip.append(t, x); else chip.append(t);
+        list.appendChild(chip);
+      });
+      voterNote.append(head, list);
+      if (maxSongs > 1 && mySongs.length >= maxSongs) {
+        const full = document.createElement('p');
+        full.className = 'text-[11px] text-legno/80 italic mt-1.5';
+        full.textContent = 'Hai usato tutti i voti. Per votarne un\'altra, togli prima una canzone con la ×.';
+        voterNote.appendChild(full);
       }
     }
 
@@ -3075,11 +3129,10 @@
       leaderTitleEl.textContent = topSong.titolo;
       leaderVotesEl.textContent = `🏆 ${votesLabel(topSong.voti)}`;
 
-      const myKey = myVote ? songKey(myVote.canzone) : '';
       const positionBadges = ['🥇', '🥈', '🥉'];
 
       songRanking.forEach((song, index) => {
-        const isMine = myKey && songKey(song.titolo) === myKey;
+        const isMine = isMySong(song.titolo);
 
         const row = document.createElement('div');
         row.className = 'song-entry-card p-2.5 bg-white/80 rounded-xl border border-salvia-200/80 shadow-xs flex items-center justify-between gap-2 transition hover:bg-white';
@@ -3128,10 +3181,19 @@
       }
       renderSongLeaderboard(['⏳', 'Caricamento classifica…']);
       try {
-        const res = await fetch(FOGLIO_GOOGLE_URL + '?azione=classifica');
+        const q = voterCode ? '&votante=' + encodeURIComponent(voterCode) : '';
+        const res = await fetch(FOGLIO_GOOGLE_URL + '?azione=classifica' + q);
         const result = await res.json();
         if (!result || result.ok !== true) throw new Error('Risposta non valida');
         songRanking = Array.isArray(result.classifica) ? result.classifica : [];
+        if (result.versione >= 2) {
+          applyServerVotes(result);
+        } else {
+          // Script del foglio non ancora aggiornato: vale ancora 1 voto per telefono
+          maxSongs = 1;
+          mySongs = mySongs.slice(-1);
+        }
+        updateMyVoteNote();
         renderSongLeaderboard();
       } catch (err) {
         console.error('Classifica non caricata:', err);
@@ -3150,6 +3212,14 @@
       if (!voterCode) voterCode = newVoterCode();
       if (!canzone) return false;
       if (songBusy) return false;
+      if (isMySong(canzone)) {
+        showSongStatus(`Hai già votato "${canzone}".`, 'ok');
+        return true;
+      }
+      if (maxSongs > 1 && mySongs.length >= maxSongs) {
+        showSongStatus(`Hai già votato ${maxSongs} canzoni. Togline una con la × qui sopra e poi vota questa.`, 'error');
+        return false;
+      }
 
       songBusy = true;
       if (addSongBtn) addSongBtn.disabled = true;
@@ -3167,16 +3237,23 @@
           signal: controller.signal
         });
         const result = await res.json().catch(() => null);
+        if (result && result.limite) {
+          applyServerVotes(result);
+          songRanking = Array.isArray(result.classifica) ? result.classifica : songRanking;
+          updateMyVoteNote();
+          showSongStatus(`Hai già votato ${maxSongs} canzoni. Togline una con la × qui sopra e poi vota questa.`, 'error');
+          return false;
+        }
         if (!res.ok || !result || result.ok !== true) {
           throw new Error((result && result.errore) || ('HTTP ' + res.status));
         }
 
         // Solo qui siamo sicuri che il voto è salvato nel foglio
-        myVote = { votante: voterCode, canzone: result.canzone || canzone };
-        saveMyVote(myVote.votante, myVote.canzone);
+        const saved = result.canzone || canzone;
+        applyServerVotes(result, saved);
         songRanking = Array.isArray(result.classifica) ? result.classifica : songRanking;
         updateMyVoteNote();
-        showSongStatus(`Voto salvato: "${myVote.canzone}". Grazie!`, 'ok');
+        showSongStatus(result.giaVotata ? `Avevi già votato "${saved}".` : `Voto salvato: "${saved}". Grazie!`, 'ok');
         spawnMusicNotes(window.innerWidth / 2, window.innerHeight / 2, 10);
         playSingleNote(1046.5, 'triangle', 0.3);
         return true;
@@ -3188,6 +3265,45 @@
         clearTimeout(timeoutId);
         songBusy = false;
         if (addSongBtn) addSongBtn.disabled = false;
+        updateMyVoteNote();
+        renderSongLeaderboard();
+      }
+    }
+
+    // Toglie il voto di questo telefono a una canzone
+    async function removeSongVote(songTitle) {
+      if (!FOGLIO_GOOGLE_URL || !voterCode || songBusy) return;
+      hideSongStatus();
+      songBusy = true;
+      if (addSongBtn) addSongBtn.disabled = true;
+      updateMyVoteNote();
+      renderSongLeaderboard();
+      showSongStatus('Tolgo il voto…', 'info');
+
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 20000);
+      try {
+        const res = await fetch(FOGLIO_GOOGLE_URL, {
+          method: 'POST',
+          body: JSON.stringify({ tipo: 'togli', votante: voterCode, canzone: songTitle, _gotcha: '' }),
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          signal: controller.signal
+        });
+        const result = await res.json().catch(() => null);
+        if (!res.ok || !result || result.ok !== true || !(result.versione >= 2)) {
+          throw new Error((result && result.errore) || ('HTTP ' + res.status));
+        }
+        applyServerVotes(result);
+        songRanking = Array.isArray(result.classifica) ? result.classifica : songRanking;
+        showSongStatus(`Voto tolto a "${songTitle}". Ora puoi votarne un'altra.`, 'ok');
+      } catch (err) {
+        console.error('Voto non tolto:', err);
+        showSongStatus('Ops, non sono riuscito a togliere il voto. Controlla la connessione e riprova.', 'error');
+      } finally {
+        clearTimeout(timeoutId);
+        songBusy = false;
+        if (addSongBtn) addSongBtn.disabled = false;
+        updateMyVoteNote();
         renderSongLeaderboard();
       }
     }

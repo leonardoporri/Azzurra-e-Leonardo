@@ -72,10 +72,11 @@ Poi cancella le righe di prova. Sul telefono resterà scritto "Hai votato…":
   contro i robot. Se arriva spazzatura, si cancellano le righe.
 - **Doppioni nella conferma:** se un invitato invia due volte, vedrai due
   righe. Tieni l'ultima.
-- **Voto canzoni, un voto per telefono:** il telefono ricorda il suo codice.
-  Se si vota di nuovo, la riga viene aggiornata (si cambia voto). È un blocco
-  debole: chi cancella i dati del browser, o usa un altro telefono, può votare
-  ancora. Se vedi voti strani (es. tante righe uguali nello stesso minuto),
+- **Voto canzoni, fino a 3 canzoni per telefono:** il telefono ricorda il suo
+  codice. Ogni canzone votata è una riga del foglio (stesso codice su più
+  righe = stesso telefono). Con la × sul sito l'invitato toglie un suo voto e
+  la riga sparisce. È un blocco debole: chi cancella i dati del browser, o usa
+  un altro telefono, può votare ancora. Se vedi voti strani (es. tante righe uguali nello stesso minuto),
   cancella le righe: la classifica si aggiorna da sola.
 - **Canzoni scritte in modo diverso:** "volare" e "Volare" contano come la
   stessa canzone (maiuscole, spazi e trattini non contano). Errori di battitura
