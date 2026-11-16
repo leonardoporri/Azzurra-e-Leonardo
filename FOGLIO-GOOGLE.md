@@ -1,11 +1,18 @@
-# Attivare la conferma presenza (circa 10 minuti, una volta sola)
+# Attivare conferma presenza e voto canzoni (circa 10 minuti, una volta sola)
 
-Le risposte degli invitati finiscono in un foglio Google, una riga per risposta.
-Il sito mostra "Grazie di cuore!" **solo** se la riga è stata salvata davvero.
-Se qualcosa va storto, l'invitato vede un messaggio di errore e può riprovare.
+Un solo foglio Google raccoglie due cose:
 
-Finché non completi questi passi, il modulo sul sito dice
-"Il modulo non è ancora attivo" e non finge di inviare.
+- **Conferma presenza** → scheda `Risposte`, una riga per risposta. Il sito
+  mostra "Grazie di cuore!" **solo** se la riga è stata salvata davvero. Se
+  qualcosa va storto, l'invitato vede un errore e può riprovare.
+- **Voto canzoni** → scheda `Voti canzoni`, una riga per telefono. Il voto è
+  anonimo: nella riga c'è solo un codice casuale, non il nome. La classifica
+  sul sito si calcola da queste righe.
+
+Le due schede si creano da sole al primo invio.
+
+Finché non completi questi passi, il sito dice "non ancora attivo" e non
+finge di salvare.
 
 ## 1. Crea il foglio
 
@@ -43,8 +50,14 @@ const FOGLIO_GOOGLE_URL = '';
 
 ## 5. Prova
 
-Invia una conferma finta dal sito pubblicato, dal telefono. Deve comparire una
-nuova riga nel foglio, nella scheda `Risposte`. Poi cancella la riga di prova.
+Dal sito pubblicato, dal telefono:
+
+1. Invia una conferma finta. Deve comparire una riga nella scheda `Risposte`.
+2. Vota una canzone finta. Deve comparire una riga in `Voti canzoni` e la
+   canzone deve apparire in classifica.
+
+Poi cancella le righe di prova. Sul telefono resterà scritto "Hai votato…":
+è normale, al prossimo voto vero verrà sostituito.
 
 ## Da sapere
 
@@ -57,5 +70,13 @@ nuova riga nel foglio, nella scheda `Risposte`. Poi cancella la riga di prova.
 - **L'indirizzo `/exec` è pubblico** (è scritto nel sito). Chiunque lo trovi
   può aggiungere righe al foglio, ma non può leggerlo. C'è un filtro semplice
   contro i robot. Se arriva spazzatura, si cancellano le righe.
-- **Doppioni:** se un invitato invia due volte, vedrai due righe. Tieni
-  l'ultima.
+- **Doppioni nella conferma:** se un invitato invia due volte, vedrai due
+  righe. Tieni l'ultima.
+- **Voto canzoni, un voto per telefono:** il telefono ricorda il suo codice.
+  Se si vota di nuovo, la riga viene aggiornata (si cambia voto). È un blocco
+  debole: chi cancella i dati del browser, o usa un altro telefono, può votare
+  ancora. Se vedi voti strani (es. tante righe uguali nello stesso minuto),
+  cancella le righe: la classifica si aggiorna da sola.
+- **Canzoni scritte in modo diverso:** "volare" e "Volare" contano come la
+  stessa canzone (maiuscole, spazi e trattini non contano). Errori di battitura
+  diversi invece contano come canzoni diverse: puoi correggerli nel foglio.
