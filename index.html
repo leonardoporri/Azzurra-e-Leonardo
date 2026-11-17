@@ -312,6 +312,16 @@
     body.night-mode #treasure-card { background-color: #0f2418 !important; }
     body.night-mode #treasure-note-backdrop { background-color: rgba(0, 0, 0, 0.6); }
 
+    /* Sul telefono niente sfocatura dietro i riquadri (sono bianchi al 75-95%,
+       la differenza non si vede) tranne la barra in alto, dove il testo ci
+       scorre sotto: e' tra gli effetti piu' pesanti mentre si scorre la pagina. */
+    @media (max-width: 767px) {
+      main .backdrop-blur, main .backdrop-blur-md, main .backdrop-blur-lg, main .backdrop-blur-xs,
+      section .backdrop-blur, section .backdrop-blur-md, section .backdrop-blur-lg, section .backdrop-blur-xs {
+        -webkit-backdrop-filter: none !important; backdrop-filter: none !important;
+      }
+    }
+
     #petals-canvas {
       position: fixed;
       top: 0;
@@ -2016,13 +2026,22 @@
       });
     }
 
-    // Scarica i suoni in sottofondo appena la pagina è pronta (circa 1,5 MB in tutto:
-    // prima le vostre registrazioni, poi i suoni di scorta)
-    if (document.readyState === 'complete') {
-      setTimeout(preloadInstrumentSamples, 800);
-    } else {
-      window.addEventListener('load', () => setTimeout(preloadInstrumentSamples, 800), { once: true });
+    // Scarica i suoni in sottofondo (circa 1,5 MB in tutto: prima le vostre
+    // registrazioni, poi i suoni di scorta). Aspetta la fine dell'animazione di
+    // apertura, per non farla andare a scatti; al primo tocco parte subito.
+    function startPreloadWhenCalm() {
+      if (window.introAttiva) {
+        window.addEventListener('intro-finita', preloadInstrumentSamples, { once: true });
+      } else {
+        setTimeout(preloadInstrumentSamples, 800);
+      }
     }
+    if (document.readyState === 'complete') {
+      startPreloadWhenCalm();
+    } else {
+      window.addEventListener('load', startPreloadWhenCalm, { once: true });
+    }
+    window.addEventListener('pointerdown', () => { if (!window.introAttiva) preloadInstrumentSamples(); }, { once: true, passive: true });
 
     // Trova il campione più vicino alla nota richiesta
     function nearestSample(group, freq) {
@@ -3950,6 +3969,25 @@
       'rgba(223, 183, 108, 0.8)'
     ];
 
+    // Lucciole: l'alone luminoso si disegna una volta sola e poi si copia.
+    // Prima si ricalcolava la sfocatura per ogni lucciola a ogni fotogramma,
+    // il lavoro piu' pesante della modalita' notte sui telefoni.
+    const fireflySprites = {};
+    function fireflySprite(golden) {
+      const key = golden ? 'oro' : 'base';
+      if (fireflySprites[key]) return fireflySprites[key];
+      const r = golden ? 5.4 : 3.7, blur = golden ? 22 : 14, half = Math.ceil(r + blur * 1.6), sc = 2;
+      const c = document.createElement('canvas'); c.width = c.height = half * 2 * sc;
+      const g = c.getContext('2d'); g.scale(sc, sc); g.translate(half, half);
+      g.shadowBlur = blur * sc; g.shadowColor = golden ? '#f59e0b' : '#fde047';
+      g.fillStyle = golden ? 'rgb(251, 191, 36)' : 'rgb(254, 240, 138)';
+      g.beginPath(); g.arc(0, 0, r, 0, Math.PI * 2); g.fill();
+      g.shadowBlur = (golden ? 6 : 4) * sc;
+      g.fillStyle = golden ? 'rgb(255, 251, 235)' : 'rgb(255, 255, 255)';
+      g.beginPath(); g.arc(0, 0, r * (golden ? 0.45 : 0.55), 0, Math.PI * 2); g.fill();
+      return (fireflySprites[key] = { c, r, half });
+    }
+
     class Petal {
       constructor(customX, customY, isBurst = false) {
         this.reset(customX, customY, isBurst);
@@ -4020,34 +4058,16 @@
           // Lucciola d'oro: piu' grande e calda, da prendere con un tocco
           this.fireflyPulse += 0.06;
           const r = 4.2 + Math.sin(this.fireflyPulse) * 1.2;
-          ctx.shadowBlur = 22;
-          ctx.shadowColor = '#f59e0b';
-          ctx.fillStyle = 'rgba(251, 191, 36, 0.95)';
-          ctx.beginPath();
-          ctx.arc(0, 0, r, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.shadowBlur = 6;
-          ctx.fillStyle = 'rgba(255, 251, 235, 1)';
-          ctx.beginPath();
-          ctx.arc(0, 0, r * 0.45, 0, Math.PI * 2);
-          ctx.fill();
+          const spr = fireflySprite(true), k = r / spr.r;
+          ctx.globalAlpha = 0.95;
+          ctx.drawImage(spr.c, -spr.half * k, -spr.half * k, spr.half * 2 * k, spr.half * 2 * k);
         } else if (isNightMode && this.isFirefly) {
           this.fireflyPulse += 0.05;
           const glowAlpha = 0.5 + Math.sin(this.fireflyPulse) * 0.45;
           const fireflyR = 2.5 + Math.sin(this.fireflyPulse) * 1.2;
-
-          ctx.shadowBlur = 14;
-          ctx.shadowColor = '#fde047';
-          ctx.fillStyle = `rgba(254, 240, 138, ${glowAlpha})`;
-          ctx.beginPath();
-          ctx.arc(0, 0, fireflyR, 0, Math.PI * 2);
-          ctx.fill();
-
-          ctx.shadowBlur = 4;
-          ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(1, glowAlpha + 0.2)})`;
-          ctx.beginPath();
-          ctx.arc(0, 0, fireflyR * 0.55, 0, Math.PI * 2);
-          ctx.fill();
+          const spr = fireflySprite(false), k = fireflyR / spr.r;
+          ctx.globalAlpha = glowAlpha;
+          ctx.drawImage(spr.c, -spr.half * k, -spr.half * k, spr.half * 2 * k, spr.half * 2 * k);
         } else {
           ctx.rotate(this.angle);
           ctx.fillStyle = isNightMode ? 'rgba(160, 205, 175, 0.6)' : this.color;
