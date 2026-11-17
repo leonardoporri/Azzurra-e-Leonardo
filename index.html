@@ -2008,14 +2008,13 @@
     function preloadInstrumentSamples() {
       if (samplesRequested) return;
       samplesRequested = true;
-      // Le registrazioni si scaricano una alla volta: niente picchi di lavoro sul telefono
-      Object.entries(RECORDINGS).reduce((prev, [instrument, url]) => prev.then(() =>
+      Object.entries(RECORDINGS).forEach(([instrument, url]) => {
         fetch(url)
           .then(r => { if (!r.ok) throw new Error(r.status); return r.arrayBuffer(); })
           .then(decodeSample)
           .then(buf => { sampleBuffers['reg-' + instrument] = buf; })
-          .catch(() => {}) // se manca, si usano i suoni di scorta
-      ), Promise.resolve());
+          .catch(() => {}); // se manca, si usano i suoni di scorta
+      });
       Object.values(SAMPLE_MAP).forEach(group => {
         Object.keys(group).forEach(name => {
           fetch(SAMPLE_BASE + name + '.mp3')
@@ -2032,7 +2031,7 @@
     // apertura, per non farla andare a scatti; al primo tocco parte subito.
     function startPreloadWhenCalm() {
       if (window.introAttiva) {
-        window.addEventListener('intro-finita', () => setTimeout(preloadInstrumentSamples, 1000), { once: true });
+        window.addEventListener('intro-finita', preloadInstrumentSamples, { once: true });
       } else {
         setTimeout(preloadInstrumentSamples, 800);
       }
