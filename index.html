@@ -368,13 +368,17 @@
     @keyframes truckBounce {
       0% { transform: translateY(0) scale(1, 1); }
       20% { transform: translateY(-28px) scale(0.94, 1.08); }
-      40% { transform: translateY(6px) scale(1.06, 0.92); }
+      40% { transform: translateY(0) scale(1.06, 0.92); }
       65% { transform: translateY(-12px) scale(0.98, 1.03); }
-      85% { transform: translateY(3px) scale(1.02, 0.98); }
+      85% { transform: translateY(0) scale(1.02, 0.98); }
       100% { transform: translateY(0) scale(1, 1); }
     }
     .animate-truck-bounce {
       animation: truckBounce 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+      /* si schiaccia e salta restando con le ruote a terra (prima si deformava
+         rispetto all'angolo del disegno e finiva sotto il bordo) */
+      transform-box: fill-box;
+      transform-origin: center bottom;
     }
 
     @keyframes musiciansGroove {
@@ -387,6 +391,7 @@
     }
     .animate-groove {
       animation: musiciansGroove 0.75s ease-in-out forwards;
+      transform-box: fill-box; /* ondeggiano sui propri piedi, non sul fondo di tutto il disegno */
       transform-origin: center bottom;
     }
 
@@ -4585,6 +4590,7 @@
 
   </script>
   <!-- Animazione di apertura (aeroplanino), solo alla prima visita -->
-  <script src="intro.js"></script>
+  <!-- il numero dopo ?v= va cambiato a ogni modifica di intro.js, cosi' i telefoni non usano la copia vecchia -->
+  <script src="intro.js?v=3"></script>
 </body>
 </html>
