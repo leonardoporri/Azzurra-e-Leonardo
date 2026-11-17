@@ -1561,15 +1561,10 @@
           <input type="text" name="Nome_e_Cognome" id="name" required placeholder="Es. Mario Rossi" class="w-full px-4 py-3 rounded-xl border border-salvia-300 focus:outline-none focus:ring-2 focus:ring-salvia-400 bg-avorio/50 text-sm">
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-xs font-semibold text-legno uppercase tracking-wider mb-1.5" for="email">Email *</label>
-            <input type="email" name="Email" id="email" required placeholder="mario@esempio.it" class="w-full px-4 py-3 rounded-xl border border-salvia-300 focus:outline-none focus:ring-2 focus:ring-salvia-400 bg-avorio/50 text-sm">
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-legno uppercase tracking-wider mb-1.5" for="phone">Telefono</label>
-            <input type="tel" name="Telefono" id="phone" placeholder="+39 333 0000000" class="w-full px-4 py-3 rounded-xl border border-salvia-300 focus:outline-none focus:ring-2 focus:ring-salvia-400 bg-avorio/50 text-sm">
-          </div>
+        <!-- Email tolta su richiesta degli sposi (17/11/2026): non serviva -->
+        <div>
+          <label class="block text-xs font-semibold text-legno uppercase tracking-wider mb-1.5" for="phone">Telefono</label>
+          <input type="tel" name="Telefono" id="phone" placeholder="+39 333 0000000" class="w-full px-4 py-3 rounded-xl border border-salvia-300 focus:outline-none focus:ring-2 focus:ring-salvia-400 bg-avorio/50 text-sm">
         </div>
 
         <div>
@@ -3865,6 +3860,9 @@
 
       // I campi disattivati (es. ospiti quando non si viene) sono esclusi
       const payload = Object.fromEntries(new FormData(form).entries());
+      // L'email non si chiede piu'. Lo script del foglio pubblicato prima la
+      // pretendeva: mandiamo un trattino cosi' funziona senza ripubblicarlo.
+      payload.Email = '—';
 
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 20000);

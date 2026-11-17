@@ -93,7 +93,8 @@ function salvaConferma_(dati) {
   var nome = pulisci_(dati.Nome_e_Cognome);
   var email = pulisci_(dati.Email);
   var presenza = pulisci_(dati.Presenza);
-  if (!nome || !email || !presenza) {
+  // L'email non e' piu' obbligatoria: il sito non la chiede (manda '—').
+  if (!nome || !presenza) {
     return risposta_({ ok: false, errore: 'Campi obbligatori mancanti' });
   }
 
