@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Azzurra &amp; Leonardo — 10 Aprile 2027</title>
+  <title>Azzurra &amp; Leonardo — 10 aprile 2027</title>
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -463,6 +463,41 @@
     @media (orientation: portrait) and (max-width: 1023px) {
       #hero { padding-bottom: 11rem; }
     }
+
+    /* Mappa disegnata del percorso (sezione Luoghi) */
+    .route-map text { font-family: "Plus Jakarta Sans", sans-serif; }
+    .route-map .map-paper { fill: #faf6ef; stroke: #c5d8c5; stroke-width: 1.5; }
+    .route-map .map-roads { stroke: #ece3d4; }
+    .route-map .map-route { stroke: #ba735f; }
+    .route-map .map-church-wall { fill: #f8ede8; stroke: #ba735f; stroke-width: 1.4; }
+    .route-map .map-church-roof { fill: #dfb5a6; stroke: #ba735f; stroke-width: 1.4; stroke-linejoin: round; }
+    .route-map .map-cross { stroke: #c8a85f; }
+    .route-map .map-door { fill: #ba735f; }
+    .route-map .map-trunk { fill: #8a6a4a; }
+    .route-map .map-oak-a { fill: #9dbf9e; stroke: #5e8760; stroke-width: 1.3; }
+    .route-map .map-oak-b { fill: #c5d8c5; stroke: #5e8760; stroke-width: 1.3; }
+    .route-map .map-gate { stroke: #4a3b2c; }
+    .route-map .map-p { fill: #3d583e; }
+    .route-map .map-p-text { fill: #ffffff; font-size: 13px; font-weight: 800; }
+    .route-map .map-label { fill: #4a3b2c; font-family: "Cormorant Garamond", serif; font-size: 15px; font-weight: 700; }
+    .route-map .map-note { fill: #6b5a48; font-size: 10.5px; }
+    .route-map .map-time { fill: #ffffff; stroke: #c8a85f; stroke-width: 1.2; }
+    .route-map .map-time-text { fill: #4a3b2c; font-size: 10.5px; font-weight: 700; }
+    .route-map .map-heart { fill: #ce9380; }
+    .route-map .map-car-body { fill: #5e8760; stroke: #2b3f2c; stroke-width: 1; stroke-linejoin: round; }
+    .route-map .map-car-window { fill: #e3ece3; }
+    .route-map .map-car-wheel { fill: #4a3b2c; }
+    /* Notte nel bosco: la mappa diventa scura ma resta leggibile */
+    body.night-mode .route-map .map-paper { fill: #0e2216; stroke: rgba(94,135,96,.6); }
+    body.night-mode .route-map .map-roads { stroke: #1a3524; }
+    body.night-mode .route-map .map-route { stroke: #fef08a; }
+    body.night-mode .route-map .map-label { fill: #f1faf3; }
+    body.night-mode .route-map .map-note { fill: #b9cfbf; }
+    body.night-mode .route-map .map-gate { stroke: #e2ede5; }
+    body.night-mode .route-map .map-p { fill: #5e8760; }
+    body.night-mode .route-map .map-time { fill: #12281a; stroke: #dfb76c; }
+    body.night-mode .route-map .map-time-text { fill: #fef08a; }
+    body.night-mode .route-map .map-car-body { fill: #9dbf9e; }
   </style>
 </head>
 <body class="font-sans antialiased bg-forest-texture relative selection:bg-salvia-200 selection:text-salvia-800">
@@ -794,7 +829,7 @@
       <!-- Interruttore Lucine Magiche & Simulazione Notte -->
       <div class="mt-4 inline-flex items-center gap-2 bg-white/80 backdrop-blur-md px-4 py-2 rounded-full border border-salvia-200 text-xs text-legno/80 shadow-sm cursor-pointer hover:bg-salvia-50 transition" id="toggle-lights-btn">
         <span class="w-2.5 h-2.5 rounded-full bg-yellow-400 animate-ping"></span>
-        <span id="lights-text">✨ Clicca per accendere le lucine e vivere la notte nel bosco</span>
+        <span id="lights-text">✨ Tocca per accendere le lucine e vivere la notte nel bosco</span>
       </div>
 
       <!-- COUNTDOWN DINAMICO -->
@@ -876,7 +911,7 @@
       <div class="text-center max-w-xl mx-auto mb-16">
         <span class="text-salvia-700 font-semibold tracking-widest text-xs uppercase block mb-2">I Momenti Salienti</span>
         <h2 class="font-serif text-4xl sm:text-5xl text-legno">Il Programma della Giornata</h2>
-        <p class="text-legno/70 mt-3 text-sm sm:text-base">Dalla cerimonia religiosa al ricevimento</p>
+        <p class="text-legno/70 mt-3 text-sm sm:text-base">Dalla cerimonia religiosa alla festa nel bosco</p>
       </div>
 
       <div class="relative">
@@ -1011,7 +1046,7 @@
             </div>
             
             <h3 class="font-serif text-3xl text-legno mb-2">I Nostri Food Truck</h3>
-            <p class="text-sm text-legno/75 mb-6">Clicca sui corner per scoprire cosa potrai gustare all'ombra delle querce:</p>
+            <p class="text-sm text-legno/75 mb-6">Tocca un food truck per scoprire cosa potrai gustare all'ombra delle querce:</p>
 
             <!-- 3 Pulsanti Omogenei con Animazioni -->
             <div class="grid grid-cols-3 gap-2 sm:gap-3 mb-6" id="truck-tabs">
@@ -1037,12 +1072,12 @@
               </div>
               <div id="truck-dishes-list" class="space-y-2 text-xs sm:text-sm text-legno/80 leading-relaxed"></div>
 
-              <!-- Nota a fondo riquadro per paste espresse riservate -->
+              <!-- Nota a fondo riquadro per le paste semplici su richiesta -->
               <div id="pasta-reservation-note" class="hidden mt-4 p-3.5 bg-salvia-100/90 border border-salvia-300 rounded-xl text-xs text-salvia-800 leading-relaxed shadow-xs">
                 <span class="font-bold flex items-center gap-1 mb-1">
-                  <span>ℹ️</span> Nota Esclusiva per i Primi Piatti Espressi:
+                  <span>ℹ️</span> Pasta su richiesta:
                 </span>
-                La pasta al pomodoro e la pasta burro e parmigiano sono preparate espresse ed esclusivamente per chi, compilando la <strong>Conferma Presenza</strong>, segnala nelle esigenze alimentari di essere vegetariano oppure di portare un bambino.
+                La pasta al pomodoro e la pasta burro e parmigiano sono cucinate al momento, solo per chi lo chiede nella <strong>Conferma Presenza</strong> (campo «Esigenze alimentari»): vegetariani e bambini.
               </div>
             </div>
           </div>
@@ -1160,8 +1195,115 @@
       <div class="text-center max-w-xl mx-auto mb-14">
         <span class="text-salvia-700 font-semibold tracking-widest text-xs uppercase block mb-2">Come Raggiungerci</span>
         <h2 class="font-serif text-4xl sm:text-5xl text-legno">I Luoghi del Matrimonio</h2>
-        <p class="text-legno/70 mt-3 text-sm sm:text-base">Mappe e indicazioni per la cerimonia e il ricevimento a Latina</p>
+        <p class="text-legno/70 mt-3 text-sm sm:text-base">Mappa e indicazioni per la cerimonia e il ricevimento a Latina</p>
       </div>
+
+      <!-- Mappa disegnata del percorso: chiesa -> Parco delle Querce.
+           È un disegno indicativo (non in scala, senza nord): per la strada
+           vera c'è il pulsante che apre il navigatore di Google Maps. -->
+      <div id="mappa-percorso" class="bg-white rounded-3xl p-4 sm:p-8 border border-salvia-200 shadow-ambient mb-8">
+        <div class="text-center mb-4">
+          <span class="text-xs font-bold text-salvia-700 uppercase tracking-wider">Il percorso del giorno</span>
+          <h3 class="font-serif text-2xl sm:text-3xl text-legno mt-1">Dalla chiesa al bosco di querce</h3>
+        </div>
+
+        <svg class="route-map w-full h-auto max-w-2xl mx-auto block" viewBox="0 0 340 230" role="img" aria-labelledby="mappa-titolo mappa-desc">
+          <title id="mappa-titolo">Mappa disegnata del percorso del matrimonio</title>
+          <desc id="mappa-desc">Si parte dalla Chiesa San Giuseppe Lavoratore, con il parcheggio dietro la chiesa in Piazzale dell'Ambrosia, e si arriva in auto al Parco delle Querce, in Strada Podgora 40A, dove il parcheggio è dentro il parco. Disegno non in scala.</desc>
+
+          <!-- Foglio -->
+          <rect class="map-paper" x="2" y="2" width="336" height="226" rx="18"/>
+          <!-- Stradine di sfondo, solo decorative -->
+          <g class="map-roads" fill="none" stroke-width="6" stroke-linecap="round">
+            <path d="M-10 128 C 60 120, 110 150, 170 140 S 280 110, 350 122"/>
+            <path d="M128 -10 C 120 50, 150 90, 140 140 S 120 210, 132 240"/>
+            <path d="M240 -10 C 236 60, 268 120, 292 240"/>
+          </g>
+
+          <!-- Percorso (tratteggiato) -->
+          <path id="map-route" class="map-route" d="M115 83 C 165 83, 150 145, 200 148 S 258 156, 268 170" fill="none" stroke-width="3.2" stroke-linecap="round" stroke-dasharray="1 8"/>
+
+          <!-- Chiesa -->
+          <g transform="translate(36 30)">
+            <rect class="map-church-wall" x="6" y="26" width="38" height="30" rx="2"/>
+            <path class="map-church-roof" d="M2 28 L25 8 L48 28 Z"/>
+            <rect class="map-church-wall" x="40" y="14" width="12" height="42" rx="1.5"/>
+            <path class="map-church-roof" d="M38 16 L46 4 L54 16 Z"/>
+            <path class="map-cross" d="M46 -6 V4 M42.5 -2.5 H49.5" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+            <path class="map-door" d="M20 56 V44 a5 5 0 0 1 10 0 V56 Z"/>
+            <circle class="map-door" cx="25" cy="34" r="3"/>
+          </g>
+          <!-- Parcheggio dietro la chiesa -->
+          <g transform="translate(96 74)">
+            <rect class="map-p" width="18" height="18" rx="4"/>
+            <text class="map-p-text" x="9" y="13.5" text-anchor="middle">P</text>
+          </g>
+          <text class="map-label" x="20" y="106">Chiesa</text>
+          <text class="map-label" x="20" y="120">San Giuseppe</text>
+          <text class="map-label" x="20" y="134">Lavoratore</text>
+          <text class="map-note" x="20" y="150">P dietro la chiesa:</text>
+          <text class="map-note" x="20" y="162">P.le dell'Ambrosia</text>
+          <g transform="translate(20 172)">
+            <rect class="map-time" width="44" height="17" rx="8.5"/>
+            <text class="map-time-text" x="22" y="12" text-anchor="middle">11:00</text>
+          </g>
+
+          <!-- Parco delle Querce -->
+          <g class="map-oaks">
+            <rect x="244" y="148" width="4" height="16" rx="1.5" class="map-trunk"/>
+            <circle cx="246" cy="142" r="15" class="map-oak-a"/>
+            <rect x="304" y="140" width="4" height="18" rx="1.5" class="map-trunk"/>
+            <circle cx="306" cy="132" r="17" class="map-oak-b"/>
+            <rect x="275" y="122" width="4" height="18" rx="1.5" class="map-trunk"/>
+            <circle cx="277" cy="112" r="19" class="map-oak-a"/>
+          </g>
+          <!-- Cancello e parcheggio dentro il parco -->
+          <path class="map-gate" d="M250 188 H290 M254 188 V176 M286 188 V176 M254 178 Q270 170 286 178" fill="none" stroke-width="2" stroke-linecap="round"/>
+          <g transform="translate(296 170)">
+            <rect class="map-p" width="18" height="18" rx="4"/>
+            <text class="map-p-text" x="9" y="13.5" text-anchor="middle">P</text>
+          </g>
+          <text class="map-label" x="320" y="58" text-anchor="end">Parco delle Querce</text>
+          <text class="map-note" x="320" y="72" text-anchor="end">Str. Podgora, 40A</text>
+          <text class="map-note" x="320" y="84" text-anchor="end">P dentro il parco</text>
+          <g transform="translate(276 196)">
+            <rect class="map-time" width="44" height="17" rx="8.5"/>
+            <text class="map-time-text" x="22" y="12" text-anchor="middle">13:30</text>
+          </g>
+
+          <!-- Cuoricino a metà strada -->
+          <path class="map-heart" transform="translate(186 124) scale(0.55)" d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.1 0 3.6 1.1 4.3 2.4h2c.7-1.3 2.2-2.4 4.3-2.4 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z"/>
+
+          <!-- Auto degli invitati che percorre la strada (ferma se il telefono chiede meno animazioni) -->
+          <g id="map-car">
+            <g transform="translate(-11 -9)">
+              <path class="map-car-body" d="M2 12 Q2 8 6 8 L8 3.5 Q9 2 11 2 H15 Q17 2 18 4 L20 8 Q22 8 22 11 V14 H2 Z"/>
+              <rect class="map-car-window" x="9" y="3.6" width="8" height="4" rx="1"/>
+              <circle class="map-car-wheel" cx="7" cy="14.5" r="2.6"/>
+              <circle class="map-car-wheel" cx="17.5" cy="14.5" r="2.6"/>
+            </g>
+            <animateMotion id="map-car-motion" dur="7s" repeatCount="indefinite" rotate="auto" keyPoints="0;1;1" keyTimes="0;0.8;1" calcMode="linear">
+              <mpath href="#map-route"/>
+            </animateMotion>
+          </g>
+        </svg>
+
+        <p class="text-center text-[11px] sm:text-xs text-legno/60 mt-3 mb-5">
+          Disegno indicativo, non in scala: per la strada esatta usa il navigatore.
+        </p>
+
+        <ol class="space-y-2 text-sm text-legno/80 leading-relaxed max-w-xl mx-auto mb-6">
+          <li class="flex gap-3"><span class="shrink-0 w-6 h-6 rounded-full bg-cipria-100 text-cipria-500 text-xs font-bold flex items-center justify-center">1</span><span>Per la messa delle 11:00 parcheggia in <strong>P.le dell'Ambrosia</strong>, dietro la chiesa.</span></li>
+          <li class="flex gap-3"><span class="shrink-0 w-6 h-6 rounded-full bg-salvia-100 text-salvia-700 text-xs font-bold flex items-center justify-center">2</span><span>Dopo la messa riprendi l'auto e raggiungi il <strong>Parco delle Querce</strong>, in Str. Podgora 40A.</span></li>
+          <li class="flex gap-3"><span class="shrink-0 w-6 h-6 rounded-full bg-salvia-100 text-salvia-700 text-xs font-bold flex items-center justify-center">3</span><span>Entra nel parco: il parcheggio è all'interno. Ci vediamo sotto le querce!</span></li>
+        </ol>
+
+        <a href="https://www.google.com/maps/dir/?api=1&amp;origin=Chiesa+San+Giuseppe+Lavoratore%2C+Piazza+San+Giuseppe%2C+04100+Latina+LT&amp;destination=Parco+delle+Querce+Sporting+Club%2C+Strada+Podgora+40A%2C+04100+Latina+LT&amp;travelmode=driving" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center space-x-2 w-full max-w-md mx-auto py-3 bg-salvia-500 hover:bg-salvia-600 text-white rounded-2xl font-semibold text-sm transition shadow-xs">
+          <span>Apri il percorso in auto su Google Maps</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+        </a>
+      </div>
+
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         
@@ -1241,7 +1383,7 @@
         <p class="text-xs sm:text-sm text-legno/75 max-w-xl mx-auto mb-4 leading-relaxed">
           Sarà una festa fuori dagli schemi pensata solo per divertirci insieme! <strong>Nessun dress code formale</strong>: vestitevi comodi e sentitevi liberi. <strong>Se avete voglia</strong> di seguire il tema della giornata, le tonalità pastello saranno le benvenute.
         </p>
-        <span class="block font-medium text-legno/90 text-xs sm:text-sm mb-6">Clicca sui singoli colori per scoprire note e sfumature:</span>
+        <span class="block font-medium text-legno/90 text-xs sm:text-sm mb-6">Tocca i singoli colori per scoprire note e sfumature:</span>
 
         <div class="space-y-3 sm:space-y-4 mb-6">
           <div class="flex flex-wrap items-center justify-center gap-3 sm:gap-3.5">
@@ -1292,7 +1434,7 @@
             <span>✨</span> Come Funziona
           </h4>
           <p class="text-xs sm:text-sm text-legno/80 leading-relaxed mb-3">
-            <strong>Seleziona 2 o più colori</strong> qui sotto (oppure clicca su una delle combinazioni rapide) per visualizzare l'armonia d'insieme e scoprire come distribuirli con eleganza tra capi e accessori.
+            <strong>Seleziona 2 o più colori</strong> qui sotto (oppure tocca una delle combinazioni rapide) per visualizzare l'armonia d'insieme e scoprire come distribuirli con eleganza tra capi e accessori.
           </p>
           <div class="pt-2.5 border-t border-salvia-200/60 flex items-start gap-2 text-xs sm:text-sm text-legno/75 leading-relaxed">
             <span class="text-base leading-none">💛</span>
@@ -1341,7 +1483,7 @@
           <!-- Dettagli & Suggerimento Outfit -->
           <div id="combo-details-box" class="space-y-3">
             <div id="combo-empty-state" class="text-center py-4 text-xs sm:text-sm text-legno/60 italic">
-              Seleziona almeno 2 tonalità qui sopra o clicca su una delle idee rapide per scoprire il mix perfetto!
+              Seleziona almeno 2 tonalità qui sopra o tocca una delle idee rapide per scoprire il mix perfetto!
             </div>
             
             <div id="combo-active-content" class="hidden space-y-3">
@@ -1367,7 +1509,7 @@
         <!-- Card Calzature -->
         <div class="bg-avorio p-6 rounded-2xl border border-salvia-200">
           <div class="flex items-center gap-3 mb-2">
-            <div id="twirl-shoe-btn" class="interactive-element w-10 h-10 rounded-2xl bg-cipria-100 flex items-center justify-center text-xl shrink-0 shadow-xs transition select-none" title="Clicca per girarti!">
+            <div id="twirl-shoe-btn" class="interactive-element w-10 h-10 rounded-2xl bg-cipria-100 flex items-center justify-center text-xl shrink-0 shadow-xs transition select-none" title="Tocca per una piroetta!">
               <span id="twirl-shoe-icon" class="inline-block transform transition-transform">👠</span>
             </div>
             <h4 class="font-serif text-xl text-legno font-semibold">Calzature Consigliate</h4>
@@ -1380,13 +1522,13 @@
         <!-- Card Clima -->
         <div class="bg-avorio p-6 rounded-2xl border border-salvia-200">
           <div class="flex items-center gap-3 mb-2">
-            <div id="twirl-sun-btn" class="interactive-element w-10 h-10 rounded-2xl bg-salvia-100 flex items-center justify-center text-xl shrink-0 shadow-xs transition select-none" title="Clicca per una piroetta!">
+            <div id="twirl-sun-btn" class="interactive-element w-10 h-10 rounded-2xl bg-salvia-100 flex items-center justify-center text-xl shrink-0 shadow-xs transition select-none" title="Tocca per una piroetta!">
               <span id="twirl-sun-icon" class="inline-block transform transition-transform">☀️</span>
             </div>
             <h4 class="font-serif text-xl text-legno font-semibold">Clima Primaverile</h4>
           </div>
           <p class="text-xs sm:text-sm text-legno/75 leading-relaxed">
-            Ad aprile le giornate a Latina sono piacevolmente miti. All'ombra delle querce consigliamo di portare al seguito una stola o una giacca leggera per sicurezza.
+            Ad aprile le giornate a Latina sono piacevolmente miti. All'ombra delle querce consigliamo di portare una stola o una giacca leggera, per sicurezza.
           </p>
         </div>
       </div>
@@ -1401,7 +1543,7 @@
         <span class="text-salvia-700 font-semibold tracking-widest text-xs uppercase block mb-1">Ci Sarai?</span>
         <h2 class="font-serif text-4xl text-legno font-normal">Conferma Presenza</h2>
         <p class="text-sm text-legno/70 mt-2">
-          Vi preghiamo di confermare la presenza entro il <strong class="font-semibold text-legno">15 Febbraio 2027</strong>
+          Vi preghiamo di confermare la presenza entro il <strong class="font-semibold text-legno">15 febbraio 2027</strong>
         </p>
       </div>
 
@@ -1419,15 +1561,10 @@
           <input type="text" name="Nome_e_Cognome" id="name" required placeholder="Es. Mario Rossi" class="w-full px-4 py-3 rounded-xl border border-salvia-300 focus:outline-none focus:ring-2 focus:ring-salvia-400 bg-avorio/50 text-sm">
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-xs font-semibold text-legno uppercase tracking-wider mb-1.5" for="email">Email *</label>
-            <input type="email" name="Email" id="email" required placeholder="mario@esempio.it" class="w-full px-4 py-3 rounded-xl border border-salvia-300 focus:outline-none focus:ring-2 focus:ring-salvia-400 bg-avorio/50 text-sm">
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-legno uppercase tracking-wider mb-1.5" for="phone">Telefono</label>
-            <input type="tel" name="Telefono" id="phone" placeholder="+39 333 0000000" class="w-full px-4 py-3 rounded-xl border border-salvia-300 focus:outline-none focus:ring-2 focus:ring-salvia-400 bg-avorio/50 text-sm">
-          </div>
+        <!-- Email tolta su richiesta degli sposi (17/11/2026): non serviva -->
+        <div>
+          <label class="block text-xs font-semibold text-legno uppercase tracking-wider mb-1.5" for="phone">Telefono</label>
+          <input type="tel" name="Telefono" id="phone" placeholder="+39 333 0000000" class="w-full px-4 py-3 rounded-xl border border-salvia-300 focus:outline-none focus:ring-2 focus:ring-salvia-400 bg-avorio/50 text-sm">
         </div>
 
         <div>
@@ -1461,9 +1598,9 @@
 
           <div>
             <label class="block text-xs font-semibold text-legno uppercase tracking-wider mb-1.5" for="diet">Esigenze alimentari, allergie o intolleranze</label>
-            <input type="text" name="Esigenze_Alimentari" id="diet" placeholder="Es. Vegetariano, Bambino (richiesta pasta espressa), Celiachia..." class="w-full px-4 py-3 rounded-xl border border-salvia-300 focus:outline-none focus:ring-2 focus:ring-salvia-400 bg-avorio/50 text-sm">
+            <input type="text" name="Esigenze_Alimentari" id="diet" placeholder="Es. Vegetariano, bambino, celiachia, allergia alle noci..." class="w-full px-4 py-3 rounded-xl border border-salvia-300 focus:outline-none focus:ring-2 focus:ring-salvia-400 bg-avorio/50 text-sm">
             <span class="block text-[11px] text-legno/60 mt-1 italic">
-              Indicare qui se si desidera la pasta espressa (al pomodoro o burro e parmigiano) per vegetariani o per i più piccoli.
+              Vegetariani e bambini possono chiedere qui una pasta semplice cucinata al momento (al pomodoro oppure burro e parmigiano): scrivete quale preferite.
             </span>
           </div>
         </div>
@@ -1488,7 +1625,7 @@
         </div>
         <h3 class="font-serif text-3xl text-legno font-semibold">Grazie di Cuore!</h3>
         <p class="text-sm text-legno/80 max-w-sm mx-auto leading-relaxed">
-          La tua risposta è stata inviata e registrata con successo. Ci vediamo il 10 Aprile 2027 a Latina per festeggiare insieme!
+          La tua risposta è stata inviata e registrata con successo. Ci vediamo il 10 aprile 2027 a Latina per festeggiare insieme!
         </p>
         <button id="rsvp-reset" class="text-xs text-salvia-700 underline font-medium hover:text-salvia-800 pt-2 block mx-auto">
           Invia un'altra conferma
@@ -1651,6 +1788,25 @@
     window.addEventListener('load', placeHeroMoon);
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(placeHeroMoon);
     window.addEventListener('orientationchange', () => setTimeout(layoutHeroArt, 200));
+
+    // MAPPA DEL PERCORSO: se il telefono chiede meno animazioni,
+    // l'autina resta ferma a metà strada invece di muoversi.
+    (function () {
+      const motion = document.getElementById('map-car-motion');
+      const route = document.getElementById('map-route');
+      const car = document.getElementById('map-car');
+      if (!motion || !route || !car) return;
+      const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (!reduce) return;
+      motion.remove();
+      try {
+        const len = route.getTotalLength();
+        const a = route.getPointAtLength(len * 0.5);
+        const b = route.getPointAtLength(len * 0.5 + 1);
+        const angle = Math.atan2(b.y - a.y, b.x - a.x) * 180 / Math.PI;
+        car.setAttribute('transform', `translate(${a.x} ${a.y}) rotate(${angle})`);
+      } catch (e) { /* resta dov'è */ }
+    })();
 
     // 1. COUNTDOWN MATRIMONIO (10 Aprile 2027, Ore 11:00 CEST)
     const targetDate = new Date('2027-04-10T11:00:00+02:00').getTime();
@@ -2781,7 +2937,7 @@
         });
 
         if (lightsText) {
-          lightsText.innerText = "✨ Clicca per accendere le lucine e vivere la notte nel bosco";
+          lightsText.innerText = "✨ Tocca per accendere le lucine e vivere la notte nel bosco";
         }
         
         [587.33, 739.99, 880, 1174.66].forEach((freq, idx) => {
@@ -2803,14 +2959,14 @@
           { name: "Frittura di calamari", desc: "Calamari freschi dorati e croccanti", isKids: false, isVeg: false },
           { name: "Gamberi in tempura con salsa agrodolce", desc: "Gamberi fragranti serviti con salsa agrodolce", isKids: false, isVeg: false },
           { name: "Nuggets con salse", desc: "Bocconcini dorati e teneri serviti con salse", isKids: true, isVeg: false },
-          { name: "Patatine fritte", desc: "Chips espresse dorate al momento", isKids: true, isVeg: true },
+          { name: "Patatine fritte", desc: "Patatine dorate e croccanti, fritte al momento", isKids: true, isVeg: true },
           { name: "Mini bun polpotto", desc: "Panino artigianale con friarielli, polpo alla piastra, olio evo al limone, stracciatella e pomodoro secco — premiato Gambero Rosso", isKids: false, isVeg: false, isAwarded: true },
           { name: "Mini bun pulled pork", desc: "Panino artigianale con cicoria ripassata, pulled pork e salsa agrodolce", isKids: false, isVeg: false },
-          { name: "Mini maritozzi pulled salmon", desc: "Maritozzo artigianale con rucola, salmone cotto a bassa e lenta temperatura, salsa coleslaw e salsa yogurt", isKids: false, isVeg: false }
+          { name: "Mini maritozzi pulled salmon", desc: "Maritozzo artigianale con rucola, salmone cotto a bassa temperatura, salsa coleslaw e salsa yogurt", isKids: false, isVeg: false }
         ]
       },
       gastronomade: {
-        title: "Gastronomade — Primi Piatti Espressi",
+        title: "Gastronomade — Primi piatti cucinati al momento",
         dishes: [
           { name: "Caramelle ripiene", desc: "Caramelle ripiene di radicchio e speck con fonduta di parmigiano", isKids: false, isVeg: false },
           { name: "Tagliolino con bisque di scampi", desc: "Tagliolino fresco con bisque di scampi, pesto di mandorle e scampi in tartare", isKids: false, isVeg: false },
@@ -2820,7 +2976,7 @@
       gingiro: {
         title: "Gingiro — Street Food & Bao Fusion",
         dishes: [
-          { name: "Taco con pulled pork", desc: "Taco con pulled pork, insalatina coleslaw fresca e salsa Bbq", isKids: false, isVeg: false },
+          { name: "Taco con pulled pork", desc: "Taco con pulled pork, insalatina coleslaw fresca e salsa BBQ", isKids: false, isVeg: false },
           { name: "Bao tartare di chianina", desc: "Paninetto al vapore ripieno di tartare di chianina e maionese al tartufo", isKids: false, isVeg: false },
           { name: "Bao con melanzane", desc: "Paninetto al vapore ripieno di melanzane, salsa di pomodoro, gel al basilico e parmigiano", isKids: false, isVeg: true },
           { name: "Mini focaccina con tataki di tonno", desc: "Mini focaccina con tataki di tonno, maionese al lime e verza", isKids: false, isVeg: false }
@@ -2875,8 +3031,8 @@
         dishesToDisplay = truck.dishes.filter(d => d.isVeg).map(d => ({ ...d, showBadge: true, badgeEmoji: '🍃', badgeText: 'Vegetariano' }));
         if (activeTruckKey === 'gastronomade') {
           dishesToDisplay.push(
-            { name: "Pasta al pomodoro (espressa)", desc: "Pasta corta trafilata al bronzo condita con sugo semplice al pomodoro fresco e basilico.", showBadge: true, badgeEmoji: '🍃', badgeText: 'Vegetariano (Su richiesta)' },
-            { name: "Pasta burro e parmigiano (espressa)", desc: "Pasta fresca saltata con burro d'alpeggio e parmigiano reggiano 24 mesi.", showBadge: true, badgeEmoji: '🍃', badgeText: 'Vegetariano (Su richiesta)' }
+            { name: "Pasta al pomodoro", desc: "Pasta corta trafilata al bronzo condita con sugo semplice al pomodoro fresco e basilico.", showBadge: true, badgeEmoji: '🍃', badgeText: 'Vegetariano (su richiesta)' },
+            { name: "Pasta burro e parmigiano", desc: "Pasta fresca saltata con burro d'alpeggio e parmigiano reggiano 24 mesi.", showBadge: true, badgeEmoji: '🍃', badgeText: 'Vegetariano (su richiesta)' }
           );
           pastaReservationNote.classList.remove('hidden');
         } else {
@@ -2886,8 +3042,8 @@
         dishesToDisplay = truck.dishes.filter(d => d.isKids).map(d => ({ ...d, showBadge: true, badgeEmoji: '👶', badgeText: 'Per i più piccoli' }));
         if (activeTruckKey === 'gastronomade') {
           dishesToDisplay.push(
-            { name: "Pasta al pomodoro (espressa)", desc: "Pasta corta trafilata al bronzo condita con sugo semplice al pomodoro fresco e basilico.", showBadge: true, badgeEmoji: '👶', badgeText: 'Per i più piccoli (Su richiesta)' },
-            { name: "Pasta burro e parmigiano (espressa)", desc: "Pasta fresca saltata con burro d'alpeggio e parmigiano reggiano 24 mesi.", showBadge: true, badgeEmoji: '👶', badgeText: 'Per i più piccoli (Su richiesta)' }
+            { name: "Pasta al pomodoro", desc: "Pasta corta trafilata al bronzo condita con sugo semplice al pomodoro fresco e basilico.", showBadge: true, badgeEmoji: '👶', badgeText: 'Per i più piccoli (su richiesta)' },
+            { name: "Pasta burro e parmigiano", desc: "Pasta fresca saltata con burro d'alpeggio e parmigiano reggiano 24 mesi.", showBadge: true, badgeEmoji: '👶', badgeText: 'Per i più piccoli (su richiesta)' }
           );
           pastaReservationNote.classList.remove('hidden');
         } else {
@@ -2901,10 +3057,10 @@
         truckDishesListEl.innerHTML = `
           <div class="py-8 text-center bg-white/60 rounded-xl border border-dashed border-salvia-300">
             <p class="text-xs sm:text-sm text-legno/70 italic mb-2">
-              Nessun piatto con il filtro selezionato in questo corner.
+              Nessun piatto con il filtro scelto in questo food truck.
             </p>
             <button id="reset-filter-inline" class="text-xs font-semibold text-salvia-700 underline hover:text-salvia-900">
-              Mostra tutti i piatti del corner
+              Mostra tutti i piatti di questo food truck
             </button>
           </div>
         `;
@@ -3382,12 +3538,12 @@
       avorio: "✨ Avorio Caldo: elegante e senza tempo, ideale per camicie e dettagli luminosi.",
       tortora: "🍂 Tortora Chiaro: neutro e raffinato, in perfetta sintonia con la natura.",
       celeste: "🧊 Celeste Ghiaccio: pulito e luminoso, un soffio di aria fresca primaverile.",
-      oro: "🌟 Tocchi Dorati: perfetto per piccoli accessori, gioielli e piccoli dettagli preziosi.",
+      oro: "🌟 Tocchi Dorati: perfetto per accessori, gioielli e piccoli dettagli preziosi.",
       menta: "🍃 Verde Menta: freschezza briosa e moderna, delizioso per gilet, abiti svasati e papillon.",
       albicocca: "🍑 Albicocca Chiaro: caldo e vellutato, dona un tocco gioioso e primaverile al viso.",
       malva: "🌺 Malva Polveroso: romantico ed elegante, una sfumatura sofisticata senza tempo.",
       eucalipto: "🌿 Verde Eucalipto: tonalità botanica rilassante, si fonde con l'atmosfera degli alberi.",
-      sabbia: "🌾 Sabbia Dorata: neutro naturale, eccellente per pantaloni estivi, giacche e borse in paglia."
+      sabbia: "🌾 Sabbia Dorata: neutro naturale, eccellente per pantaloni leggeri, giacche e borse in paglia."
     };
 
     document.querySelectorAll('.color-palette-btn').forEach(btn => {
@@ -3590,7 +3746,7 @@
 
     // 7. AGGIUNGI A CALENDARIO
     document.getElementById('add-calendar-btn').addEventListener('click', () => {
-      const gcalUrl = "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Matrimonio+Azzurra+%26+Leonardo&dates=20270410T090000Z/20270410T170000Z&details=Matrimonio+di+Azzurra+e+Leonardo.+Cerimonia+religiosa+e+ricevimento+presso+Parco+delle+Querce+-+Sporting+Club+a+Latina!&location=Parco+delle+Querce+-+Sporting+Club,+Str.+Podgora,+40A,+04100+Latina+LT";
+      const gcalUrl = "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Matrimonio+Azzurra+%26+Leonardo&dates=20270410T090000Z/20270410T170000Z&details=Matrimonio+di+Azzurra+e+Leonardo.%0AOre+11:00+messa+nella+Chiesa+San+Giuseppe+Lavoratore,+Piazza+S.+Giuseppe,+Latina+(parcheggio+in+P.le+dell%27Ambrosia,+dietro+la+chiesa).%0AOre+13:30+festa+al+Parco+delle+Querce+-+Sporting+Club,+Str.+Podgora+40A,+Latina+(parcheggio+dentro+il+parco).%0ASito:+https://leonardoporri.github.io/Matrimonio/&location=Chiesa+San+Giuseppe+Lavoratore,+Piazza+S.+Giuseppe,+04100+Latina+LT";
       window.open(gcalUrl, '_blank');
     });
 
@@ -3704,6 +3860,9 @@
 
       // I campi disattivati (es. ospiti quando non si viene) sono esclusi
       const payload = Object.fromEntries(new FormData(form).entries());
+      // L'email non si chiede piu'. Lo script del foglio pubblicato prima la
+      // pretendeva: mandiamo un trattino cosi' funziona senza ripubblicarlo.
+      payload.Email = '—';
 
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 20000);
