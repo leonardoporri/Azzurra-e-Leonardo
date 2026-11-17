@@ -13,7 +13,7 @@ Sito statico (nessun database), pubblicato gratis con GitHub Pages.
 1. Su GitHub apri il repository → **Settings** → **Pages**.
 2. In "Build and deployment" scegli **Source: Deploy from a branch**.
 3. Branch: **main**, cartella **/ (root)** → **Save**.
-4. Dopo 1-2 minuti il sito è online su `https://leonardoporri.github.io/Matrimonio/`.
+4. Dopo 1-2 minuti il sito è online su `https://leonardoporri.github.io/Azzurra-e-Leonardo/`.
 
 Ogni modifica unita al ramo `main` viene pubblicata da sola in pochi minuti.
 
