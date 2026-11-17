@@ -1,10 +1,11 @@
 /* ANIMAZIONE DI APERTURA: l'aeroplanino di carta scende da sopra le nuvole,
    il sito si avvicina, l'aereo fa il giro della morte intorno ai nomi ed esce
    dal bordo destro; poi parte la pioggia di petali.
-   Regole: parte solo alla prima visita (memoria del telefono, chiave
-   'introVista'), si salta con un tocco o con Esc, non parte con "riduci
-   movimento" e non parte se si arriva da un link a una sezione (#...).
-   Per rivederla: aggiungere ?intro all'indirizzo. */
+   Regole: parte a ogni apertura e a ogni ricarica, si salta con un tocco o
+   con Esc, non parte con "riduci movimento". Se si arriva da un link a una
+   sezione (#...), alla fine porta a quella sezione.
+   Quando finisce manda l'evento 'intro-finita' (lo usano i suoni della band
+   per scaricarsi dopo, senza rallentare l'animazione). */
 (function () {
   const reduce = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -54,20 +55,32 @@
     cv.style.cssText = 'position:absolute;inset:0;width:100%;height:100%';
     ov.appendChild(cv);
     document.documentElement.appendChild(ov); // fuori dal body: il body viene "zoomato"
-    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    const dpr = 1; // nuvole e cielo sono morbidi: bastano i pixel normali, il telefono lavora 4 volte meno
     const W = innerWidth, H = innerHeight;
     cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
     const g = cv.getContext('2d'); g.setTransform(dpr, 0, 0, dpr, 0, 0);
     return { ov, cv, g, W, H };
   }
 
+  // Zoom e sfocatura solo sulla copertina e sulla barra in alto (cio' che si
+  // vede): prima toccava tutta la pagina, molto piu' lunga e pesante da ridisegnare.
+  let zoomEls = null;
   function setSiteZoom(scale, ox, oy, blur) {
-    const b = document.body;
-    if (scale >= .999 && !blur) { b.style.transform = ''; b.style.transformOrigin = ''; b.style.filter = ''; document.documentElement.style.background = ''; return; }
-    document.documentElement.style.background = '#9dbf9e';
-    b.style.transformOrigin = ox + 'px ' + oy + 'px';
-    b.style.transform = 'scale(' + scale.toFixed(4) + ')';
-    b.style.filter = blur ? 'blur(' + blur.toFixed(2) + 'px)' : '';
+    if (scale >= .999 && !blur) {
+      if (zoomEls) zoomEls.forEach(z => { z.el.style.transform = ''; z.el.style.transformOrigin = ''; z.el.style.filter = ''; z.el.style.willChange = ''; });
+      zoomEls = null; document.documentElement.style.background = ''; document.body.style.background = '';
+      return;
+    }
+    if (!zoomEls) {
+      zoomEls = [document.getElementById('hero'), document.querySelector('header')].filter(Boolean)
+        .map(el => { const r = el.getBoundingClientRect(); el.style.willChange = 'transform'; return { el, l: r.left, t: r.top }; });
+      document.documentElement.style.background = '#9dbf9e'; document.body.style.background = '#9dbf9e';
+    }
+    zoomEls.forEach(z => {
+      z.el.style.transformOrigin = (ox - z.l) + 'px ' + (oy - z.t) + 'px';
+      z.el.style.transform = 'scale(' + scale.toFixed(4) + ')';
+      z.el.style.filter = blur ? 'blur(' + blur.toFixed(2) + 'px)' : '';
+    });
   }
 
   function namesTarget() {
@@ -223,12 +236,17 @@
     cancel = introA(st, done);
   }
 
-  // ---------- avvio: solo alla prima visita ----------
-  let vista = false;
-  try { vista = localStorage.getItem('introVista') === '1'; } catch (e) {}
-  const forza = /[?&]intro\b/.test(location.search);
-  if ((!vista && !location.hash) || forza) {
-    try { localStorage.setItem('introVista', '1'); } catch (e) {}
-    playIntro({ ignoreReduce: false });
-  }
+  // ---------- avvio: a ogni apertura e ricarica ----------
+  window.introAttiva = true;
+  const hash = location.hash;
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  playIntro({
+    ignoreReduce: false,
+    onEnd: () => {
+      window.introAttiva = false;
+      // se si era arrivati con un link a una sezione, ci si va adesso
+      if (hash && hash.length > 1) { const t = document.getElementById(decodeURIComponent(hash.slice(1))); if (t) t.scrollIntoView(); }
+      window.dispatchEvent(new Event('intro-finita'));
+    }
+  });
 })();
