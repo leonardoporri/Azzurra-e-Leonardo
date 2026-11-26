@@ -207,6 +207,7 @@
         if (target.el) setTimeout(() => target.el.dispatchEvent(new MouseEvent('click', { bubbles: true })), 120);
         return;
       }
+      if (window.togliCopertura) { window.togliCopertura(); window.togliCopertura = null; } // il cielo vero e' disegnato: via la copertura
       raf = requestAnimationFrame(frame);
     }
     raf = requestAnimationFrame(frame);
@@ -218,12 +219,13 @@
     opts = opts || {};
     const old = document.getElementById('intro-overlay'); if (old) old.remove();
     setSiteZoom(1);
-    if (reduce() && !opts.ignoreReduce) { if (opts.onEnd) opts.onEnd('ridotto'); return; }
+    if (reduce() && !opts.ignoreReduce) { if (window.togliCopertura) window.togliCopertura(); if (opts.onEnd) opts.onEnd('ridotto'); return; }
     window.scrollTo(0, 0);
     const st = makeStage();
     let finished = false, cancel = () => {};
     function done(fade) {
       if (finished) return; finished = true; cancel();
+      if (window.togliCopertura) window.togliCopertura();
       setSiteZoom(1);
       const end = () => { st.ov.remove(); if (opts.onEnd) opts.onEnd('fine'); };
       if (!fade) return end();

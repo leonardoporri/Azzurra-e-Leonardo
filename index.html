@@ -513,6 +513,31 @@
     body.night-mode .route-map .map-time-text { fill: #fef08a; }
     body.night-mode .route-map .map-car-body { fill: #9dbf9e; }
   </style>
+  <!-- COPERTURA DI APERTURA: copre la pagina fin dal primo istante con lo stesso
+       cielo con cui parte l'aeroplanino, cosi' non si vede il sito "a lampo" prima
+       dell'animazione. La toglie intro.js appena il suo cielo e' disegnato.
+       Sicurezze: se intro.js non arriva o va storto, si toglie da sola. -->
+  <style>
+    html.intro-copri::after {
+      content: ""; position: fixed; inset: 0; z-index: 2147483001; pointer-events: none;
+      background:
+        radial-gradient(circle 55vw at 78% 16%, rgba(255,248,225,.95), rgba(255,240,205,.35) 30%, rgba(255,240,205,0) 100%),
+        linear-gradient(#9fc0d6, #d9e4e6 55%, #f4ece1 85%, #edd5cc);
+    }
+  </style>
+  <script>
+    (function () {
+      try {
+        if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        var h = document.documentElement;
+        h.classList.add('intro-copri');
+        var togli = function () { h.classList.remove('intro-copri'); };
+        window.togliCopertura = togli;
+        setTimeout(togli, 8000);                                   // sicurezza estrema
+        window.addEventListener('load', function () { setTimeout(togli, 2000); }); // sicurezza: pagina carica ma niente animazione
+      } catch (e) {}
+    })();
+  </script>
 </head>
 <body class="font-sans antialiased bg-forest-texture relative selection:bg-salvia-200 selection:text-salvia-800">
 
@@ -4587,6 +4612,6 @@
   </script>
   <!-- Animazione di apertura (aeroplanino), solo alla prima visita -->
   <!-- il numero dopo ?v= va cambiato a ogni modifica di intro.js, cosi' i telefoni non usano la copia vecchia -->
-  <script src="intro.js?v=3"></script>
+  <script src="intro.js?v=4" onerror="window.togliCopertura &amp;&amp; window.togliCopertura()"></script>
 </body>
 </html>
