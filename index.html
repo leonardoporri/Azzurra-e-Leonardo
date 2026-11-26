@@ -326,8 +326,9 @@
       position: fixed;
       top: 0;
       left: 0;
-      width: 100vw;
+      width: 100%;
       height: 100vh;
+      height: 100lvh; /* altezza massima, con la barra del browser nascosta */
       pointer-events: none;
       z-index: 30;
     }
@@ -460,7 +461,15 @@
       transition: filter 0.25s ease;
       -webkit-tap-highlight-color: transparent;
     }
-    .interactive-element:hover {
+    /* Bagliore: col mouse quando ci si passa sopra; col dito solo mentre
+       l'elemento "suona" (classe .acceso, tolta da sola alla fine). Sul
+       telefono il :hover restava acceso per sempre dopo il tocco. */
+    @media (hover: hover) and (pointer: fine) {
+      .interactive-element:hover {
+        filter: drop-shadow(0 0 14px rgba(223, 183, 108, 0.9));
+      }
+    }
+    .interactive-element.acceso {
       filter: drop-shadow(0 0 14px rgba(223, 183, 108, 0.9));
     }
 
@@ -1261,7 +1270,7 @@
           </g>
 
           <!-- Percorso (tratteggiato) -->
-          <path id="map-route" class="map-route" d="M115 83 C 165 83, 150 145, 200 148 S 258 156, 268 170" fill="none" stroke-width="3.2" stroke-linecap="round" stroke-dasharray="1 8"/>
+          <path id="map-route" class="map-route" d="M115 83 C 165 83, 150 145, 200 148 S 236 146, 248 149 C 262 153, 280 179, 305 179" fill="none" stroke-width="3.2" stroke-linecap="round" stroke-dasharray="1 8"/>
 
           <!-- Chiesa -->
           <g transform="translate(36 30)">
@@ -1290,8 +1299,6 @@
 
           <!-- Parco delle Querce -->
           <g class="map-oaks">
-            <rect x="244" y="148" width="4" height="16" rx="1.5" class="map-trunk"/>
-            <circle cx="246" cy="142" r="15" class="map-oak-a"/>
             <rect x="304" y="140" width="4" height="18" rx="1.5" class="map-trunk"/>
             <circle cx="306" cy="132" r="17" class="map-oak-b"/>
             <rect x="275" y="122" width="4" height="18" rx="1.5" class="map-trunk"/>
@@ -1321,9 +1328,14 @@
               <circle class="map-car-wheel" cx="6.5" cy="14.5" r="2.6"/>
               <circle class="map-car-wheel" cx="18" cy="14.5" r="2.6"/>
             </g>
-            <animateMotion id="map-car-motion" dur="7s" repeatCount="indefinite" rotate="auto" keyPoints="0;1;1" keyTimes="0;0.8;1" calcMode="linear">
+            <animateMotion id="map-car-motion" dur="8s" repeatCount="indefinite" rotate="auto" keyPoints="0;1;1" keyTimes="0;0.72;1" keySplines="0.3 0 0.4 1;0 0 1 1" calcMode="spline">
               <mpath href="#map-route"/>
             </animateMotion>
+          </g>
+          <!-- Quercia di sinistra disegnata DOPO l'auto: cosi' l'auto ci passa dietro -->
+          <g class="map-oaks">
+            <rect x="244" y="148" width="4" height="16" rx="1.5" class="map-trunk"/>
+            <circle cx="246" cy="142" r="15" class="map-oak-a"/>
           </g>
         </svg>
 
@@ -1829,7 +1841,7 @@
     window.addEventListener('orientationchange', () => setTimeout(layoutHeroArt, 200));
 
     // MAPPA DEL PERCORSO: se il telefono chiede meno animazioni,
-    // l'autina resta ferma a metà strada invece di muoversi.
+    // l'autina resta ferma, gia' parcheggiata sulla P del parco.
     (function () {
       const motion = document.getElementById('map-car-motion');
       const route = document.getElementById('map-route');
@@ -1840,8 +1852,8 @@
       motion.remove();
       try {
         const len = route.getTotalLength();
-        const a = route.getPointAtLength(len * 0.5);
-        const b = route.getPointAtLength(len * 0.5 + 1);
+        const a = route.getPointAtLength(len - 1);
+        const b = route.getPointAtLength(len);
         const angle = Math.atan2(b.y - a.y, b.x - a.x) * 180 / Math.PI;
         car.setAttribute('transform', `translate(${a.x} ${a.y}) rotate(${angle})`);
       } catch (e) { /* resta dov'è */ }
@@ -1879,6 +1891,7 @@
 
     // 3. GENERATORE AUDIO AD ALTA FEDELTÀ (WEB AUDIO API)
     let audioCtx = null;
+    let clickSuono = null, bipInCorso = false; // vedi SUONI AI TOCCHI
     let masterGain = null;
     let compressor = null;
     let reverbNode = null;
@@ -1903,6 +1916,7 @@
     }
 
     function getAudioContext() {
+      if (clickSuono && !bipInCorso) clickSuono.altro = true; // questo tocco ha gia' un suono suo
       if (!audioCtx) {
         const AudioContextClass = window.AudioContext || window.webkitAudioContext;
         audioCtx = new AudioContextClass();
@@ -1954,7 +1968,75 @@
       window.removeEventListener('touchstart', unlockAudio);
     }, { once: true });
 
+    // SUONI AI TOCCHI: ogni cosa cliccabile fa un "bip" scelto a caso tra
+    // tanti (note e timbri diversi, stesso stile morbido degli altri suoni),
+    // mai lo stesso di prima. Le cose che hanno gia' un suono loro (band,
+    // food truck, querce, strumenti, nomi, luci, cuori nascosti) restano
+    // come sono: il bip sostituisce solo le note singole e il silenzio.
+    let ultimiBip = [];
+    const BIP = [
+      { n: [659.25], t: 'sine', d: 0.18 },
+      { n: [783.99], t: 'sine', d: 0.18 },
+      { n: [987.77], t: 'sine', d: 0.16 },
+      { n: [1174.66], t: 'sine', d: 0.15 },
+      { n: [587.33], t: 'triangle', d: 0.2 },
+      { n: [880], t: 'triangle', d: 0.18 },
+      { n: [1318.51], t: 'triangle', d: 0.14 },
+      { n: [783.99, 1046.5], t: 'sine', d: 0.13 },
+      { n: [659.25, 880], t: 'triangle', d: 0.13 },
+      { n: [987.77, 1318.51], t: 'sine', d: 0.12 },
+      { n: [1174.66, 880], t: 'triangle', d: 0.13 },
+      { n: [1046.5, 783.99], t: 'sine', d: 0.13 },
+      { n: [783.99, 987.77, 1174.66], t: 'triangle', d: 0.1 },
+      { n: [1318.51, 1046.5, 1318.51], t: 'sine', d: 0.09 },
+      { n: [587.33, 739.99], t: 'sine', d: 0.14 },
+      { n: [880, 1108.73, 1318.51], t: 'sine', d: 0.09 }
+    ];
+    function suonaBip() {
+      let i;
+      do { i = Math.floor(Math.random() * BIP.length); } while (ultimiBip.includes(i));
+      ultimiBip = [i].concat(ultimiBip).slice(0, 3); // niente ripetizioni ravvicinate
+      const b = BIP[i];
+      bipInCorso = true;
+      try {
+        const ctx = getAudioContext();
+        const t0 = ctx.currentTime + 0.005;
+        b.n.forEach((f, k) => {
+          const at = t0 + k * 0.07;
+          const osc = ctx.createOscillator(), g = ctx.createGain();
+          osc.type = b.t;
+          osc.frequency.setValueAtTime(f, at);
+          g.gain.setValueAtTime(0.0001, at);
+          g.gain.linearRampToValueAtTime(0.16, at + 0.006);
+          g.gain.exponentialRampToValueAtTime(0.0001, at + b.d);
+          osc.connect(g); g.connect(masterGain);
+          osc.start(at); osc.stop(at + b.d + 0.05);
+        });
+      } catch (e) {}
+      bipInCorso = false;
+    }
+    const CLICCABILE = 'a[href], button, [role="button"], .interactive-element, label, summary, ' +
+      'input[type="checkbox"], input[type="radio"], input[type="submit"], input[type="button"], [onclick], .cursor-pointer';
+    const SUONO_PROPRIO = '.hidden-heart, [data-suono-proprio]';
+    document.addEventListener('click', (e) => {
+      const el = e.target && e.target.closest ? e.target.closest(CLICCABILE) : null;
+      if (!el) return;
+      const cs = { sync: true, semplice: false, altro: false, proprio: !!el.closest(SUONO_PROPRIO) };
+      clickSuono = cs;
+      // fine del tocco: poi si aspetta un attimo per sentire se parte un suono suo
+      setTimeout(() => {
+        cs.sync = false;
+        setTimeout(() => {
+          if (clickSuono === cs) clickSuono = null;
+          if (cs.proprio) return;
+          if (cs.semplice || !cs.altro) suonaBip();
+        }, 60);
+      }, 0);
+    }, true);
+
     function playSingleNote(freq, type = 'sine', duration = 0.25) {
+      // Nota singola suonata subito da un tocco: la sostituisce un "bip" a caso
+      if (clickSuono && clickSuono.sync && !clickSuono.proprio) { clickSuono.semplice = true; return; }
       try {
         const ctx = getAudioContext();
         const now = ctx.currentTime;
@@ -2666,6 +2748,18 @@
         musiciansBody.classList.remove('animate-groove');
       });
     }
+
+    // Bagliore dopo un tocco: si accende e si spegne da solo quando finisce
+    // il suono (la band dura circa 3 secondi, il resto meno di un secondo).
+    const accesoTimers = new WeakMap();
+    function accendi(el, ms) {
+      clearTimeout(accesoTimers.get(el));
+      el.classList.add('acceso');
+      accesoTimers.set(el, setTimeout(() => el.classList.remove('acceso'), ms));
+    }
+    document.querySelectorAll('.interactive-element').forEach(el => {
+      el.addEventListener('click', () => accendi(el, el.id === 'interactive-musicians' ? 2900 : 700));
+    });
 
     const oakLeft = document.getElementById('interactive-oak-left');
     const oakLeftLeaves = document.getElementById('oak-left-leaves');
@@ -3983,9 +4077,17 @@
     const ctx = canvas.getContext('2d');
     let width, height;
 
+    // Sul telefono, scorrendo, la barra dell'indirizzo appare e sparisce e
+    // l'altezza della finestra cambia di continuo. Prima la tela veniva
+    // ridimensionata ogni volta e il disegno si "stirava": tutte le foglie
+    // sembravano saltare in alto o in basso. Ora la tela ha sempre l'altezza
+    // massima e si ridimensiona solo se cambia davvero (rotazione, finestra).
     function resizeCanvas() {
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
+      const w = canvas.clientWidth || window.innerWidth;
+      const h = Math.max(canvas.clientHeight || 0, window.innerHeight);
+      if (w === width && h === height) return;
+      width = canvas.width = w;
+      height = canvas.height = h;
     }
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
@@ -4615,6 +4717,6 @@
   </script>
   <!-- Animazione di apertura (aeroplanino), solo alla prima visita -->
   <!-- il numero dopo ?v= va cambiato a ogni modifica di intro.js, cosi' i telefoni non usano la copia vecchia -->
-  <script src="intro.js?v=4" onerror="window.togliCopertura &amp;&amp; window.togliCopertura()"></script>
+  <script src="intro.js?v=5" onerror="window.togliCopertura &amp;&amp; window.togliCopertura()"></script>
 </body>
 </html>
