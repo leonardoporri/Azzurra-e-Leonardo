@@ -501,6 +501,7 @@
     .route-map .map-car-body { fill: #5e8760; stroke: #2b3f2c; stroke-width: 1; stroke-linejoin: round; }
     .route-map .map-car-window { fill: #e3ece3; }
     .route-map .map-car-wheel { fill: #4a3b2c; }
+    .route-map .map-car-light { fill: #f2d16b; }
     /* Notte nel bosco: la mappa diventa scura ma resta leggibile */
     body.night-mode .route-map .map-paper { fill: #0e2216; stroke: rgba(94,135,96,.6); }
     body.night-mode .route-map .map-roads { stroke: #1a3524; }
@@ -513,6 +514,31 @@
     body.night-mode .route-map .map-time-text { fill: #fef08a; }
     body.night-mode .route-map .map-car-body { fill: #9dbf9e; }
   </style>
+  <!-- COPERTURA DI APERTURA: copre la pagina fin dal primo istante con lo stesso
+       cielo con cui parte l'aeroplanino, cosi' non si vede il sito "a lampo" prima
+       dell'animazione. La toglie intro.js appena il suo cielo e' disegnato.
+       Sicurezze: se intro.js non arriva o va storto, si toglie da sola. -->
+  <style>
+    html.intro-copri::after {
+      content: ""; position: fixed; inset: 0; z-index: 2147483001; pointer-events: none;
+      background:
+        radial-gradient(circle 55vw at 78% 16%, rgba(255,248,225,.95), rgba(255,240,205,.35) 30%, rgba(255,240,205,0) 100%),
+        linear-gradient(#9fc0d6, #d9e4e6 55%, #f4ece1 85%, #edd5cc);
+    }
+  </style>
+  <script>
+    (function () {
+      try {
+        if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        var h = document.documentElement;
+        h.classList.add('intro-copri');
+        var togli = function () { h.classList.remove('intro-copri'); };
+        window.togliCopertura = togli;
+        setTimeout(togli, 8000);                                   // sicurezza estrema
+        window.addEventListener('load', function () { setTimeout(togli, 2000); }); // sicurezza: pagina carica ma niente animazione
+      } catch (e) {}
+    })();
+  </script>
 </head>
 <body class="font-sans antialiased bg-forest-texture relative selection:bg-salvia-200 selection:text-salvia-800">
 
@@ -581,7 +607,7 @@
       <a href="#programma" class="py-1.5 text-legno hover:text-salvia-600 mobile-nav-link">Programma</a>
       <a href="#esperienze" class="py-1.5 text-legno hover:text-salvia-600 mobile-nav-link">Food Truck &amp; Jukebox</a>
       <a href="#luoghi" class="py-1.5 text-legno hover:text-salvia-600 mobile-nav-link">I Luoghi</a>
-      <a href="#dettagli" class="py-1.5 text-legno hover:text-salvia-600 mobile-nav-link">Dettagli &amp; Dress Code</a>
+      <a href="#dettagli" class="py-1.5 text-legno hover:text-salvia-600 mobile-nav-link">Nessun dress code</a>
       <a href="#album" class="py-1.5 text-legno hover:text-salvia-600 mobile-nav-link">Album Foto</a>
       <a href="#conferma-presenza" class="py-2 bg-salvia-500 text-white rounded-full font-semibold mobile-nav-link shadow-xs">Conferma Presenza</a>
     </div>
@@ -1288,10 +1314,12 @@
           <!-- Auto degli invitati che percorre la strada (ferma se il telefono chiede meno animazioni) -->
           <g id="map-car">
             <g transform="translate(-11 -9)">
-              <path class="map-car-body" d="M2 12 Q2 8 6 8 L8 3.5 Q9 2 11 2 H15 Q17 2 18 4 L20 8 Q22 8 22 11 V14 H2 Z"/>
-              <rect class="map-car-window" x="9" y="3.6" width="8" height="4" rx="1"/>
-              <circle class="map-car-wheel" cx="7" cy="14.5" r="2.6"/>
-              <circle class="map-car-wheel" cx="17.5" cy="14.5" r="2.6"/>
+              <!-- muso a destra (verso di marcia): cofano lungo davanti, faro giallo, abitacolo spostato dietro -->
+              <path class="map-car-body" d="M2 13 Q1.5 7.5 5 7 L7 3 Q8 2 9.5 2 H12.5 Q14 2 15 3.5 L17 7.2 H19.5 Q22.5 7.6 22.5 11 V14 H2 Z"/>
+              <path class="map-car-window" d="M8.2 3.4 H12.6 L14.6 6.8 H6.8 Z"/>
+              <circle class="map-car-light" cx="21.3" cy="9.6" r="1.1"/>
+              <circle class="map-car-wheel" cx="6.5" cy="14.5" r="2.6"/>
+              <circle class="map-car-wheel" cx="18" cy="14.5" r="2.6"/>
             </g>
             <animateMotion id="map-car-motion" dur="7s" repeatCount="indefinite" rotate="auto" keyPoints="0;1;1" keyTimes="0;0.8;1" calcMode="linear">
               <mpath href="#map-route"/>
@@ -1385,7 +1413,7 @@
       
       <div class="text-center max-w-xl mx-auto mb-12">
         <span class="text-salvia-700 font-semibold tracking-widest text-xs uppercase block mb-2">Consigli Pratici</span>
-        <h2 class="font-serif text-4xl text-legno">Dettagli &amp; Dress Code</h2>
+        <h2 class="font-serif text-4xl text-legno">Nessun dress code</h2>
       </div>
 
       <!-- Guida interattiva con 15 colori pastello -->
@@ -1554,7 +1582,7 @@
         <span class="text-salvia-700 font-semibold tracking-widest text-xs uppercase block mb-1">Ci Sarai?</span>
         <h2 class="font-serif text-4xl text-legno font-normal">Conferma Presenza</h2>
         <p class="text-sm text-legno/70 mt-2">
-          Vi preghiamo di confermare la presenza entro il <strong class="font-semibold text-legno">15 febbraio 2027</strong>
+          Vi preghiamo di confermare la presenza entro il <strong class="font-semibold text-legno">28 febbraio 2027</strong>
         </p>
       </div>
 
@@ -4587,6 +4615,6 @@
   </script>
   <!-- Animazione di apertura (aeroplanino), solo alla prima visita -->
   <!-- il numero dopo ?v= va cambiato a ogni modifica di intro.js, cosi' i telefoni non usano la copia vecchia -->
-  <script src="intro.js?v=3"></script>
+  <script src="intro.js?v=4" onerror="window.togliCopertura &amp;&amp; window.togliCopertura()"></script>
 </body>
 </html>
