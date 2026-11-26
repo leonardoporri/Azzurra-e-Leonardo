@@ -4432,38 +4432,69 @@
         return { d, dir, roll, duration: rnd(8000, 11000) }; // lento: si deve poter prendere al volo
       }
 
+      // Il volo viene calcolato tutto PRIMA di partire (un punto ogni 25 ms)
+      // e poi affidato al browser come animazione: cosi' gira sul "motore
+      // grafico" del telefono e resta fluido anche mentre si scorre la pagina
+      // o il telefono e' occupato. Prima si ricalcolava a ogni fotogramma e
+      // nelle curve strette la punta "scattava" di colpo verso la nuova
+      // direzione: ora la rotazione e' ammorbidita. Percorso e acrobazie
+      // sono gli stessi di prima.
+      let flight = null;
       function fly() {
         if (document.hidden || flying) return schedule();
         const f = buildFlight();
         trailPath.setAttribute('d', f.d);
         const len = trailPath.getTotalLength();
-        const start = performance.now();
+        const STEP = 25;
+        const n = Math.max(2, Math.round(f.duration / STEP));
+        const at = (d) => trailPath.getPointAtLength(Math.max(0, Math.min(len, d)));
+
+        // 1) posizioni e direzioni grezze
+        const pts = [];
+        for (let i = 0; i <= n; i++) {
+          const t = i / n;
+          // Leggera accelerazione/decelerazione (come prima)
+          const e = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+          const d = e * len;
+          const p = at(d), a = at(d - 6), b = at(d + 6);
+          pts.push({ t, x: p.x, y: p.y, ang: Math.atan2(b.y - a.y, b.x - a.x) * 180 / Math.PI });
+        }
+        // 2) angolo continuo (niente giri a vuoto passando da +180 a -180)
+        for (let i = 1; i < pts.length; i++) {
+          let dd = pts[i].ang - pts[i - 1].ang;
+          while (dd > 180) dd -= 360;
+          while (dd < -180) dd += 360;
+          pts[i].ang = pts[i - 1].ang + dd;
+        }
+        // 3) rotazione ammorbidita: media su circa 2 decimi di secondo
+        const W2 = 4;
+        const smoothAng = pts.map((_, i) => {
+          let sum = 0, cnt = 0;
+          for (let k = -W2; k <= W2; k++) { const j = i + k; if (j >= 0 && j < pts.length) { sum += pts[j].ang; cnt++; } }
+          return sum / cnt;
+        });
+        // 4) fotogrammi chiave
+        const frames = pts.map((p, i) => {
+          let flip = f.dir < 0 ? -1 : 1; // da destra a sinistra: resta dritto
+          if (f.roll > 0 && Math.abs(p.t - f.roll) < 0.06) flip *= -Math.cos(((p.t - f.roll) / 0.06 + 1) * Math.PI);
+          const bob = Math.sin((p.t * f.duration) / 180) * 3; // leggero dondolio
+          return { transform: `translate(${p.x.toFixed(1)}px, ${(p.y + bob).toFixed(1)}px) rotate(${smoothAng[i].toFixed(2)}deg) scaleY(${flip.toFixed(3)})` };
+        });
+
         flying = true;
+        if (flight) flight.cancel();
+        plane.style.transform = frames[0].transform;
         plane.style.opacity = '1';
         plane.classList.add('catchable'); // si puo' prendere al volo (caccia al tesoro)
-
-        function frame(now) {
-          const t = Math.min(1, (now - start) / f.duration);
-          // Leggera accelerazione/decelerazione
-          const e = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
-          const p = trailPath.getPointAtLength(e * len);
-          const q = trailPath.getPointAtLength(Math.min(len, e * len + 2));
-          const angle = Math.atan2(q.y - p.y, q.x - p.x) * 180 / Math.PI;
-          // Avvitamento: il piano "si gira" su sé stesso per un attimo
-          let flip = f.dir < 0 ? -1 : 1; // da destra a sinistra: resta dritto
-          if (f.roll > 0 && Math.abs(t - f.roll) < 0.06) flip *= -Math.cos(((t - f.roll) / 0.06 + 1) * Math.PI);
-          const bob = Math.sin(now / 180) * 3;
-          plane.style.transform = `translate(${p.x}px, ${p.y + bob}px) rotate(${angle}deg) scaleY(${flip.toFixed(3)})`;
-          if (t < 1) {
-            requestAnimationFrame(frame);
-          } else {
-            flying = false;
-            plane.style.opacity = '0';
-            plane.classList.remove('catchable');
-            schedule();
-          }
-        }
-        requestAnimationFrame(frame);
+        flight = plane.animate(frames, { duration: f.duration, easing: 'linear', fill: 'forwards' });
+        flight.onfinish = () => {
+          flying = false;
+          plane.style.transform = frames[frames.length - 1].transform;
+          plane.style.opacity = '0';
+          plane.classList.remove('catchable');
+          if (flight) { flight.cancel(); flight = null; }
+          schedule();
+        };
       }
 
       function schedule() {
