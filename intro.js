@@ -52,10 +52,13 @@
     ov.setAttribute('aria-hidden', 'true');
     ov.style.cssText = 'position:fixed;inset:0;z-index:2147483000;overflow:hidden;cursor:pointer;-webkit-tap-highlight-color:transparent;pointer-events:auto';
     const cv = document.createElement('canvas');
-    cv.style.cssText = 'position:absolute;inset:0;width:100%;height:100%';
+    cv.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;will-change:transform';
     ov.appendChild(cv);
     document.documentElement.appendChild(ov); // fuori dal body: il body viene "zoomato"
-    const dpr = 1; // nuvole e cielo sono morbidi: bastano i pixel normali, il telefono lavora 4 volte meno
+    // Nuvole e cielo sono sfumati: basta meta' dei pixel (la tela viene poi
+    // allargata a tutto schermo). Il telefono lavora 4 volte meno a ogni
+    // fotogramma e l'aereo (disegnato a parte, nitido) non scatta piu'.
+    const dpr = .5;
     const W = innerWidth, H = innerHeight;
     cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
     const g = cv.getContext('2d'); g.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -114,7 +117,7 @@
 
     const T_CAM = 1900;
     const CAM_END = 1.2 + 46 * .13 + .3;
-    const t0 = performance.now();
+    let t0 = null; // il tempo parte dal primo fotogramma vero: niente salto iniziale se il telefono e' ancora occupato
     let raf;
 
     // ---- il volo: una linea disegnata a punti, che finisce fuori dal bordo destro ----
@@ -149,10 +152,13 @@
     }
     function where(t) { return at(profile(clamp(t, 0, 1)) * TOTAL); }
     function dirAt(t) { const a = where(t - .006), b = where(t + .006); return Math.atan2(b.y - a.y, b.x - a.x) * 180 / Math.PI; }
-    let angU = null, bank = 0;
+    let angU = null, bank = 0, lastNow = null;
 
     function frame(now) {
+      if (t0 === null) t0 = now;
       const ms = now - t0;
+      // passo di tempo reale: inclinazione uguale a 60 o 120 fotogrammi al secondo
+      const dt = lastNow === null ? 16.7 : clamp(now - lastNow, 1, 50); lastNow = now;
       const tc = easeInOut(clamp(ms / T_CAM, 0, 1));
       const camZ = tc * CAM_END;
       g.clearRect(0, 0, W, H);
@@ -198,7 +204,7 @@
       if (angU === null) angU = a;
       let dd = a - angU; while (dd > 180) dd -= 360; while (dd < -180) dd += 360; angU += dd;
       let turn = dirAt(tp + .02) - dirAt(tp - .02); while (turn > 180) turn -= 360; while (turn < -180) turn += 360;
-      bank += (clamp(turn * 1.2, -50, 50) - bank) * .15;   // si inclina in virata
+      bank += (clamp(turn * 1.2, -50, 50) - bank) * (1 - Math.pow(.85, dt / 16.7));   // si inclina in virata
       const size = lerp(5.2, 1.1, easeOut(clamp(tp / .7, 0, 1))); // grande vicino a noi, piccolo sul sito
       plane.style.transform = `translate(${p.x - 24}px,${p.y - 16}px) rotate(${angU}deg) scale(${size}) scaleY(${Math.cos(bank * Math.PI / 180).toFixed(3)})`;
       // uscito dal bordo destro: sparisce, e partono i petali del sito
