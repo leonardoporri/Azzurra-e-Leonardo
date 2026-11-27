@@ -3636,31 +3636,36 @@
     loadSongRanking();
 
     // 6. DETTAGLI & DRESS CODE — PALETTE & COMBINATORE
+    // in ordine: pastello dal chiaro al verde, poi i classici dal chiaro allo scuro
     const paletteColorsList = [
-      { id: 'salvia', name: 'Verde Salvia', hex: '#9dbf9e', tag: 'botanico' },
-      { id: 'cipria', name: 'Rosa Cipria', hex: '#dfb5a6', tag: 'romantico' },
-      { id: 'azzurro', name: 'Azzurro Polvere', hex: '#b8d4e3', tag: 'fresco' },
-      { id: 'vaniglia', name: 'Giallo Vaniglia', hex: '#faedcd', tag: 'luminoso' },
-      { id: 'lilla', name: 'Lilla Lavanda', hex: '#d8b4e2', tag: 'romantico' },
-      { id: 'pesca', name: 'Pesca Tenero', hex: '#ffccd5', tag: 'dolce' },
       { id: 'avorio', name: 'Avorio Caldo', hex: '#f4ece1', tag: 'neutro' },
-      { id: 'tortora', name: 'Tortora Chiaro', hex: '#d4c5b9', tag: 'neutro' },
-      { id: 'celeste', name: 'Celeste Ghiaccio', hex: '#e0f4f7', tag: 'fresco' },
-      { id: 'oro', name: 'Tocchi Dorati', hex: '#dfb76c', tag: 'accento' },
-      { id: 'menta', name: 'Verde Menta', hex: '#bfe5d0', tag: 'botanico' },
-      { id: 'albicocca', name: 'Albicocca Chiaro', hex: '#fed1b2', tag: 'luminoso' },
-      { id: 'malva', name: 'Malva Polveroso', hex: '#cbb4d4', tag: 'romantico' },
-      { id: 'eucalipto', name: 'Verde Eucalipto', hex: '#a8dadc', tag: 'botanico' },
+      { id: 'vaniglia', name: 'Giallo Vaniglia', hex: '#faedcd', tag: 'luminoso' },
       { id: 'sabbia', name: 'Sabbia Dorata', hex: '#e8dcc4', tag: 'neutro' },
+      { id: 'tortora', name: 'Tortora Chiaro', hex: '#d4c5b9', tag: 'neutro' },
+      { id: 'oro', name: 'Tocchi Dorati', hex: '#dfb76c', tag: 'accento' },
+      { id: 'albicocca', name: 'Albicocca Chiaro', hex: '#fed1b2', tag: 'luminoso' },
+      { id: 'pesca', name: 'Pesca Tenero', hex: '#ffccd5', tag: 'dolce' },
+      { id: 'cipria', name: 'Rosa Cipria', hex: '#dfb5a6', tag: 'romantico' },
+      { id: 'lilla', name: 'Lilla Lavanda', hex: '#d8b4e2', tag: 'romantico' },
+      { id: 'malva', name: 'Malva Polveroso', hex: '#cbb4d4', tag: 'romantico' },
+      { id: 'celeste', name: 'Celeste Ghiaccio', hex: '#e0f4f7', tag: 'fresco' },
+      { id: 'azzurro', name: 'Azzurro Polvere', hex: '#b8d4e3', tag: 'fresco' },
+      { id: 'eucalipto', name: 'Verde Eucalipto', hex: '#a8dadc', tag: 'botanico' },
+      { id: 'menta', name: 'Verde Menta', hex: '#bfe5d0', tag: 'botanico' },
+      { id: 'salvia', name: 'Verde Salvia', hex: '#9dbf9e', tag: 'botanico' },
       // colori classici
-      { id: 'nero', name: 'Nero', hex: '#2b2b2d', tag: 'classico' },
       { id: 'bianco', name: 'Bianco', hex: '#fbfaf7', tag: 'classico' },
+      { id: 'cammello', name: 'Cammello', hex: '#c19a6b', tag: 'classico' },
+      { id: 'senape', name: 'Senape', hex: '#d1a33a', tag: 'classico' },
+      { id: 'arancio', name: 'Arancio Bruciato', hex: '#c0622f', tag: 'classico' },
+      { id: 'terracotta', name: 'Terracotta', hex: '#b85f45', tag: 'classico' },
       { id: 'bordeaux', name: 'Rosso Bordeaux', hex: '#7b2d3b', tag: 'classico' },
+      { id: 'marrone', name: 'Marrone', hex: '#6b4a33', tag: 'classico' },
       { id: 'salviascuro', name: 'Verde Salvia Scuro', hex: '#5f7a61', tag: 'classico' },
       { id: 'bosco', name: 'Verde Bosco', hex: '#2f4f3a', tag: 'classico' },
       { id: 'navy', name: 'Blu Navy', hex: '#26344f', tag: 'classico' },
-      { id: 'arancio', name: 'Arancio Bruciato', hex: '#c0622f', tag: 'classico' },
-      { id: 'marrone', name: 'Marrone', hex: '#6b4a33', tag: 'classico' }
+      { id: 'antracite', name: 'Grigio Antracite', hex: '#45474b', tag: 'classico' },
+      { id: 'nero', name: 'Nero', hex: '#2b2b2d', tag: 'classico' }
     ];
 
     let selectedCombo = [];
@@ -4721,7 +4726,7 @@
   </script>
   <!-- Animazione di apertura (aeroplanino), solo alla prima visita -->
   <!-- il numero dopo ?v= va cambiato a ogni modifica di intro.js, cosi' i telefoni non usano la copia vecchia -->
-  <script src="manichini.js?v=2" defer></script>
+  <script src="manichini.js?v=3" defer></script>
   <script src="intro.js?v=5" onerror="window.togliCopertura &amp;&amp; window.togliCopertura()"></script>
 </body>
 </html>

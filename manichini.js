@@ -4,15 +4,17 @@
 (function () {
   const bar = document.getElementById('combo-swatch-bar');
   if (!bar) return;
-  const NAMES = {
-    '#9dbf9e': 'Verde Salvia', '#dfb5a6': 'Rosa Cipria', '#b8d4e3': 'Azzurro Polvere', '#faedcd': 'Giallo Vaniglia',
-    '#d8b4e2': 'Lilla Lavanda', '#ffccd5': 'Pesca Tenero', '#f4ece1': 'Avorio Caldo', '#d4c5b9': 'Tortora Chiaro',
-    '#e0f4f7': 'Celeste Ghiaccio', '#dfb76c': 'Tocchi Dorati', '#bfe5d0': 'Verde Menta', '#fed1b2': 'Albicocca Chiaro',
-    '#cbb4d4': 'Malva Polveroso', '#a8dadc': 'Verde Eucalipto', '#e8dcc4': 'Sabbia Dorata',
-    '#2b2b2d': 'Nero', '#fbfaf7': 'Bianco', '#7b2d3b': 'Rosso Bordeaux', '#5f7a61': 'Verde Salvia Scuro',
-    '#2f4f3a': 'Verde Bosco', '#26344f': 'Blu Navy', '#c0622f': 'Arancio Bruciato', '#6b4a33': 'Marrone'
+  const NAMES = {   // pastello dal chiaro al verde, poi i classici
+    '#f4ece1': 'Avorio Caldo', '#faedcd': 'Giallo Vaniglia', '#e8dcc4': 'Sabbia Dorata', '#d4c5b9': 'Tortora Chiaro',
+    '#dfb76c': 'Tocchi Dorati', '#fed1b2': 'Albicocca Chiaro', '#ffccd5': 'Pesca Tenero', '#dfb5a6': 'Rosa Cipria',
+    '#d8b4e2': 'Lilla Lavanda', '#cbb4d4': 'Malva Polveroso', '#e0f4f7': 'Celeste Ghiaccio', '#b8d4e3': 'Azzurro Polvere',
+    '#a8dadc': 'Verde Eucalipto', '#bfe5d0': 'Verde Menta', '#9dbf9e': 'Verde Salvia',
+    '#fbfaf7': 'Bianco', '#c19a6b': 'Cammello', '#d1a33a': 'Senape', '#c0622f': 'Arancio Bruciato',
+    '#b85f45': 'Terracotta', '#7b2d3b': 'Rosso Bordeaux', '#6b4a33': 'Marrone', '#5f7a61': 'Verde Salvia Scuro',
+    '#2f4f3a': 'Verde Bosco', '#26344f': 'Blu Navy', '#45474b': 'Grigio Antracite', '#2b2b2d': 'Nero'
   };
   const NEUTRO = '#e4dbd0';
+  const BIANCO = '#fbfaf7';
 
   function rgb2hex(s) {
     const m = String(s).match(/\d+/g); if (!m) return null;
@@ -78,8 +80,8 @@
   const scarpe = (d, col) => `<path d="${d}" fill="${col}" class="mk-china-s"/>`;
   const fiorellino = (x, y, r, col) => `<g class="mk-china-s"><circle cx="${x}" cy="${y}" r="${r}" fill="${col}"/><circle cx="${x + r * 1.2}" cy="${y + r * .9}" r="${r}" fill="${col}"/><circle cx="${x - r * .25}" cy="${y + r * 1.4}" r="${r}" fill="${col}"/></g><circle cx="${x + r * .3}" cy="${y + r * .75}" r="${r * .45}" fill="${shade(col, -0.3)}"/>`;
   let CLIP = 0;
-  // manica come pennellata: contorno a china sotto, colore ad acquerello sopra
-  const manica = (d, col, w) => `<path d="${d}" stroke-width="${w + 1.8}" class="mk-manica-c"/><path d="${d}" stroke="${col}" stroke-width="${w}" stroke-linecap="round" fill="none" filter="url(#mk-acq)"/>`;
+  // braccia e gambe sottili: contorno a china sotto, pelle sopra
+  const arto = d => `<path d="${d}" class="mk-braccio-c"/><path d="${d}" class="mk-braccio-b"/>`;
   const cravatta = col => `<path d="M58 53 L62 53 L61.3 57.5 L58.7 57.5 Z M58.7 57.5 L61.3 57.5 L63 79 L60 83 L57 79 Z" fill="${col}" class="mk-china"/>`;
 
   function B_uomo(o) {
@@ -91,10 +93,8 @@
       ${capo(pant, o.pantaloni)}
       <path d="M51 140 L51.5 282 M69 140 L68.5 282" class="mk-piega"/>
       ${scarpe('M43 288.5 Q43.5 282 51 282 Q58 282 59.5 288.5 Z M61 288.5 Q62 282 69 282 Q76.5 282 77.5 288.5 Z', o.scarpe)}
-      <path d="M42 57 Q35 92 39 126" stroke="${maniche}" stroke-width="10" stroke-linecap="round" fill="none" filter="url(#mk-acq)"/>
-      <path d="M78 57 Q87 92 85 124" stroke="${maniche}" stroke-width="10" stroke-linecap="round" fill="none" filter="url(#mk-acq)"/>
-      <path d="M37 57 Q30 92 34 126 M83 57 Q92 92 90 124" class="mk-china"/>
-      <ellipse cx="86" cy="132" rx="3.5" ry="5" class="mk-pelle"/>
+      ${capo('M43 54 Q35 57 33 88 Q31.5 108 31 124 L39.5 124.5 Q40 108 41.5 90 Z', maniche)}
+      ${capo('M77 54 Q85 57 87 88 Q88.5 108 89 124 L80.5 124.5 Q80 108 78.5 90 Z', maniche)}
       <path d="M56 36 Q60 44 64 36 L64 50 Q60 53 56 50 Z" class="mk-pelle"/>`;
     if (f) {
       s += `${capo('M41 54 Q60 47 79 54 L82 132 Q70 136 61 130 L60 122 L59 130 Q50 136 38 132 Z', o.giacca)}
@@ -114,7 +114,8 @@
       <path d="M53.5 49 L60 55 L56 60 Z M66.5 49 L60 55 L64 60 Z" fill="${o.camicia}" class="mk-china"/>
       <circle cx="60" cy="96" r="1.1" class="mk-bottone"/><circle cx="60" cy="105" r="1.1" class="mk-bottone"/><circle cx="60" cy="114" r="1.1" class="mk-bottone"/>`;
     }
-    return s + `<ellipse cx="60" cy="25" rx="9.5" ry="12" transform="rotate(-4 60 25)" class="mk-pelle mk-china-s"/>
+    return s + `<ellipse cx="35.2" cy="129" rx="3.3" ry="4.6" class="mk-pelle"/><ellipse cx="84.8" cy="129" rx="3.3" ry="4.6" class="mk-pelle"/>
+      <ellipse cx="60" cy="25" rx="9.5" ry="12" transform="rotate(-4 60 25)" class="mk-pelle mk-china-s"/>
       <path d="M50.5 22 Q50 9 61 9 Q71 9 70 21 Q66 14 58 15 Q53 16 50.5 22 Z" class="mk-capelli"/>
     </svg>`;
   }
@@ -126,8 +127,8 @@
     return `<svg viewBox="0 0 120 300" aria-hidden="true">
       <ellipse cx="62" cy="293" rx="36" ry="3.5" class="mk-ombra"/>
       <path d="M58 46 L58 57 M64 46 L64 57" class="mk-china"/>
-      <path d="M48 59 Q38 82 41 104 Q43 118 39 128" class="mk-braccio-b"/>
-      <path d="M72 59 Q86 76 80 94 Q76 100 69 99" class="mk-braccio-b"/>
+      ${arto('M48 59 Q38 82 41 104 Q43 118 39 128')}
+      ${arto('M72 59 Q86 76 80 94 Q76 100 69 99')}
       <path d="M47 59 Q45 52 52 52 L70 52 Q76 52 73 59 Z" class="mk-pelle"/>
       ${scarpe('M47 294 Q47.5 287.5 53.5 287.5 Q59 287.5 59.5 294 Z M63 294 Q63.5 287.5 69.5 287.5 Q75 287.5 75.5 294 Z', o.scarpe)}
       ${capo(gonna, o.abito)}
@@ -135,7 +136,7 @@
       ${capo(busto, o.abito)}
       <path d="M51 96 Q60 100 69 96 L69 102 Q60 106 51 102 Z" fill="${o.cintura}" class="mk-china"/>
       <path d="M69 99 q6 3 3 9 q-4 -4 -6 -7 z" fill="${o.cintura}" class="mk-china"/>
-      ${f ? manica('M47.5 59 Q38 82 41 104 Q41.8 110 41.2 116', o.coprispalle, 6.2) + manica('M72.5 59 Q86 76 80 94 Q78.5 97 76 98', o.coprispalle, 6.2)
+      ${f ? capo('M46 56 Q35 80 37.5 104 Q38.5 111 37.8 117 L44.6 117.5 Q45.5 110 44.5 103 Q42 84 50.5 62 Z', o.coprispalle) + capo('M70 56 Q88 70 84 94 Q81 100 75 101.5 L74 95 Q77 93 77 90 Q79 78 69.5 64 Z', o.coprispalle)
         + capo('M46 55 Q52 51 57.5 54 Q56 78 55.5 100 L56.5 123 Q49.5 125.5 42.5 121 Q45 100 45.5 78 Z', o.coprispalle)
         + capo('M74 55 Q68 51 62.5 54 Q64 78 64.5 100 L63.5 123 Q70.5 125.5 77.5 121 Q75 100 74.5 78 Z', o.coprispalle)
         + '<circle cx="56.3" cy="92" r=".9" class="mk-bottone"/><circle cx="56.3" cy="104" r=".9" class="mk-bottone"/>' : ''}
@@ -156,16 +157,16 @@
     const gonna = 'M53 204 L67 204 Q82 222 92 248 Q76 257 60 252 Q44 257 28 248 Q38 222 53 204 Z';
     return `
       <ellipse cx="60" cy="291" rx="22" ry="3" class="mk-ombra"/>
-      <path d="M55 252 L54 282 M65 252 L66 282" class="mk-braccio-b"/>
+      ${arto('M55 252 L54 282 M65 252 L66 282')}
       ${scarpe('M48 287.5 Q49 281.5 54 281.5 Q59 281.5 59.5 287.5 Z M61 287.5 Q61.5 281.5 66.5 281.5 Q71.5 281.5 72 287.5 Z', o.scarpe)}
-      <path d="M52 186 Q41 194 34 206" class="mk-braccio-b"/>
-      <path d="M68 186 Q79 194 86 206" class="mk-braccio-b"/>
+      ${arto('M52 186 Q41 194 34 206')}
+      ${arto('M68 186 Q79 194 86 206')}
       <path d="M57 170 L57 182 L63 182 L63 170 Z" class="mk-pelle"/>
       ${capo(gonna, o.abito)}
       <path d="M58 210 Q50 232 42 252 M62 210 Q70 232 78 252" class="mk-piega"/>
       ${capo(busto, o.abito)}
       <path d="M52.6 201 L67.4 201 L67 206.5 L53 206.5 Z" fill="${o.cintura}" class="mk-china"/>
-      ${f ? manica('M52 186 Q43 192 37.5 202', o.coprispalle, 4.6) + manica('M68 186 Q77 192 82.5 202', o.coprispalle, 4.6)
+      ${f ? capo('M51 183.5 Q41 189 35.5 200 L40 203.5 Q45 194 53 189 Z', o.coprispalle) + capo('M69 183.5 Q79 189 84.5 200 L80 203.5 Q75 194 67 189 Z', o.coprispalle)
         + capo('M49.5 184 Q54.5 181 58.3 183 Q57.2 197 57 212.5 Q52 214 46.5 211.5 Q48.5 198 49.5 184 Z', o.coprispalle)
         + capo('M70.5 184 Q65.5 181 61.7 183 Q62.8 197 63 212.5 Q68 214 73.5 211.5 Q71.5 198 70.5 184 Z', o.coprispalle) : ''}
       <ellipse cx="60" cy="160" rx="11" ry="12" class="mk-pelle mk-china-s"/>
@@ -244,11 +245,11 @@
   .mk-scope .mk-china,.mk-scope .mk-china-s,.mk-scope .mk-piega{filter:url(#ink1)}
   .mk-scope .mk-pelle{filter:none}
   .mk-scope .mk-bottone{fill:var(--tratto);opacity:.6}
-  .mk-scope .mk-base{opacity:.6}
+  .mk-scope .mk-base{opacity:.9}
   .mk-scope .mk-tratt{opacity:.22}
   body.night-mode .mk-scope .mk-base{opacity:.92}
   body.night-mode .mk-scope .mk-tratt{opacity:0}
-  .mk-scope .mk-manica-c{fill:none;stroke:var(--tratto);stroke-linecap:round;opacity:.75;filter:url(#ink1)}
+  .mk-scope .mk-braccio-c{fill:none;stroke:var(--tratto);stroke-width:5.9;stroke-linecap:round;opacity:.7}
   body.night-mode .mk-scope .mk-china{opacity:1;stroke-width:1.25}
   body.night-mode .mk-scope .mk-china-s{stroke-opacity:1;stroke-width:1}
   body.night-mode .mk-scope .mk-pelle{stroke-opacity:.7}
@@ -344,6 +345,7 @@
       S.principali.forEach(k => { o[k] = cols[p]; });
       S.dettagli.forEach(k => { o[k] = prossimo(p); });
       divisibili(S).forEach((k, i) => { if (N > S.dettagli.length + 1 + i) o[k] = prossimo(p); });
+      if (chi === 'uomo' && N <= 2 && o.camicia) o.camicia = BIANCO;
       V[chi] = o;
     });
     return V;
