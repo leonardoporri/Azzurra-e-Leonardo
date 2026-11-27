@@ -245,7 +245,7 @@
   .mk-scope .mk-china,.mk-scope .mk-china-s,.mk-scope .mk-piega{filter:url(#ink1)}
   .mk-scope .mk-pelle{filter:none}
   .mk-scope .mk-bottone{fill:var(--tratto);opacity:.6}
-  .mk-scope .mk-base{opacity:.9}
+  .mk-scope .mk-base{opacity:.6}
   .mk-scope .mk-tratt{opacity:.22}
   body.night-mode .mk-scope .mk-base{opacity:.92}
   body.night-mode .mk-scope .mk-tratt{opacity:0}
@@ -336,6 +336,7 @@
       inizio[chi] = q;
       S.dettagli.forEach(() => prossimo(p));
       divisibili(S).forEach((k, i) => { if (N > S.dettagli.length + 1 + i) prossimo(p); });
+      if (chi === 'uomo' && S.principali.includes('camicia') && N >= 3 && !(N > S.dettagli.length + 1)) prossimo(p);
     });
     CHI.forEach(chi => {
       const S = SCHEMA[chi][st[chi]], o = { st: st[chi] };
@@ -345,7 +346,8 @@
       S.principali.forEach(k => { o[k] = cols[p]; });
       S.dettagli.forEach(k => { o[k] = prossimo(p); });
       divisibili(S).forEach((k, i) => { if (N > S.dettagli.length + 1 + i) o[k] = prossimo(p); });
-      if (chi === 'uomo' && N <= 2 && o.camicia) o.camicia = BIANCO;
+      // camicia del papà mai uguale al gilet: bianca con 1-2 colori, altrimenti un altro colore
+      if (chi === 'uomo' && o.camicia) { if (N <= 2) o.camicia = BIANCO; else if (o.camicia === o.gilet) o.camicia = prossimo(p); }
       V[chi] = o;
     });
     return V;
