@@ -3651,7 +3651,16 @@
       { id: 'albicocca', name: 'Albicocca Chiaro', hex: '#fed1b2', tag: 'luminoso' },
       { id: 'malva', name: 'Malva Polveroso', hex: '#cbb4d4', tag: 'romantico' },
       { id: 'eucalipto', name: 'Verde Eucalipto', hex: '#a8dadc', tag: 'botanico' },
-      { id: 'sabbia', name: 'Sabbia Dorata', hex: '#e8dcc4', tag: 'neutro' }
+      { id: 'sabbia', name: 'Sabbia Dorata', hex: '#e8dcc4', tag: 'neutro' },
+      // colori classici
+      { id: 'nero', name: 'Nero', hex: '#2b2b2d', tag: 'classico' },
+      { id: 'bianco', name: 'Bianco', hex: '#fbfaf7', tag: 'classico' },
+      { id: 'bordeaux', name: 'Rosso Bordeaux', hex: '#7b2d3b', tag: 'classico' },
+      { id: 'salviascuro', name: 'Verde Salvia Scuro', hex: '#5f7a61', tag: 'classico' },
+      { id: 'bosco', name: 'Verde Bosco', hex: '#2f4f3a', tag: 'classico' },
+      { id: 'navy', name: 'Blu Navy', hex: '#26344f', tag: 'classico' },
+      { id: 'arancio', name: 'Arancio Bruciato', hex: '#c0622f', tag: 'classico' },
+      { id: 'marrone', name: 'Marrone', hex: '#6b4a33', tag: 'classico' }
     ];
 
     let selectedCombo = [];
@@ -3680,7 +3689,15 @@
         return L > 0.18 ? '#2b2118' : '#ffffff';
       }
 
-      paletteColorsList.forEach(c => {
+      paletteColorsList.forEach((c, i) => {
+        // titoletti dei due gruppi: pastello e classici
+        if (i === 0 || (c.tag === 'classico' && paletteColorsList[i - 1].tag !== 'classico')) {
+          const t = document.createElement('span');
+          t.style.gridColumn = '1 / -1';
+          t.className = 'text-[11px] font-bold uppercase tracking-wider text-legno/60 mt-1';
+          t.textContent = c.tag === 'classico' ? 'Colori classici' : 'Pastello';
+          comboGrid.appendChild(t);
+        }
         const isSelected = selectedCombo.includes(c.id);
         const btn = document.createElement('button');
         btn.type = 'button';
@@ -3777,7 +3794,18 @@
         let moodText = '';
         let adviceText = '';
 
-        if (hasBotanical && hasWarm) {
+        const classici = selectedCombo.filter(id => (paletteColorsList.find(c => c.id === id) || {}).tag === 'classico');
+        if (classici.length && classici.length < selectedCombo.length) {
+          comboHarmonyIcon.innerText = '🖤🌸';
+          comboHarmonyTitle.innerText = 'Classico & Pastello';
+          moodText = 'Un colore classico dà profondità e carattere alle tonalità pastello.';
+          adviceText = '<strong>Come distribuirli:</strong> Usa il colore classico per un capo principale (giacca, pantaloni, abito) e il pastello per i dettagli, oppure il contrario: un pastello come base e un tocco deciso su cravatta, cintura o scarpe.';
+        } else if (classici.length) {
+          comboHarmonyIcon.innerText = '🎩✨';
+          comboHarmonyTitle.innerText = 'Eleganza Classica';
+          moodText = 'Tonalità decise e senza tempo, che stanno bene in ogni stagione.';
+          adviceText = '<strong>Come distribuirli:</strong> Scegli il colore più scuro per il capo principale e quello più chiaro per camicia o dettagli, così il contrasto resta pulito.';
+        } else if (hasBotanical && hasWarm) {
           comboHarmonyIcon.innerText = '🌿🌸';
           comboHarmonyTitle.innerText = 'Equilibrio Perfetto: Bosco & Fiore';
           moodText = 'L\'accostamento tra note botaniche e toni cipria, albicocca o malva crea la sinergia più romantica ed elegante della giornata.';
