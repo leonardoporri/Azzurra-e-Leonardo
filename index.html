@@ -3798,7 +3798,12 @@
         const barSegment = document.createElement('div');
         barSegment.className = 'flex-1 h-full flex flex-col justify-end p-1 sm:p-2 text-center transition-all duration-300';
         barSegment.style.backgroundColor = colorObj.hex;
-        barSegment.innerHTML = `<span class="text-[9px] sm:text-[10px] font-bold text-legno/80 bg-white/75 backdrop-blur-xs rounded px-1 truncate shadow-xs">${colorObj.name}</span>`;
+        barSegment.style.minWidth = '0'; // con tanti colori le strisce si stringono invece di uscire dalla barra
+        barSegment.title = colorObj.name;
+        // Fino a 4 colori il nome sta nella striscia; oltre, i nomi restano nell'elenco qui sotto
+        barSegment.innerHTML = selectedCombo.length <= 4
+          ? `<span class="text-[9px] sm:text-[10px] font-bold text-legno/80 bg-white/75 backdrop-blur-xs rounded px-1 truncate shadow-xs">${colorObj.name}</span>`
+          : '';
         comboSwatchBar.appendChild(barSegment);
       });
 
@@ -4748,6 +4753,7 @@
   </script>
   <!-- Animazione di apertura (aeroplanino), solo alla prima visita -->
   <!-- il numero dopo ?v= va cambiato a ogni modifica di intro.js, cosi' i telefoni non usano la copia vecchia -->
+  <script src="manichini.js?v=1" defer></script>
   <script src="intro.js?v=5" onerror="window.togliCopertura &amp;&amp; window.togliCopertura()"></script>
 </body>
 </html>
