@@ -4682,9 +4682,24 @@
         });
       });
 
+      // Quando si prende una lucciola d'oro o l'aeroplanino, il "click" che il
+      // telefono manda subito dopo il tocco non deve arrivare a pulsanti o link
+      // che stanno sotto (prima a volte si apriva qualcosa del sito).
+      let ingoiaClickFino = 0;
+      function ingoiaProssimoClick() { ingoiaClickFino = Date.now() + 700; }
+      ['click', 'mouseup', 'touchend'].forEach(tipo => window.addEventListener(tipo, (e) => {
+        if (Date.now() < ingoiaClickFino) {
+          if (e.cancelable) e.preventDefault();
+          e.stopPropagation();
+          e.stopImmediatePropagation();
+          if (tipo === 'click') ingoiaClickFino = 0;
+        }
+      }, { capture: true, passive: false }));
+
       // --- E. Lucciole d'oro (di notte, con i petali accesi) ---
       window.addEventListener('pointerdown', (e) => {
         if (!isNightMode || !petalsEnabled || done.lucciole()) return;
+        if (e.target.closest && e.target.closest('#mk-pers')) return;
         const hitR = e.pointerType === 'touch' ? 38 : 28;
         let hit = null, best = hitR * hitR;
         for (const p of petals) {
@@ -4693,6 +4708,9 @@
           if (d < best) { best = d; hit = p; }
         }
         if (!hit) return;
+        e.preventDefault();
+        e.stopPropagation();
+        ingoiaProssimoClick();
         hit.isGolden = false;
         hit.isFirefly = false;
         spawnPetalBurst(hit.x, hit.y, 8);
@@ -4704,7 +4722,7 @@
           playSingleNote(1046.5 + state.lucciole * 80, 'sine', 0.3);
           renderPill();
         }
-      });
+      }, true); // in cattura: arriva prima dei pulsanti sotto
 
       // --- F. Aeroplanino ---
       function planeCaught() {
@@ -4724,6 +4742,7 @@
           if (!planeEl.classList.contains('catchable')) return;
           e.preventDefault();
           e.stopPropagation();
+          ingoiaProssimoClick();
           planeEl.classList.remove('catchable');
           planeEl.style.opacity = '0';
           planeCaught();
