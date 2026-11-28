@@ -1132,7 +1132,7 @@
           </div>
 
           <div class="mt-6 pt-4 border-t border-salvia-100 text-center">
-            <span class="text-xs text-legno/60 card-bottom-note">Tutti i food truck saranno aperti e accessibili liberamente per tutta la durata dell'evento.</span>
+            <span class="text-xs text-legno/60 card-bottom-note">Tanti sapori diversi da assaggiare: girate tra i food truck e lasciatevi tentare!</span>
           </div>
         </div>
 
@@ -3648,6 +3648,7 @@
       { id: 'cipria', name: 'Rosa Cipria', hex: '#dfb5a6', tag: 'romantico' },
       { id: 'lilla', name: 'Lilla Lavanda', hex: '#d8b4e2', tag: 'romantico' },
       { id: 'malva', name: 'Malva Polveroso', hex: '#cbb4d4', tag: 'romantico' },
+      { id: 'pervinca', name: 'Pervinca', hex: '#c5cbec', tag: 'fresco' },
       { id: 'celeste', name: 'Celeste Ghiaccio', hex: '#e0f4f7', tag: 'fresco' },
       { id: 'azzurro', name: 'Azzurro Polvere', hex: '#b8d4e3', tag: 'fresco' },
       { id: 'eucalipto', name: 'Verde Eucalipto', hex: '#a8dadc', tag: 'botanico' },
@@ -3655,14 +3656,18 @@
       { id: 'salvia', name: 'Verde Salvia', hex: '#9dbf9e', tag: 'botanico' },
       // colori classici
       { id: 'bianco', name: 'Bianco', hex: '#fbfaf7', tag: 'classico' },
+      { id: 'perla', name: 'Grigio Perla', hex: '#bfc0c3', tag: 'classico' },
       { id: 'cammello', name: 'Cammello', hex: '#c19a6b', tag: 'classico' },
       { id: 'senape', name: 'Senape', hex: '#d1a33a', tag: 'classico' },
       { id: 'arancio', name: 'Arancio Bruciato', hex: '#c0622f', tag: 'classico' },
       { id: 'terracotta', name: 'Terracotta', hex: '#b85f45', tag: 'classico' },
+      { id: 'rosso', name: 'Rosso', hex: '#b3262f', tag: 'classico' },
       { id: 'bordeaux', name: 'Rosso Bordeaux', hex: '#7b2d3b', tag: 'classico' },
       { id: 'marrone', name: 'Marrone', hex: '#6b4a33', tag: 'classico' },
       { id: 'salviascuro', name: 'Verde Salvia Scuro', hex: '#5f7a61', tag: 'classico' },
       { id: 'bosco', name: 'Verde Bosco', hex: '#2f4f3a', tag: 'classico' },
+      { id: 'petrolio', name: 'Verde Petrolio', hex: '#1f5a63', tag: 'classico' },
+      { id: 'royal', name: 'Blu Royal', hex: '#2b4c9a', tag: 'classico' },
       { id: 'navy', name: 'Blu Navy', hex: '#26344f', tag: 'classico' },
       { id: 'antracite', name: 'Grigio Antracite', hex: '#45474b', tag: 'classico' },
       { id: 'nero', name: 'Nero', hex: '#2b2b2d', tag: 'classico' }
@@ -4085,7 +4090,7 @@
     function fireflySprite(golden) {
       const key = golden ? 'oro' : 'base';
       if (fireflySprites[key]) return fireflySprites[key];
-      const r = golden ? 5.4 : 3.7, blur = golden ? 22 : 14, half = Math.ceil(r + blur * 1.6), sc = 2;
+      const r = golden ? 5.4 : 3.7, blur = golden ? 22 : 14, half = Math.ceil((golden ? r * 4.2 : r) + blur * 1.6), sc = 2;
       const c = document.createElement('canvas'); c.width = c.height = half * 2 * sc;
       const g = c.getContext('2d'); g.scale(sc, sc); g.translate(half, half);
       g.shadowBlur = blur * sc; g.shadowColor = golden ? '#f59e0b' : '#fde047';
@@ -4094,6 +4099,17 @@
       g.shadowBlur = (golden ? 6 : 4) * sc;
       g.fillStyle = golden ? 'rgb(255, 251, 235)' : 'rgb(255, 255, 255)';
       g.beginPath(); g.arc(0, 0, r * (golden ? 0.45 : 0.55), 0, Math.PI * 2); g.fill();
+      if (golden) {
+        // Lucciola della caccia al tesoro: stellina a quattro raggi color crema,
+        // cosi' si distingue dalle lucciole normali senza cambiare tinta
+        g.shadowBlur = 8 * sc; g.shadowColor = '#fbbf24';
+        g.fillStyle = 'rgba(255, 247, 220, 0.95)';
+        for (let i = 0; i < 4; i++) {
+          g.save(); g.rotate(i * Math.PI / 2);
+          g.beginPath(); g.moveTo(0, -r * 4); g.lineTo(r * 0.32, -r * 0.5); g.lineTo(-r * 0.32, -r * 0.5); g.closePath(); g.fill();
+          g.restore();
+        }
+      }
       return (fireflySprites[key] = { c, r, half });
     }
 
@@ -4166,9 +4182,10 @@
         if (isNightMode && this.isFirefly && this.isGolden) {
           // Lucciola d'oro: piu' grande e calda, da prendere con un tocco
           this.fireflyPulse += 0.06;
-          const r = 4.2 + Math.sin(this.fireflyPulse) * 1.2;
+          const r = 4.8 + Math.sin(this.fireflyPulse) * 1.0;
           const spr = fireflySprite(true), k = r / spr.r;
-          ctx.globalAlpha = 0.95;
+          ctx.rotate(this.fireflyPulse * 0.15);
+          ctx.globalAlpha = 1;
           ctx.drawImage(spr.c, -spr.half * k, -spr.half * k, spr.half * 2 * k, spr.half * 2 * k);
         } else if (isNightMode && this.isFirefly) {
           this.fireflyPulse += 0.05;
@@ -4726,7 +4743,7 @@
   </script>
   <!-- Animazione di apertura (aeroplanino), solo alla prima visita -->
   <!-- il numero dopo ?v= va cambiato a ogni modifica di intro.js, cosi' i telefoni non usano la copia vecchia -->
-  <script src="manichini.js?v=3" defer></script>
-  <script src="intro.js?v=5" onerror="window.togliCopertura &amp;&amp; window.togliCopertura()"></script>
+  <script src="manichini.js?v=4" defer></script>
+  <script src="intro.js?v=6" onerror="window.togliCopertura &amp;&amp; window.togliCopertura()"></script>
 </body>
 </html>
