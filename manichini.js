@@ -7,11 +7,11 @@
   const NAMES = {   // pastello dal chiaro al verde, poi i classici
     '#f4ece1': 'Avorio Caldo', '#faedcd': 'Giallo Vaniglia', '#e8dcc4': 'Sabbia Dorata', '#d4c5b9': 'Tortora Chiaro',
     '#dfb76c': 'Tocchi Dorati', '#fed1b2': 'Albicocca Chiaro', '#ffccd5': 'Pesca Tenero', '#dfb5a6': 'Rosa Cipria',
-    '#d8b4e2': 'Lilla Lavanda', '#cbb4d4': 'Malva Polveroso', '#e0f4f7': 'Celeste Ghiaccio', '#b8d4e3': 'Azzurro Polvere',
+    '#d8b4e2': 'Lilla Lavanda', '#cbb4d4': 'Malva Polveroso', '#c5cbec': 'Pervinca', '#e0f4f7': 'Celeste Ghiaccio', '#b8d4e3': 'Azzurro Polvere',
     '#a8dadc': 'Verde Eucalipto', '#bfe5d0': 'Verde Menta', '#9dbf9e': 'Verde Salvia',
-    '#fbfaf7': 'Bianco', '#c19a6b': 'Cammello', '#d1a33a': 'Senape', '#c0622f': 'Arancio Bruciato',
-    '#b85f45': 'Terracotta', '#7b2d3b': 'Rosso Bordeaux', '#6b4a33': 'Marrone', '#5f7a61': 'Verde Salvia Scuro',
-    '#2f4f3a': 'Verde Bosco', '#26344f': 'Blu Navy', '#45474b': 'Grigio Antracite', '#2b2b2d': 'Nero'
+    '#fbfaf7': 'Bianco', '#bfc0c3': 'Grigio Perla', '#c19a6b': 'Cammello', '#d1a33a': 'Senape', '#c0622f': 'Arancio Bruciato',
+    '#b85f45': 'Terracotta', '#b3262f': 'Rosso', '#7b2d3b': 'Rosso Bordeaux', '#6b4a33': 'Marrone', '#5f7a61': 'Verde Salvia Scuro',
+    '#2f4f3a': 'Verde Bosco', '#1f5a63': 'Verde Petrolio', '#2b4c9a': 'Blu Royal', '#26344f': 'Blu Navy', '#45474b': 'Grigio Antracite', '#2b2b2d': 'Nero'
   };
   const NEUTRO = '#e4dbd0';
   const BIANCO = '#fbfaf7';
@@ -273,8 +273,8 @@
   #mk-pers .mk-pezzo{font:600 12px 'Plus Jakarta Sans',sans-serif;padding:7px 12px;border-radius:999px;border:1px solid rgba(74,59,44,.25);background:transparent;color:var(--ink);display:inline-flex;align-items:center;gap:6px}
   #mk-pers .mk-pezzo i{width:12px;height:12px;border-radius:50%;border:1px solid rgba(0,0,0,.15);display:inline-block}
   #mk-pers .mk-pezzo.attivo{background:#4c6f4e;border-color:#4c6f4e;color:#fff}
-  #mk-pers .mk-tavolozza{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;justify-items:center}
-  #mk-pers .mk-tav{width:38px;height:38px;border-radius:50%;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.18);position:relative}
+  #mk-pers .mk-tavolozza{display:grid;grid-template-columns:repeat(8,1fr);gap:7px 4px;justify-items:center}
+  #mk-pers .mk-tav{width:34px;height:34px;border-radius:50%;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.18);position:relative}
   #mk-pers .mk-tav.scelto{outline:3px solid #4c6f4e;outline-offset:2px}
   #mk-pers .mk-nome{font:600 12px 'Plus Jakarta Sans',sans-serif;text-align:center;color:var(--ink);opacity:.8;margin:10px 0 4px;min-height:16px}
   #mk-pers .mk-azioni{display:flex;gap:8px;margin-top:12px}
@@ -423,7 +423,7 @@
       <div class="mk-pezzi">${ordine.map(k => `<button type="button" class="mk-pezzo${k === pezzoAttivo ? ' attivo' : ''}" data-k="${k}"><i style="background:${o[k]}"></i>${etichetta(aperto, k)}</button>`).join('')}</div>
       <div class="mk-tavolozza">${PALETTE.map(h => `<button type="button" class="mk-tav${h === corrente ? ' scelto' : ''}" data-h="${h}" style="background:${h}" aria-label="${NAMES[h]}"></button>`).join('')}</div>
       <div class="mk-nome">${etichetta(aperto, pezzoAttivo)}: ${n(corrente)}</div>
-      <div class="mk-azioni"><button type="button" class="mk-reset">Rimetti i miei colori</button><button type="button" class="mk-ok">Fatto</button></div>
+      <div class="mk-azioni"><button type="button" class="mk-reset">Annulla modifiche</button><button type="button" class="mk-ok">Fatto</button></div>
     </div>`;
   }
   const PALETTE = Object.keys(NAMES);

@@ -77,7 +77,9 @@
     if (!zoomEls) {
       zoomEls = [document.getElementById('hero'), document.querySelector('header')].filter(Boolean)
         .map(el => { const r = el.getBoundingClientRect(); el.style.willChange = 'transform'; return { el, l: r.left, t: r.top }; });
-      document.documentElement.style.background = '#9dbf9e'; document.body.style.background = '#9dbf9e';
+      // sfondo chiaro come il sito (prima era verde e si vedeva durante l'aeroplanino)
+      const bg = getComputedStyle(document.body).backgroundColor || '#faf6ef';
+      document.documentElement.style.background = bg; document.body.style.background = bg;
     }
     zoomEls.forEach(z => {
       z.el.style.transformOrigin = (ox - z.l) + 'px ' + (oy - z.t) + 'px';
