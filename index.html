@@ -864,7 +864,7 @@
       </div>
 
       <!-- Titolo Principale -->
-      <h1 id="hero-names" data-petal-rain role="button" tabindex="0" aria-label="Azzurra e Leonardo: tocca per una pioggia di petali" class="font-serif text-3xl sm:text-5xl md:text-7xl lg:text-8xl text-legno font-normal tracking-tight mb-3 whitespace-nowrap flex items-center justify-center gap-1.5 sm:gap-3 cursor-pointer select-none">
+      <h1 id="hero-names" data-petal-rain role="button" style="width:fit-content;margin-left:auto;margin-right:auto" tabindex="0" aria-label="Azzurra e Leonardo: tocca per una pioggia di petali" class="font-serif text-3xl sm:text-5xl md:text-7xl lg:text-8xl text-legno font-normal tracking-tight mb-3 whitespace-nowrap flex items-center justify-center gap-1.5 sm:gap-3 cursor-pointer select-none">
         <span>Azzurra</span>
         <span class="font-script text-salvia-600 text-4xl sm:text-6xl md:text-8xl lg:text-9xl font-normal">&amp;</span>
         <span>Leonardo</span>
@@ -2748,6 +2748,25 @@
 
     bindTreeInteraction(oakLeft, oakLeftLeaves);
     bindTreeInteraction(oakRight, oakRightLeaves);
+
+    // Le chiome stanno sotto il testo della copertina: un tocco sulla parte
+    // verde a lato del testo finiva sul riquadro del testo e l'albero non
+    // rispondeva. Qui si guarda cosa c'e' sotto il dito (con un margine di
+    // 18px tutt'intorno) e, se e' una chioma, la si fa frusciare.
+    const heroSec = document.getElementById('hero');
+    if (heroSec) heroSec.addEventListener('click', (e) => {
+      if (e.target.closest('button, a, input, textarea, [data-petal-rain], .interactive-element, #countdown, .hidden-heart')) return;
+      const giro = [[0, 0], [18, 0], [-18, 0], [0, 18], [0, -18], [13, 13], [-13, 13], [13, -13], [-13, -13]];
+      for (const [dx, dy] of giro) {
+        const sotto = document.elementsFromPoint(e.clientX + dx, e.clientY + dy);
+        const albero = sotto.map(el => el.closest && el.closest('#interactive-oak-left, #interactive-oak-right')).find(Boolean);
+        if (albero) {
+          e.stopPropagation();
+          albero.dispatchEvent(new MouseEvent('click', { bubbles: true, clientX: e.clientX, clientY: e.clientY }));
+          return;
+        }
+      }
+    });
 
     const shoeBtn = document.getElementById('twirl-shoe-btn');
     const shoeIcon = document.getElementById('twirl-shoe-icon');
